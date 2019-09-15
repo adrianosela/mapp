@@ -8,6 +8,6 @@ app.get('/healthcheck', function (req, res) {
 })
 
 // Serve HTTP
-app.listen(8080, function () {
-  console.log('app listening on port 8080!')
+app.listen(80, function () {
+  console.log('app listening on port 80!')
 })
