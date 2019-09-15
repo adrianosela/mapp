@@ -1,0 +1,25 @@
+{
+  "name": "mapp",
+  "version": "1.0.0",
+  "description": "api for mapp mobile application",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrianosela/mapp.git"
+  },
+  "keywords": [
+    "mapp"
+  ],
+  "author": "The Papayas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adrianosela/mapp/issues"
+  },
+  "homepage": "https://github.com/adrianosela/mapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
