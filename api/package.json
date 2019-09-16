@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/adrianosela/mapp#readme",
   "dependencies": {
+    "config": "^3.2.2",
     "express": "^4.17.1"
   }
 }
