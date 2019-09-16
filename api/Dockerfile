@@ -1,8 +1,8 @@
 FROM node:7
 
-RUN npm install
-
 COPY . .
+
+RUN npm install
 
 EXPOSE 80
 
