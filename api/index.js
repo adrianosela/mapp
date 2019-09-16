@@ -1,16 +1,14 @@
-// Load express module
+// dependencies
 var express = require('express');
-// External Configurations
 var config = require('config');
 
+// define http endpoints
 var app = express();
-
-// Define endpoints
 app.get('/healthcheck', function (req, res) {
   res.send('server is up and running!');
 });
 
-// Serve HTTP
+// serve http
 app.listen(config.get('Port'), function () {
   console.log(`app listening on port ${config.get('Port')}!`);
 });
