@@ -9,6 +9,6 @@ app.get('/healthcheck', function (req, res) {
 });
 
 // serve http
-app.listen(config.get('Port'), function () {
-  console.log(`app listening on port ${config.get('Port')}!`);
+app.listen(process.env.PORT || config.get('Port'), function () {
+  console.log(`app listening on port ${process.env.PORT || config.get('Port')}!`);
 });
