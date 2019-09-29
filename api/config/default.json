@@ -1,4 +1,8 @@
 {
 	"Environment": "dev",
-	"Port": 80
+	"Port": 80,
+	"Database": {
+		"url": "mongodb://127.0.0.1:27017",
+		"dbName": "MAPP"
+	}
 }
