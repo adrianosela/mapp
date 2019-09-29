@@ -1,140 +1,126 @@
 const MongoClient = require('mongodb').MongoClient;
 const config = require('config');
 
-/*
-Initializes the connection between the client and the database server
+class Datastore {
+    constructor() {}
 
-@returns: client object
-*/
-var initializeConnection = function() {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let client = await MongoClient.connect(config.get('Database.url'), { useNewUrlParser: true, useUnifiedTopology: true });
-            console.log("Successfully connected to MongoDB Server");
+    /*
+    Initializes connection between client and MongoDB server.
+    Initializes Datastore properties client, database
+    */
+    initialize() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.client = await MongoClient.connect(config.get('Database.url'), { useNewUrlParser: true, useUnifiedTopology: true });
+                console.log("Successfully connected to MongoDB Server");
+                
+                this.database = await this.client.db(config.get('Database.dbName'));
+                console.log("Successfully connected to MAPP Database");
+    
+                return resolve();
+            }
+            catch (error) {
+                return reject(error);
+            }
+        });
+    }
 
-            return resolve(client);
-        }
-        catch (error) {
-            return reject(error);
-        }
-    });
-};
+    /*
+    Closes the connection with the MongoDB server
+    */
+    closeConnection() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.client.close();
 
-/*
-Gets the Database Object from the Server
+                return resolve();
+            }
+            catch (error) {
+                return reject(error);
+            }
+        });
+    }
 
-@params: client object
-@returns: clientDb object
-*/
-var getDatabase = function(client) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let clientDb = await client.db(config.get('Database.dbName'));
-            console.log("Successfully connected to MAPP Database");
+    /*
+    Inserts a document to the specified collection
 
-            return resolve(clientDb);
-        }
-        catch (error) {
-            return reject(error);
-        }
-    });
-};
+    @params: object document, tableName string
+    @returns: inserted documentId
+    */
+    insert(document, tableName) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const collection = await this.database.collection(tableName);
 
-/*
-Inserts a document to the specified collection
+                let documentId = await collection.insertOne(document);
 
-@params: object document, tableName string
-@returns: inserted documentId
-*/
-exports.insert = function(document, tableName) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const client = await initializeConnection();
-            const database = await getDatabase(client);
-            const collection = await database.collection(tableName);
+                return resolve(documentId);
+            }
+            catch (error) {
+                return reject(error);
+            }
+        });
+    }
 
-            let documentId = await collection.insertOne(document);
+    /*
+    Finds documents based on the query from the specified collection
 
-            await client.close();
+    @params: query object, tableName string
+    @returns: results array
+    */
+    find(query, tableName) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const collection = await this.database.collection(tableName);
 
-            return resolve(documentId);
-        }
-        catch (error) {
-            return reject(error);
-        }
-    });
-};
+                let cursor = await collection.find(query);
+                let results = await cursor.toArray();
 
-/*
-Finds documents based on the query from the specified collection
+                return resolve(results);
+            }
+            catch (error) {
+                return reject(error);
+            }
+        });
+    }
 
-@params: query object, tableName string
-@returns: results array
-*/
-exports.find = function(query, tableName) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const client = await initializeConnection();
-            const database = await getDatabase(client);
-            const collection = await database.collection(tableName);
+    /*
+    Updates document with new document object from the specified collection
 
-            let cursor = await collection.find(query);
-            let results = await cursor.toArray();
+    @params: documentId string, document object, tableName string
+    */
+    update(documentId, document, tableName) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const collection = await this.database.collection(tableName);
 
-            await client.close();
+                await collection.replaceOne({ _id: documentId }, document);
 
-            return resolve(results);
-        }
-        catch (error) {
-            return reject(error);
-        }
-    });
-};
+                return resolve();
+            }
+            catch (error) {
+                return reject(error);
+            }
+        });
+    }
 
-/*
-Updates document with new document object from the specified collection
+    /*
+    Removes specified document based on Id from the specified collection
 
-@params: documentId string, document object, tableName string
-*/
-exports.update = function(documentId, document, tableName) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const client = await initializeConnection();
-            const database = await getDatabase(client);
-            const collection = await database.collection(tableName);
+    @params: documentId string, tableName string
+    */
+    remove(documentId, tableName) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const collection = await this.database.collection(tableName);
 
-            await collection.replaceOne({ _id: documentId }, document);
+                await collection.deleteOne({ _id: documentId });
 
-            await client.close();
-
-            return resolve();
-        }
-        catch (error) {
-            return reject(error);
-        }
-    });
-};
-
-/*
-Removes specified document based on Id from the specified collection
-
-@params: documentId string, tableName string
-*/
-exports.remove = function(documentId, tableName) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const client = await initializeConnection();
-            const database = await getDatabase(client);
-            const collection = await database.collection(tableName);
-
-            await collection.deleteOne({ _id: documentId });
-
-            await client.close();
-
-            return resolve();
-        }
-        catch (error) {
-            return reject(error);
-        }
-    });
-};
+                return resolve();
+            }
+            catch (error) {
+                return reject(error);
+            }
+        });
+    }
+}
