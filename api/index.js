@@ -1,14 +1,13 @@
 // dependencies
 var express = require('express');
 var config = require('config');
+var routes = require('./src/routes/mux');
 
 // define http endpoints
 var app = express();
-app.get('/healthcheck', function (req, res) {
-  res.send('server is up and running!');
-});
+app.use('/', routes);
 
 // serve http
-app.listen(process.env.PORT || config.get('Port'), function () {
-  console.log(`app listening on port ${process.env.PORT || config.get('Port')}!`);
+var server = app.listen(process.env.PORT || config.get('Port'), function () {
+  console.log('app listening on ' + server.address().port);
 });
