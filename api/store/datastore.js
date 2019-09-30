@@ -1,5 +1,4 @@
 const MongoClient = require('mongodb').MongoClient;
-const config = require('config');
 
 class Datastore {
     constructor() {}
@@ -8,15 +7,12 @@ class Datastore {
     Initializes connection between client and MongoDB server.
     Initializes Datastore properties client, database
     */
-    initialize() {
+    initialize(url, name) {
         return new Promise(async (resolve, reject) => {
             try {
-                this.client = await MongoClient.connect(config.get('Database.url'), { useNewUrlParser: true, useUnifiedTopology: true });
-                console.log("Successfully connected to MongoDB Server");
-                
-                this.database = await this.client.db(config.get('Database.dbName'));
-                console.log("Successfully connected to MAPP Database");
-    
+                this.client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+                this.database = await this.client.db(name);
+		console.log('[info] successfully connected to ' + name + ' at ' + url);
                 return resolve();
             }
             catch (error) {
@@ -32,7 +28,6 @@ class Datastore {
         return new Promise(async (resolve, reject) => {
             try {
                 this.client.close();
-
                 return resolve();
             }
             catch (error) {
@@ -51,9 +46,7 @@ class Datastore {
         return new Promise(async (resolve, reject) => {
             try {
                 const collection = await this.database.collection(tableName);
-
                 let documentId = await collection.insertOne(document);
-
                 return resolve(documentId);
             }
             catch (error) {
@@ -72,10 +65,8 @@ class Datastore {
         return new Promise(async (resolve, reject) => {
             try {
                 const collection = await this.database.collection(tableName);
-
                 let cursor = await collection.find(query);
                 let results = await cursor.toArray();
-
                 return resolve(results);
             }
             catch (error) {
@@ -93,9 +84,7 @@ class Datastore {
         return new Promise(async (resolve, reject) => {
             try {
                 const collection = await this.database.collection(tableName);
-
                 await collection.replaceOne({ _id: documentId }, document);
-
                 return resolve();
             }
             catch (error) {
@@ -113,9 +102,7 @@ class Datastore {
         return new Promise(async (resolve, reject) => {
             try {
                 const collection = await this.database.collection(tableName);
-
                 await collection.deleteOne({ _id: documentId });
-
                 return resolve();
             }
             catch (error) {
