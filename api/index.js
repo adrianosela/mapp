@@ -2,10 +2,10 @@
 const express = require('express');
 const config = require('config');
 const routes = require('./routes/mux');
-const store = require('./store/datastore');
+const db = require('./store/datastore');
 
-// initialize database
-let db = new store();
+// initialize database, to use the database simply import the same db
+// anywhere else in the codebase and use find(), insert(), etc...
 db.initialize(config.get("database.url"), config.get("database.name"));
 
 // define http endpoints

@@ -112,4 +112,8 @@ class Datastore {
     }
 }
 
-module.exports = Datastore;
+// we export a single instance of a datastore.
+// it should be initialized in index.js; then
+// successive imports will import initialized db.
+let db = new Datastore();
+module.exports = db;
