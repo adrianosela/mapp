@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const config = require('config');
 
-export default class Datastore {
+class Datastore {
     constructor() {}
 
     /*
@@ -124,3 +124,5 @@ export default class Datastore {
         });
     }
 }
+
+module.exports = Datastore;
