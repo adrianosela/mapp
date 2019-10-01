@@ -8,8 +8,8 @@ const defaultScope = [
 class Authenticator {
   constructor() {}
  
-  initialize(cid, csecret, redirURL) {
-    this.oauth2client = new OAuth2Client(cid, csecret, redirURL);
+  initialize(cid, csecret, redirUrl) {
+    this.oauth2client = new OAuth2Client(cid, csecret, redirUrl);
     this.url = this.oauth2client.generateAuthUrl({
       access_type: 'offline',
       prompt: 'consent',
@@ -18,7 +18,7 @@ class Authenticator {
     console.log('[info] successfully initialized google auth client');
   }
   
-  getURL() {
+  getUrl() {
     return this.url;
   }
 
@@ -27,9 +27,10 @@ class Authenticator {
     this.oauth2client.setCredentials(data.tokens);
     const url = 'https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses';
     const res = await this.oauth2client.request({url});
+    
     return res.data;
   }
 }
 
-let auth = new Authenticator();
-module.exports = auth;
+let authenticator = new Authenticator();
+module.exports = authenticator;

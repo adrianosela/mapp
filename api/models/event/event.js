@@ -1,14 +1,14 @@
 /**
  * Event object constructor
  *
- * @param {Location} loc - location of the event
- * @param {string} cre - creator user id
- * @param {string[]} org - array of organizer user IDs
+ * @param {Location} location - location of the event
+ * @param {string} creator - creator user id
+ * @param {string[]} organizers - array of organizer user IDs
  *
  * @returns {Event}
  */
-function Event(loc, cre, org) {
-	this.location = loc;
-	this.creator = cre;
-	this.organizers = org;
+function Event(location, creator, organizers) {
+	this.location = location;
+	this.creator = creator;
+	this.organizers = organizers;
 }
