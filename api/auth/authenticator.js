@@ -31,5 +31,5 @@ class Authenticator {
   }
 }
 
-let a = new Authenticator();
-module.exports = a;
+let auth = new Authenticator();
+module.exports = auth;

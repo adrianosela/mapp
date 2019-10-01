@@ -8,13 +8,15 @@ const authenticator = require('./auth/authenticator');
 // init db
 db.initialize(
   config.get("database.url"),
-  config.get("database.name"));
+  config.get("database.name")
+);
 
 // init google auth
 authenticator.initialize(
   config.get('auth.google.clientid'),
   config.get('auth.google.clientsecret'),
-  config.get('auth.google.redirecturl'));
+  config.get('auth.google.redirecturl')
+);
 
 // define http endpoints
 const app = express();
