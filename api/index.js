@@ -3,10 +3,20 @@ const express = require('express');
 const config = require('config');
 const routes = require('./routes/mux');
 const db = require('./store/datastore');
+const authenticator = require('./auth/authenticator');
 
-// initialize database, to use the database simply import the same db
-// anywhere else in the codebase and use find(), insert(), etc...
-db.initialize(config.get("database.url"), config.get("database.name"));
+// init db
+db.initialize(
+  config.get("database.url"),
+  config.get("database.name")
+);
+
+// init google auth
+authenticator.initialize(
+  config.get('auth.google.clientid'),
+  config.get('auth.google.clientsecret'),
+  config.get('auth.google.redirecturl')
+);
 
 // define http endpoints
 const app = express();
