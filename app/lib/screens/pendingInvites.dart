@@ -46,6 +46,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
             },
             icon: cusIcon,
           ),
+          MyPopupMenu.createPopup(),
         ],
       ),
       body: Center(),

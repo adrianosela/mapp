@@ -20,12 +20,6 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        /*leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: (){
-            MyDrawer();
-          },
-        ),*/
         title: cusWidget,
         actions: <Widget>[
           IconButton(
@@ -52,19 +46,7 @@ class _MapPageState extends State<MapPage> {
             },
             icon: cusIcon,
           ),
-          PopupMenuButton<String>(
-            onSelected: choiceAction,
-            itemBuilder: (BuildContext context) {
-              return Constants.choices.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }
-              ).toList();
-            },
-            icon: Icon(Icons.more_horiz),
-          ),
+          MyPopupMenu.createPopup(),
         ],
       ),
       body: Center(),

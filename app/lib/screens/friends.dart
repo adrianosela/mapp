@@ -46,6 +46,7 @@ class _FriendsPageState extends State<FriendsPage> {
             },
             icon: cusIcon,
           ),
+          MyPopupMenu.createPopup(),
         ],
       ),
       body: Center(),

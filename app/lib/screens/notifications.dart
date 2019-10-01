@@ -46,6 +46,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             },
             icon: cusIcon,
           ),
+          MyPopupMenu.createPopup(),
         ],
       ),
       body: Center(),
