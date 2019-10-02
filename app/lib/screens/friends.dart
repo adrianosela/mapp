@@ -65,11 +65,16 @@ class _FriendsPageState extends State<FriendsPage> {
           Container(
             width: 100,
             padding: EdgeInsets.all(15.0),
-            child: Text(
-              "Item " + index.toString(),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
+            child: GestureDetector(
+              onTap: () {
+                //TODO open info popup
+              },
+              child: Text(
+                "Item " + index.toString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
               ),
             ),
           ),
