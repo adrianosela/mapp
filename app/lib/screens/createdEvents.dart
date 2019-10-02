@@ -14,6 +14,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Created Events");
+  int count = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,42 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
           MyPopupMenu.createPopup(),
         ],
       ),
-      body: Center(),
+      body: ListView.builder(
+        // itemCount: this.count,
+          itemBuilder: (context, index) => this._buildRow(index)
+      ),
     );
+  }
+
+  _buildRow(int index) {
+    while(count < 10) {
+      count++;
+      return Row(
+        children: [
+          Container(
+            width: 100,
+            padding: EdgeInsets.all(15.0),
+            child: Text(
+              "Item " + index.toString(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
+            ),
+          ),
+          Container(
+            width: 250,
+          ),
+          Container(
+            child: IconButton(
+              icon: Icon(Icons.create),
+              onPressed: (){
+                //TODO pop-up with edit event options
+              },
+            ),
+          ),
+        ],
+      );
+    }
   }
 }

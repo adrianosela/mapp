@@ -14,6 +14,7 @@ class _FriendsPageState extends State<FriendsPage> {
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Friends");
+  int count = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,42 @@ class _FriendsPageState extends State<FriendsPage> {
           MyPopupMenu.createPopup(),
         ],
       ),
-      body: Center(),
+      body: ListView.builder(
+       // itemCount: this.count,
+        itemBuilder: (context, index) => this._buildRow(index)
+      ),
     );
+  }
+
+  _buildRow(int index) {
+    while(count < 10) {
+      count++;
+      return Row(
+        children: [
+          Container(
+            width: 100,
+            padding: EdgeInsets.all(15.0),
+            child: Text(
+              "Item " + index.toString(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
+            ),
+          ),
+          Container(
+            width: 250,
+          ),
+          Container(
+            child: IconButton(
+              icon: Icon(Icons.more_horiz),
+              onPressed: (){
+                //TODO pop-up to invite to an event, or unfriend
+              },
+            ),
+          ),
+        ],
+      );
+    }
   }
 }

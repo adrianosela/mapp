@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+///
 class Constants {
   static const String Settings = "Settings";
   static const String Logout = "Logout";
@@ -10,6 +12,8 @@ class Constants {
   ];
 }
 
+
+///
 class MyPopupMenu {
   static PopupMenuButton<String> createPopup() {
     return PopupMenuButton<String>(
@@ -28,10 +32,12 @@ class MyPopupMenu {
   }
 }
 
+
+///
 void choiceAction(String choice) {
   if(choice == Constants.Logout) {
     //TODO pop context stack
   } else if (choice == Constants.Settings) {
-    //TODO open settings pop up
+    //TODO settings popup
   }
 }

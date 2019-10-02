@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:app/screens/calendar.dart';
 import 'package:app/screens/createdEvents.dart';
 import 'package:app/screens/friends.dart';
+import 'package:app/screens/map.dart';
 import 'package:app/screens/notifications.dart';
 import 'package:app/screens/pendingInvites.dart';
 import 'package:app/screens/savedEvents.dart';
@@ -30,6 +31,15 @@ class _MyDrawerState extends State<MyDrawer> {
                     color: Colors.blue,
                   ),
                 ),
+              ),
+              ListTile(
+                title: Text('Map'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MapPage()),
+                  );
+                },
               ),
               ListTile(
                 title: Text('Notifications'),
