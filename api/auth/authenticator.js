@@ -10,7 +10,7 @@ const defaultScope = [
 ];
 
 // Url to get user profile with an authenticated client (using user's access token)
-const fetchProfileUrl = 'https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses';
+const fetchProfileUrl = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json';
 
 /**
  * Authenticator is a Google authenticator class
