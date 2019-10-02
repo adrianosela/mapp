@@ -1,16 +1,16 @@
 /**
  * Location object constructor
  *
- * @param {number} lat - latitude of the event
- * @param {number} lon - longitude of the event
- * @param {number} rad - radius (in meters) of the event
+ * @param {number} latitude - latitude of the event
+ * @param {number} longitude - longitude of the event
+ * @param {number} radius - radius (in meters) of the event
  *
  * @returns {Location}
  */
-function Location(lat, lon, rad) {
+function Location(latitude, longitude, radius) {
   this.coordinates = {
-     latitude : lat,
-     longitude : lon
+     latitude : latitude,
+     longitude : longitude
   };
-  this.radius = rad;
+  this.radius = radius;
 }
