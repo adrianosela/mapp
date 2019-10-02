@@ -21,6 +21,4 @@ router.get('/googlecallback', async function(req, resp) {
   });
 });
 
-
-
 module.exports = router;

@@ -22,7 +22,8 @@ authenticator.initialize(
 const app = express();
 app.use('/', routes);
 
-// serve http
+// serve http - when running on Google App Engine, the PORT env variable
+// gets set by the runtime. Otherwise we use the default 'port' in config
 const server = app.listen(process.env.PORT || config.get('port'), function () {
   console.log('[info] app listening on ' + server.address().port);
 });
