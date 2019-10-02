@@ -15,7 +15,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Notifications");
-  int count = 0;
+  List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
 
   @override
   Widget build(BuildContext context) {
@@ -43,38 +43,33 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
       body: ListView.builder(
         // itemCount: this.count,
-          itemBuilder: (context, index) => this._buildRow(index)
+          itemBuilder: (context, index) => this._buildRow(context, index)
       ),
     );
   }
 
-  _buildRow(int index) {
-    while (count < 10) {
-      count++;
-      return Row(
-        children: [
-          Container(
-            width: 100,
-            padding: EdgeInsets.all(15.0),
-            child: GestureDetector(
-              onTap: () {
-                //TODO open info popup
-              },
-              child: ReusableFunctions.listItemText("Item " + index.toString()),
-            ),
+  _buildRow(BuildContext context, int index) {
+    while (index < rows.length) {
+      final item = rows[index];
+      return ListTile(
+          //TODO make title clickable
+          title: ReusableFunctions.listItemText("Item " + item),
+          trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      setState(() {
+                        rows.removeAt(index);
+                        ReusableFunctions.showInSnackBar(
+                            "Notification deleted", context);
+                        //TODO send call to backend to delete
+                      });
+                    }
+                ),
+              ]
           ),
-          Container(
-            width: 250,
-          ),
-          Container(
-            child: IconButton(
-              icon: Icon(Icons.delete_outline),
-              onPressed: (){
-                //TODO show pop-up confirm message, delete item from list
-              },
-            ),
-          ),
-        ],
       );
     }
   }

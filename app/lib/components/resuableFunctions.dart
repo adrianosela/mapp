@@ -8,7 +8,8 @@ class ReusableFunctions{
   //TODO
   static void showInSnackBar(String value, BuildContext context) {
     Scaffold.of(context).showSnackBar(new SnackBar(
-        content: new Text(value)
+        content: new Text(value),
+        duration: const Duration(seconds: 2),
     ));
   }
 
