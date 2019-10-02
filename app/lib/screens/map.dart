@@ -3,6 +3,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
+import 'package:app/components/resuableFunctions.dart';
 
 
 class MapPage extends StatefulWidget {
@@ -30,17 +31,7 @@ class _MapPageState extends State<MapPage> {
                 setState(() {
                           if(this.cusIcon.icon == Icons.search) {
                               this.cusIcon = Icon(Icons.cancel);
-                              this.cusWidget = TextField(
-                                textInputAction: TextInputAction.go,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "search for ...",
-                                ),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                ),
-                              );
+                              this.cusWidget = ReusableFunctions.cusWidgetTextField();
                           } else {
                               this.cusIcon = Icon(Icons.search);
                               this.cusWidget = Text("Map View");
@@ -179,7 +170,7 @@ class _MapPageState extends State<MapPage> {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
                               }
-                              //TODO append event to list of created events
+                              //TODO append event to list of created events, show new pin on map?
                             },
                           ),
                         )

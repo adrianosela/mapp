@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
-
+import 'package:app/components/resuableFunctions.dart';
 
 class PendingInvitesPage extends StatefulWidget {
 
@@ -28,17 +28,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
               setState(() {
                 if(this.cusIcon.icon == Icons.search) {
                   this.cusIcon = Icon(Icons.cancel);
-                  this.cusWidget = TextField(
-                    textInputAction: TextInputAction.go,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "search for ...",
-                    ),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                    ),
-                  );
+                  this.cusWidget = ReusableFunctions.cusWidgetTextField();
                 } else {
                   this.cusIcon = Icon(Icons.search);
                   this.cusWidget = Text("Pending Invites");
@@ -69,13 +59,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
               onTap: () {
                 //TODO open info popup
               },
-              child: Text(
-                "Item " + index.toString(),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
+              child: ReusableFunctions.listItemText("Item " + index.toString()),
             ),
           ),
           Container(
@@ -92,7 +76,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
           Container(
             child: IconButton(
               icon: Icon(Icons.cancel),
-              onPressed: (){
+              onPressed: () {
                 //TODO cancel invite, show pop-up confirm message, delete item from list
               },
             ),

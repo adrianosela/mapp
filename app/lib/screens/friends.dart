@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
+import 'package:app/components/resuableFunctions.dart';
 
 
 class FriendsPage extends StatefulWidget {
@@ -28,17 +29,7 @@ class _FriendsPageState extends State<FriendsPage> {
               setState(() {
                 if(this.cusIcon.icon == Icons.search) {
                   this.cusIcon = Icon(Icons.cancel);
-                  this.cusWidget = TextField(
-                    textInputAction: TextInputAction.go,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "search for ...",
-                    ),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                    ),
-                  );
+                  this.cusWidget = ReusableFunctions.cusWidgetTextField();
                 } else {
                   this.cusIcon = Icon(Icons.search);
                   this.cusWidget = Text("Friends");
