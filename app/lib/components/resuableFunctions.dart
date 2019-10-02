@@ -31,4 +31,23 @@ class ReusableFunctions{
       style: ReusableStyles.cusWidget(),
     );
   }
+
+  //TODO
+  static Text titleText(String text) {
+    return new Text(
+      text,
+      style: ReusableStyles.formTitle(),
+    );
+  }
+
+  //TODO
+  static TextFormField formInput(String text) {
+    return new TextFormField(
+      textInputAction: TextInputAction.go,
+      decoration: InputDecoration(
+        hintText: text,
+      ),
+      style: ReusableStyles.formInputField(),
+    );
+  }
 }

@@ -55,37 +55,14 @@ class _MapPageState extends State<MapPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text(
-                          "Create new event",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.blue,
-                          ),
+                        ReusableFunctions.titleText("Create New Event"),
+                        Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: ReusableFunctions.formInput("enter event name"),
                         ),
                         Padding(
                           padding: EdgeInsets.all(2.0),
-                          child: TextFormField(
-                            textInputAction: TextInputAction.go,
-                            decoration: InputDecoration(
-                              hintText: "enter event name",
-                            ),
-                            style: TextStyle(
-                              fontSize: 15.0,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: TextFormField(
-                            textInputAction: TextInputAction.go,
-                            decoration: InputDecoration(
-                              hintText: "enter event description",
-                            ),
-                            style: TextStyle(
-                              fontSize: 15.0,
-                            ),
-                          ),
+                          child: ReusableFunctions.formInput("enter event description"),
                         ),
                         Padding(
                           padding: EdgeInsets.all(2.0),
@@ -95,12 +72,13 @@ class _MapPageState extends State<MapPage> {
                                     showTitleActions: true,
                                     minTime: DateTime(2019, 3, 5),
                                     maxTime: DateTime(2023, 6, 7), onChanged: (date) {
-                                      print('change $date');
+                                      //print('change $date');
                                     }, onConfirm: (date) {
-                                      print('confirm $date');
+                                      //print('confirm $date');
                                     }, currentTime: DateTime.now(), locale: LocaleType.en);
                               },
                               child: Text(
+                                //TODO
                                 'pick event date',
                                 style: TextStyle(color: Colors.blue),
                               )

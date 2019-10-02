@@ -18,4 +18,21 @@ class ReusableStyles {
       fontSize: 16.0,
     );
   }
+
+  /// popup create form title text style
+  static TextStyle formTitle() {
+    return new TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+        color: Colors.blue
+    );
+  }
+
+  ///popup form input text style
+  static TextStyle formInputField() {
+    return new TextStyle(
+      //TODO
+      fontSize: 15.0,
+    );
+  }
 }
