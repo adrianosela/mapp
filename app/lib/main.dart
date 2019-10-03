@@ -1,5 +1,7 @@
+import 'package:app/components/resuableFunctions.dart';
 import 'package:flutter/material.dart';
-import 'package:app/screens/map.dart';
+
+import 'package:app/components/router.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +15,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Welcome to MAPP'),
+      onGenerateRoute: Router.generateRoute,
+      initialRoute: Router.homeRoute,
     );
   }
 }
@@ -51,82 +55,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: EdgeInsets.all(8.0),
                   child: SizedBox(
                     width: 250,
-                    child: TextFormField(
-                      /*validator: (value) {
-                        if (value.isEmpty) {
-                          //TODO
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },*/
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'username'
-                    ),
-                  ),
+                    child: ReusableFunctions.loginInputField('username'),
                 ),
               ),
               Padding(
                   padding: EdgeInsets.all(8.0),
                   child: SizedBox(
                     width: 250,
-                    child: TextFormField(
-                      /*validator: (value) {
-                        if (value.isEmpty) {
-                          //TODO
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },*/
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'password'
-                      ),
-                    ),
+                    child: ReusableFunctions.loginInputField('password'),
                   ),
               ),
               SizedBox(
                 width: 250,
-                child: FlatButton(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.black,
-                  padding: EdgeInsets.all(8.0),
-                  splashColor: Colors.blueAccent,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MapPage()),
-                    );
-                  },
-                  child: Text(
-                    "Login",
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ),
+                child: ReusableFunctions.loginButton(context, "Login"),
               ),
               SizedBox(
                   width: 250,
-                  child: FlatButton(
-                    color: Colors.blue,
-                    textColor: Colors.white,
-                    disabledColor: Colors.grey,
-                    disabledTextColor: Colors.black,
-                    padding: EdgeInsets.all(8.0),
-                    splashColor: Colors.blueAccent,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MapPage()),
-                      );
-                    },
-                    child: Text(
-                      "Register",
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                  )
+                child: ReusableFunctions.loginButton(context, "Register"),
               ),
             ],
           ),

@@ -38,7 +38,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             },
             icon: cusIcon,
           ),
-          MyPopupMenu.createPopup(),
+          MyPopupMenu.createPopup(context),
         ],
       ),
       body: ListView.builder(

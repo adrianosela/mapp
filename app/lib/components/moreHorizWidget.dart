@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:app/components/router.dart';
 
 ///
 class Constants {
@@ -15,7 +16,15 @@ class Constants {
 
 ///
 class MyPopupMenu {
-  static PopupMenuButton<String> createPopup() {
+
+  static BuildContext mycontext;
+
+  /*MyPopupMenu(BuildContext context) {
+    mycontext = context;
+  }*/
+
+  static PopupMenuButton<String> createPopup(context) {
+    mycontext = context;
     return PopupMenuButton<String>(
       onSelected: choiceAction,
       itemBuilder: (BuildContext context) {
@@ -30,14 +39,13 @@ class MyPopupMenu {
       icon: Icon(Icons.more_horiz),
     );
   }
-}
 
-
-///
-void choiceAction(String choice) {
-  if(choice == Constants.Logout) {
-    //TODO pop context stack
-  } else if (choice == Constants.Settings) {
-    //TODO settings popup
+  static void choiceAction(String choice) {
+    if(choice == Constants.Logout) {
+      Navigator.pushNamed(mycontext, Router.homeRoute);
+    } else if (choice == Constants.Settings) {
+      Navigator.pushNamed(mycontext, Router.editSettingsRoute);
+    }
   }
 }
+

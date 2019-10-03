@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'package:app/components/router.dart';
 import 'package:app/components/reusableStlyes.dart';
 
 class ReusableFunctions{
@@ -49,6 +50,43 @@ class ReusableFunctions{
         hintText: text,
       ),
       style: ReusableStyles.formInputField(),
+    );
+  }
+
+  //TODO
+  static FlatButton loginButton(BuildContext context, String text){
+    return new FlatButton(
+      color: Colors.blue,
+      textColor: Colors.white,
+      disabledColor: Colors.grey,
+      disabledTextColor: Colors.black,
+      padding: EdgeInsets.all(8.0),
+      splashColor: Colors.blueAccent,
+      onPressed: () {
+        Navigator.pushNamed(context, Router.mapRoute);
+      },
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 20.0),
+      ),
+    );
+
+  }
+
+  //TODO
+  static TextFormField loginInputField(String text) {
+    return new TextFormField(
+      /*validator: (value) {
+                        if (value.isEmpty) {
+                          //TODO
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },*/
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: text
+      ),
     );
   }
 }

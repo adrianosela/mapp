@@ -38,7 +38,7 @@ class _FriendsPageState extends State<FriendsPage> {
             },
             icon: cusIcon,
           ),
-          MyPopupMenu.createPopup(),
+          MyPopupMenu.createPopup(context),
         ],
       ),
       body: ListView.builder(
