@@ -1,30 +1,30 @@
 {
-	"environment": "ENC[AES256_GCM,data:ht1w,iv:Ir23yUi62yG85Ba5Mocl3J4Vz2+Hfa4QN+uC6HNYuAE=,tag:l736CXfx0BgrRBmgm9bHfw==,type:str]",
-	"port": "ENC[AES256_GCM,data:D7k=,iv:c1OB1RNbIX5pjuCVXTwLKnsz1AtBTct5PoJSMUytjtQ=,tag:85h8JcIoS1zXNhPMDzCcxA==,type:float]",
+	"environment": "ENC[AES256_GCM,data:iMNEBw==,iv:UiPfDQ0c1BMIvLsj17UUe7Hq7iq2Xx0KvSquEtWdx2Y=,tag:kNn+sMxLc0JsnVCKkGnB2Q==,type:str]",
+	"port": "ENC[AES256_GCM,data:470=,iv:ZjRFFOWadNLjjtl7qUWZbZz2qN9Hlb+CKVNPp+74AHo=,tag:wJu5x/uqlua6Mi6aVINfwg==,type:float]",
 	"database": {
-		"url": "ENC[AES256_GCM,data:lBtccnq0HZefoAP56CDEdV1baTBvvowlng==,iv:zJ1wuY20hFi1TC56hmIJ/G0HkDXd4VDkzA+3QcEmKo0=,tag:xSWiVPy2C3MMBDvXeR/c+g==,type:str]",
-		"name": "ENC[AES256_GCM,data:XWKV2iiV,iv:Y1KL+qva/hmaqNH5tuyI6xHmcqFefU0G2tDFDfo1JLs=,tag:WNx3QFA5vc4SxzoE9PPnTA==,type:str]"
+		"url": "ENC[AES256_GCM,data:8/Isc0D4KPvjCN52vG/iIn/JIIgAWUI23g==,iv:EAtGdW+vG8pjmIuIyHQveZXhio+4HAI7jrHMPM/5efA=,tag:9UIEe4+OQ5nGS0rNDOryLg==,type:str]",
+		"name": "ENC[AES256_GCM,data:g3drHvTz,iv:dEfwvPvcDw5FpjwLsmEPMyOC5BfsevkoC7frkPOkfNM=,tag:oy1JcIC8goXIgGpI3AQ8ig==,type:str]"
 	},
 	"auth": {
 		"google": {
-			"clientid": "ENC[AES256_GCM,data:khvTPYitJdxl5KhVS/S0bh4lnjxwKSxZi+qLHi4gnR36kZTIudAUo29+C6svbRV6elrQ9Zz9bWEQIMsm/UV9/en7246EUzY=,iv:HhVl3WeAJWatR+WwwcOPyJA0P7GDfDc1D2VZNCq0fcs=,tag:y+/GgoDEcWeYGJRtqQ3B3A==,type:str]",
-			"clientsecret": "ENC[AES256_GCM,data:Cid1rGOGy6TDEeLQ/rBUlGVI0PZChpjL,iv:2ofyGDe7u/zCq6FLTPszTLCo1KhDO9PptsFaZt24tbA=,tag:qnmI5Jc1KlytboqIHheP9g==,type:str]",
-			"redirecturl": "ENC[AES256_GCM,data:2HO+VqEAsQ6QSKTRN8V2cVJpc+M26gQjHaLK/MWj+A==,iv:YKAwInuRycsPtG+5rHScnSRV9elIdPpDPVxsB//8PT8=,tag:dnKLRkl14sm4Alj6viQOpw==,type:str]"
+			"clientid": "ENC[AES256_GCM,data:m6Ob8SYddYJRmfCP8fa87V3+lm27rlV6It5uc4LoYw0m8KmZkInvATBBBvb8wV4MU0kaKoN2TPETvhWR75dLmlEgeLvMaiE=,iv:/UQE2F8PL6JMw9LNNJNP/pIFy+8fInxz29n0PHDLkoA=,tag:cvqyiZ0nIPMP7Ma6FQXU8Q==,type:str]",
+			"clientsecret": "ENC[AES256_GCM,data:Sp8YszXeB8H+TuCfiAtZH9Sd45GiCy6d,iv:R5cx8wb3LDDE7byy8ueZGTcMphFRtxf9Pi6eC01fDh0=,tag:c3jjmB+HS+OaOHikrdXmpQ==,type:str]",
+			"redirecturl": "ENC[AES256_GCM,data:I/fzWu3PvkAnrkxkt62ISZ7AEm+Q8tXWPZ0nhqDJyA==,iv:9pjbI5JyFlGZ/e58sqSNqM7AgzDY8JohHyai5vSZ03I=,tag:wpkDgFVDkVEdZhCxPimRtw==,type:str]"
 		}
 	},
 	"sops": {
 		"kms": null,
-		"gcp_kms": null,
-		"azure_kv": null,
-		"lastmodified": "2019-10-03T20:16:38Z",
-		"mac": "ENC[AES256_GCM,data:Y5gsazjsDWt6QFe4Bbhjp0T8b85sChDs71AY2jvRRUdJwdOm0RBf9/LT1ZNJc25K0ONBQrxQ+PSl1oPMwwwUODYBEPUC0aDQNUYfBsK/EEqkbXP59KxAh2XQw6t5T4AD297IO94bFDIUDcbdKR0J1OhFjEX0bWB9iPZ4O4sG648=,iv:xMjAzMGvtRs5RXe8D7LU/3P8G2lIAvgJatx6ZTnLb/M=,tag:9yLzoLzMVPzYb4A0kQoIAQ==,type:str]",
-		"pgp": [
+		"gcp_kms": [
 			{
-				"created_at": "2019-10-03T20:16:18Z",
-				"enc": "-----BEGIN PGP MESSAGE-----\n\nwcFMA2/0ztmlcgH9ARAALdyFKPpIbnlLA7T13667dNrxxdcRZKsH+T9tqKF5FBMN\nBATTJKq9aGCpQKXf0X/XSAuwi4egHkBKJwb970ZCorcckhlQ+tCi2zzdhPEuntcc\n7/qmVcNFiohfk23N+C6g9BS3YH8c/v6oo+9n/Me5qg6qjH7gz/yDjbD+1gHTl5sF\nRNdAul27QcrAXRMqW+rTGL779101hm85TQkGEo7vpEXGnFta4CV/EmCuZtMrgtRt\nKs7YK95i0KBQ9qplDo3uDnnZj7dY6am88bNAau6qsma5QdM2dJuD3FyhgDjIYoIP\nReVw61UhDd+SgzD58HVRWlGzVdRZjRpw+fvJ4lPWe0v3s1GT6RUOqDcwtznY5WNk\nSDIg1240Mk8AV9tbE2SYTXF5Y+t9ECnhgsVKExRMWfxVLEiJvGJ3ftjXs/4xijZm\ng6nUnRFbgY/7CowEHzpU4HCmjDCo6J4nNPcD1X7sIfuv0JnX9NSSBOyYYMJrtNWm\nTugYSTMw8baA8RyIeOxktWM8nqHwk+lYhgYzZbL41ibKBxNYYkyha5jg/XTdxngV\ndFoPWKBVKM8zeMCcSiEeQDOodTTXTGqe3hnqjP+LebucXxqbnhV/CfloC3KFw66q\nSiyruKDyNuFp0D/Ba5dXsnm8Gl9nPNuqWGl0KPR1qC9PMG2lwtrpxd5fS+36C0DS\n4AHkbVpnB63NJR2ovSj65L+HeuFEm+DR4JDhLD3gruKR0yVT4PLlFoNpwUAY2H4v\n4PRTys3OCKRWLDE8uvSf2O1yVa2oBF/gauREkPJmQJQyPRRrzmIWIlZa4hdg7OTh\nl7MA\n=gfnd\n-----END PGP MESSAGE-----",
-				"fp": "36EE4E6A22307CBED83C7BAC03D115658D0C63C5"
+				"resource_id": "projects/mapp-254321/locations/us-west2/keyRings/mapp/cryptoKeys/config-decryption-key",
+				"created_at": "2019-10-03T21:45:49Z",
+				"enc": "CiQAN8LTF9K4aw+v/nf6naWXrWGYBrp3TwpVSsSQRuqpa8Bb1QUSSQDs1qoIVW06Mr2tsJHuxjF9RDrkz0l+NVweueicRTX8Sp91D0SQ6YOHFU99zZuEYORz29cOEk136pxxHAdUuiLPGE17HFm0CMc="
 			}
 		],
+		"azure_kv": null,
+		"lastmodified": "2019-10-03T21:50:20Z",
+		"mac": "ENC[AES256_GCM,data:TJ32FX/GJVlGGdTEBs/VYG7eoMLfSw5EHLaMpY49WiVxObOlhUVaxFTgpl5iTISrLlVYRu+oDm1gbaaS1SeXoWI9mdWHMusXz4kHIEDQ+DigUGRdCFvmMDnoJtSj8Gzp3tLTfjGVJqhOySpaELIdtKAmCXBaDE9x92uH3GWSr54=,iv:aHIQLSz9oTN2h1mlNmZQnQjNI5tiyZlFWpPjcNyjRfs=,tag:9ZSmuJrpszInCKl4ObAxcg==,type:str]",
+		"pgp": null,
 		"unencrypted_suffix": "_unencrypted",
 		"version": "3.4.0"
 	}
