@@ -42,12 +42,13 @@ class ReusableFunctions{
   }
 
   //TODO
-  static TextFormField formInput(String text) {
+  static TextFormField formInput(String text, [TextEditingController controller]) {
     return new TextFormField(
       textInputAction: TextInputAction.go,
       decoration: InputDecoration(
         hintText: text,
       ),
+      controller: controller,
       style: ReusableStyles.formInputField(),
     );
   }
