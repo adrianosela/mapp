@@ -25,6 +25,9 @@ class _MapPageState extends State<MapPage> {
   final _formKey = GlobalKey<FormState>();
   bool isSwitched = true;
 
+  //Text Controllers
+  TextEditingController eventNameCont = TextEditingController();
+  TextEditingController eventDescriptionCont = TextEditingController();
 
 
   //TODO sets the intial view of the map needs to be changed to user location
@@ -38,18 +41,24 @@ class _MapPageState extends State<MapPage> {
   //TODO Need to pass event related info to marker to display, maybe different colors for different events
   Future _addMarkerLongPressed(LatLng latlang) async {
     setState(() {
-      final MarkerId markerId = MarkerId("RANDOM_ID");
+      //TODO need to pass event_id into the MarkerId, using event name for now
+      final MarkerId markerId = MarkerId(eventNameCont.text);
       Marker marker = Marker(
         markerId: markerId,
-        draggable: true,
+        draggable: false,
         position: latlang, //With this parameter you automatically obtain latitude and longitude
         infoWindow: InfoWindow(
-          title: "Marker here",
-          snippet: 'This looks good',
+          title: eventNameCont.text,
+          snippet: eventDescriptionCont.text,
+
         ),
-        icon: BitmapDescriptor.defaultMarker,
+        //TODO Change color of marker depending on event type
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
       );
 
+      //Clear Text Controllers
+      eventNameCont.clear();
+      eventNameCont.clear();
       markers[markerId] = marker;
     });
 
@@ -100,11 +109,11 @@ class _MapPageState extends State<MapPage> {
                         ReusableFunctions.titleText("Create New Event"),
                         Padding(
                           padding: EdgeInsets.all(2.0),
-                          child: ReusableFunctions.formInput("enter event name"),
+                          child: ReusableFunctions.formInput("enter event name", eventNameCont),
                         ),
                         Padding(
                           padding: EdgeInsets.all(2.0),
-                          child: ReusableFunctions.formInput("enter event description"),
+                          child: ReusableFunctions.formInput("enter event description", eventDescriptionCont),
                         ),
                         Padding(
                           padding: EdgeInsets.all(2.0),
@@ -187,6 +196,7 @@ class _MapPageState extends State<MapPage> {
                           child: RaisedButton(
                             child: Text("Save"),
                             onPressed: () {
+                              //TODO Figure out what this commented code does
 //                              if (_formKey.currentState.validate()) {
 //
 //                                _formKey.currentState.save();
@@ -194,6 +204,7 @@ class _MapPageState extends State<MapPage> {
                               //TODO Need to pass Title to add to marker
                               _addMarkerLongPressed(latlang);
                               //TODO append event to list of created events, show new pin on map?
+                              Navigator.of(context).pop();
                             },
                           ),
                         )
