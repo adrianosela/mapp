@@ -18,10 +18,11 @@ router.get('/events', function(req, resp) {
 router.post('/event', function(req, resp) {
   var newEvent = new Event({
     location: {
-      latitude: 'some lat',
+      latitude: 'asdasd',
       longitude: 'some lon'
     },
     date: Date.now(),
+    duration: 100,
     creator: 'adriano',
     organizers: [ 'x', 'y', 'z' ],
   });
