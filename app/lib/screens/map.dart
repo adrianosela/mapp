@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
@@ -14,10 +18,42 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
 
+
+  Completer<GoogleMapController> _controller = Completer();
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Map View");
   final _formKey = GlobalKey<FormState>();
   bool isSwitched = true;
+
+
+
+  //TODO sets the intial view of the map needs to be changed to user location
+  static const LatLng _center = const LatLng(45.521563, -122.677433);
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+  }
+
+  //TODO Need to pass event related info to marker to display, maybe different colors for different events
+  Future _addMarkerLongPressed(LatLng latlang) async {
+    setState(() {
+      final MarkerId markerId = MarkerId("RANDOM_ID");
+      Marker marker = Marker(
+        markerId: markerId,
+        draggable: true,
+        position: latlang, //With this parameter you automatically obtain latitude and longitude
+        infoWindow: InfoWindow(
+          title: "Marker here",
+          snippet: 'This looks good',
+        ),
+        icon: BitmapDescriptor.defaultMarker,
+      );
+
+      markers[markerId] = marker;
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +79,15 @@ class _MapPageState extends State<MapPage> {
           MyPopupMenu.createPopup(),
         ],
       ),
-      body: Center(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
+      body: GoogleMap(
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: _center,
+          zoom: 11.0,
+        ),
+        onLongPress: (latlang) {
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -145,9 +187,12 @@ class _MapPageState extends State<MapPage> {
                           child: RaisedButton(
                             child: Text("Save"),
                             onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                              }
+//                              if (_formKey.currentState.validate()) {
+//
+//                                _formKey.currentState.save();
+//                              }
+                              //TODO Need to pass Title to add to marker
+                              _addMarkerLongPressed(latlang);
                               //TODO append event to list of created events, show new pin on map?
                             },
                           ),
@@ -158,7 +203,7 @@ class _MapPageState extends State<MapPage> {
                 );
               });
         },
-        child: Icon(Icons.add),
+        markers: Set<Marker>.of(markers.values),
       ),
     );
   }
