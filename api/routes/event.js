@@ -2,9 +2,18 @@ const router = require('express').Router();
 
 let Event = require('../models/event');
 
-// FIXME: don't return all events, auth, etc...
+/**
+ * GET /events - get all events within a given radius
+ *               of given latitude and longitude
+ */
 router.get('/events', function(req, resp) {
-  Event.find({}, function(err, events) {
+  const latitude = req.latitude;
+  const longitude = req.longitude;
+  const radius = req.radius;
+  // TODO: input validation
+
+  const query = {}; // TODO: create complex query
+  Event.find(query, function(err, events) {
     if (err) {
       console.log(err);
       resp.status(500, 'could not retrieve events');
@@ -13,18 +22,35 @@ router.get('/events', function(req, resp) {
   });
 });
 
-// FIXME: dont use hardcoded event, read from req
-// write validation function for event schema
+/** 
+ * GET /event - retrieve all data on an event by id.
+ *               there should be an 'id' query param
+ */
+router.get('/event', function(req, resp) {
+  Event.findById(req.query.id, function(err, event) {
+    if (err) {
+      console.log(err);
+      resp.status(500, 'could not retrieve event');
+    }
+    if (!event) { resp.status(404, 'event not found'); }
+    resp.json(event);
+  });
+});
+
+/**
+ * POST /event - create an event (from json request body)
+ */
 router.post('/event', function(req, resp) {
+  // TODO: input validation 
   var newEvent = new Event({
     location: {
-      latitude: 'asdasd',
-      longitude: 'some lon'
+      latitude: req.latitude,
+      longitude: req.longitude
     },
-    date: Date.now(),
-    duration: 100,
-    creator: 'adriano',
-    organizers: [ 'x', 'y', 'z' ],
+    date: new Date(req.unixdate*1000);,
+    duration: req.duration,
+    creator: req.creator, // TODO: get user id from authenticated token
+    organizers: req.organizers,
   });
 
   newEvent.save(function(err) {

@@ -2,7 +2,7 @@ let mongoose = require('mongoose');
 
 let eventSchema = new mongoose.Schema({
   // time/place
-  location: { 
+  location: {
     latitude: { type: String, required: true },
     longitude: { type: String, required: true },
   },
