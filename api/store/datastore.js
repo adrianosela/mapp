@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 
+const options = {
+  useCreateIndex: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+};
+
 class Datastore {
   constructor() {}
 
@@ -11,7 +17,7 @@ class Datastore {
    * @param {string} dbName - Name of specific database in MongoDB server
    */
   initialize(url, dbName) {
-    mongoose.connect(url + '/' + dbName, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+    mongoose.connect(url + '/' + dbName, options).then(() => {
       console.log('[info] successfully connected to ' + dbName + ' at ' + url);
 
       mongoose.connection.on('error', function(err) {

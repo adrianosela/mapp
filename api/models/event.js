@@ -3,8 +3,8 @@ let mongoose = require('mongoose');
 let eventSchema = new mongoose.Schema({
   // time/place
   location: {
-    latitude: { type: String, required: true },
-    longitude: { type: String, required: true },
+   type: { type: String, required: true },
+   coordinates: []
   },
   date: { type: Date, required: true },
   duration: { type: Number, required: true },
@@ -17,5 +17,8 @@ let eventSchema = new mongoose.Schema({
   // metadata
   categories: { type: [ String ], required: false },
 });
+
+// set geospatial indexing
+eventSchema.index({ location: "2dsphere" });
 
 let Event = module.exports = mongoose.model('Event', eventSchema);
