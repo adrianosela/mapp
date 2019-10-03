@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('mongoose');
 
-var eventSchema = new Schema({
-  location: { latitude: String, longitude: String }
+let eventSchema = new mongoose.Schema({
+  location: { latitude: String, longitude: String },
   date: { type: Date },
   creator: String,
   organizers: [ String ],
 });
+
+let Event = module.exports = mongoose.model('Event', eventSchema);

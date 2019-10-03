@@ -1,8 +1,7 @@
 const router = require('express').Router();
-const healthHandlers = require('./healthcheck');
-const authHandlers = require('./auth');
 
-router.use(healthHandlers);
-router.use(authHandlers);
+router.use(require('./auth'));
+router.use(require('./event'));
+router.use(require('./healthcheck'));
 
 module.exports = router;
