@@ -53,10 +53,7 @@ router.get('/event', function(req, resp) {
 router.post('/event', function(req, resp) {
   // TODO: input validation
   var newEvent = new Event({
-    location: {
-      type: 'Point',
-      coordinates: [-77.0364, 38.8951]
-    },
+    location: { type: 'Point', coordinates: [-77.0364, 38.8951] },
     date: Date.now(),
     duration: 1000,
     creator: 'some user', // TODO: get user id from authenticated token
