@@ -76,13 +76,7 @@ class ReusableFunctions{
   //TODO
   static TextFormField loginInputField(String text) {
     return new TextFormField(
-      /*validator: (value) {
-                        if (value.isEmpty) {
-                          //TODO
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },*/
+      //TODO add validation? 
       decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: text

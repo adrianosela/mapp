@@ -19,10 +19,6 @@ class MyPopupMenu {
 
   static BuildContext mycontext;
 
-  /*MyPopupMenu(BuildContext context) {
-    mycontext = context;
-  }*/
-
   static PopupMenuButton<String> createPopup(context) {
     mycontext = context;
     return PopupMenuButton<String>(
