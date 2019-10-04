@@ -5,16 +5,16 @@ import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/resuableFunctions.dart';
 
 
-class CalendarPage extends StatefulWidget {
+class EditEventPage extends StatefulWidget {
 
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  _EditEventPageState createState() => _EditEventPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class _EditEventPageState extends State<EditEventPage> {
 
   Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Calendar");
+  Widget cusWidget = Text("Edit Event");
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   this.cusWidget = ReusableFunctions.cusWidgetTextField();
                 } else {
                   this.cusIcon = Icon(Icons.search);
-                  this.cusWidget = Text("Calendar");
+                  this.cusWidget = Text("Edit Event");
                 }
               });
             },

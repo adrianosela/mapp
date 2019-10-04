@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:app/screens/calendar.dart';
-import 'package:app/screens/createdEvents.dart';
-import 'package:app/screens/friends.dart';
-import 'package:app/screens/map.dart';
-import 'package:app/screens/notifications.dart';
-import 'package:app/screens/pendingInvites.dart';
-import 'package:app/screens/savedEvents.dart';
+import 'package:app/components/router.dart';
 
 
 class MyDrawer extends StatefulWidget {
@@ -35,64 +29,43 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 title: Text('Map'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MapPage()),
-                  );
+                  Navigator.pushNamed(context, Router.mapRoute);
                 },
               ),
               ListTile(
                 title: Text('Notifications'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NotificationsPage()),
-                  );
+                  Navigator.pushNamed(context, Router.notificationsRoute);
                 },
               ),
               ListTile(
                 title: Text('Friends'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => FriendsPage()),
-                  );
+                  Navigator.pushNamed(context, Router.friendsRoute);
                 },
               ),
               ListTile(
                 title: Text('Created Events'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CreatedEventsPage()),
-                  );
+                  Navigator.pushNamed(context, Router.createdEventsRoute);
                 },
               ),
               ListTile(
                 title: Text('Saved Events'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SavedEventsPage()),
-                  );
+                  Navigator.pushNamed(context, Router.savedEventsRoute);
                 },
               ),
               ListTile(
                 title: Text('Pending Invites'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PendingInvitesPage()),
-                  );
+                  Navigator.pushNamed(context, Router.pendingInvitesRoute);
                 },
               ),
               ListTile(
                 title: Text('Calendar'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CalendarPage()),
-                  );
+                  Navigator.pushNamed(context, Router.calendarRoute);
                 },
               ),
             ],
