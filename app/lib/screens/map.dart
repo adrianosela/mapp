@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/resuableFunctions.dart';
+
 
 
 class MapPage extends StatefulWidget {
@@ -18,8 +20,9 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
 
+  GoogleMapController mapController;
+  Location location = Location();
 
-  Completer<GoogleMapController> _controller = Completer();
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Map View");
   final _formKey = GlobalKey<FormState>();
@@ -34,8 +37,28 @@ class _MapPageState extends State<MapPage> {
   static const LatLng _center = const LatLng(49.2827, -123.1207);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
+
+
   void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
+    mapController = controller;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    location.onLocationChanged().listen((location) async {
+      mapController?.moveCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(
+              location.latitude,
+              location.longitude,
+            ),
+            zoom: 13.0,
+          ),
+        ),
+      );
+    });
   }
 
   GoogleMap _initializeMap(){
