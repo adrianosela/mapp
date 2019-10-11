@@ -13,9 +13,10 @@ let eventSchema = new mongoose.Schema({
     creator: { type: String, required: true },
     organizers: { type: [ String ], required: true },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
+    invited: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
 
     // metadata
-    categories: { type: [ String ], required: false }
+    categories: { type: [ String ], required: false, default: [] }
 });
 
 // set geospatial indexing
