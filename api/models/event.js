@@ -1,21 +1,22 @@
 let mongoose = require('mongoose');
 
 let eventSchema = new mongoose.Schema({
-  // time/place
-  location: {
-   type: { type: String, required: true },
-   coordinates: []
-  },
-  date: { type: Date, required: true },
-  duration: { type: Number, required: true },
+    // time/place
+    location: {
+        type: { type: String, required: true },
+        coordinates: []
+    },
+    date: { type: Date, required: true },
+    duration: { type: Number, required: true },
 
-  // people
-  creator: { type: String, required: true },
-  organizers: { type: [ String ], required: true },
-  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
+    // people
+    creator: { type: String, required: true },
+    organizers: { type: [ String ], required: true },
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
+    invited: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
 
-  // metadata
-  categories: { type: [ String ], required: false },
+    // metadata
+    categories: { type: [ String ], required: false, default: [] }
 });
 
 // set geospatial indexing
