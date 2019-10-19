@@ -1,6 +1,8 @@
 const router = require('express').Router();
+const notificationsEngine = require('../notifications/notificationsEngine');
 
 let Event = require('../models/event');
+let User = require('../models/user');
 
 /**
  * GET /events - get all events within a given radius
@@ -18,7 +20,7 @@ router.get('/events', function(req, resp) {
     location: {
       $near: {
         $maxDistance: radius,
-	$geometry: { type: "Point", coordinates: [longitude, latitude] }
+	    $geometry: { type: "Point", coordinates: [longitude, latitude] }
       }
     }
   };
@@ -58,7 +60,8 @@ router.post('/event', function(req, resp) {
     const longitude = Number(req.body.longitude);
     // TODO: input validation
 
-    var newEvent = new Event({
+    let newEvent = new Event({
+        name: name,
         location: { type: 'Point', coordinates: [longitude, latitude] },
         date: Date.now(),
         duration: 1000,
@@ -66,14 +69,53 @@ router.post('/event', function(req, resp) {
         organizers: ['x', 'y', 'z'],
     });
 
-    newEvent.save(function(err) {
+    newEvent.save(function(err, event) {
         if (err) {
-        console.log(err);
-        resp.status(500).send('failed to create event :(');
+            console.log(err);
+            resp.status(500).send('Failed to create event');
         }
 
-        resp.send('event created successfully!');
+        let response = {
+            message: 'Event created successfully!',
+            data: {
+                eventId: event._id
+            }
+        }
+
+        resp.json(response);
     });
 });
+
+router.post('/event/invite', async function(req, resp) {
+    const invited = req.body.invited;
+
+    let invitedUsers = []
+    for(let userEmail of invited) {
+        let query = {
+            email: userEmail
+        }
+
+        let user = await User.findOne(query);
+        invitedUsers.push(user);
+        // TODO: Send notification to user
+        // notificationsEngine.invited.push(user.id);
+    }
+
+    const filter = { _id: req.body.eventId };
+    const update = { invited: invitedUsers };
+    let updatedEvent = await Event.findOneAndUpdate(filter, update, {
+        new: true
+    });
+
+    let response = {
+        message: 'Event updated with invited users',
+        data: {
+            eventId: updatedEvent._id
+        }
+    }
+    resp.json(response);
+});
+
+// TODO: Add PUT for updating event
 
 module.exports = router;
