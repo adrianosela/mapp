@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const notificationsEngine = require('../notifications/notificationsEngine');
+// TODO: Add notifications engine
 
 let Event = require('../models/event');
 let User = require('../models/user');
@@ -75,7 +75,7 @@ router.post('/event/invite', async function(req, resp) {
     const filter = { _id: req.body.eventId };
     const update = { invited: invitedUsers };
     let updatedEvent = await Event.findOneAndUpdate(filter, update, {
-        new: true
+        new: true       // Flag for returning updated event
     });
 
     let response = {
