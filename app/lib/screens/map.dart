@@ -9,6 +9,7 @@ import 'package:location/location.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/resuableFunctions.dart';
+import 'package:app/components/reusableStlyes.dart';
 
 
 
@@ -27,16 +28,16 @@ class _MapPageState extends State<MapPage> {
   Widget cusWidget = Text("Map View");
   final _formKey = GlobalKey<FormState>();
   bool isSwitched = true;
+  var searchText;
 
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
 
 
-  //TODO sets the intial view of the map needs to be changed to user location
+  //TODO sets the initial view of the map needs to be changed to user location
   static const LatLng _center = const LatLng(49.2827, -123.1207);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
-
 
 
   void _onMapCreated(GoogleMapController controller) {
@@ -232,7 +233,24 @@ class _MapPageState extends State<MapPage> {
                 setState(() {
                           if(this.cusIcon.icon == Icons.search) {
                               this.cusIcon = Icon(Icons.cancel);
-                              this.cusWidget = ReusableFunctions.cusWidgetTextField();
+                              this.cusWidget = TextField(
+                                textInputAction: TextInputAction.go,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "search for ...",
+                                ),
+                                style: ReusableStyles.cusWidget(),
+                                onSubmitted: (String str) {
+                                  //TODO send to backend
+                                  setState(() {
+                                    searchText = str;
+                                  });
+                                  //print(searchText);
+                                },
+                                //onChanged: (searchText) {
+                                  //print(searchText.toString());
+                                //},
+                              );
                           } else {
                               this.cusIcon = Icon(Icons.search);
                               this.cusWidget = Text("Map View");
