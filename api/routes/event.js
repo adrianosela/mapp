@@ -26,6 +26,7 @@ router.get('/event', function(req, resp) {
  * POST /event - create an event (from json request body)
  */
 router.post('/event', function(req, resp) {
+    const name = req.body.name;
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const public = req.body.public;
