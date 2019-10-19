@@ -1,5 +1,5 @@
 const router = require('express').Router();
-// TODO: Add notifications engine
+const notificationsEngine = require('../notifications/notificationsEngine');
 
 let Event = require('../models/event');
 let User = require('../models/user');
