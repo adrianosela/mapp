@@ -28,7 +28,7 @@ router.get('/event', function(req, resp) {
 router.post('/event', function(req, resp) {
     const name = req.body.name;
     const description = req.body.description;
-    const creator = req.token.sub;
+    //const creator = req.token.sub;
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const eventDate = Number(req.body.eventDate);
@@ -42,8 +42,8 @@ router.post('/event', function(req, resp) {
         description: description,
         location: { type: 'Point', coordinates: [longitude, latitude] },
         date: eventDate,
-        duration: endsAt,
-        creator: creator, 
+        endsAt: endsAt,
+        creator: "someone", 
         public: public,
         invited: invited
     });
