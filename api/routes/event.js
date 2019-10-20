@@ -30,6 +30,7 @@ router.post('/event', function(req, resp) {
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const public = req.body.public;
+    // TODO: Add Event Date
     // TODO: input validation
 
     let newEvent = new Event({
@@ -62,9 +63,12 @@ router.post('/event/invite', async function(req, resp) {
     const invited = req.body.invited;
 
     let invitedUsers = []
-    for(let userEmail of invited) {
+    for(let userInfo of invited) {
         let query = {
-            email: userEmail
+            $or: [ 
+                { email: userInfo },
+                { name: userInfo }
+            ]
         }
 
         let user = await User.findOne(query);
@@ -76,7 +80,8 @@ router.post('/event/invite', async function(req, resp) {
     const filter = { _id: req.body.eventId };
     const update = { invited: invitedUsers };
     let updatedEvent = await Event.findOneAndUpdate(filter, update, {
-        new: true       // Flag for returning updated event
+        new: true,       // Flag for returning updated event
+        useFindAndModify: false
     });
 
     let response = {
@@ -85,6 +90,7 @@ router.post('/event/invite', async function(req, resp) {
             eventId: updatedEvent._id
         }
     }
+    
     resp.json(response);
 });
 
