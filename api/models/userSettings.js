@@ -9,4 +9,4 @@ let userSettingsSchema = new mongoose.Schema({
     },
 });
 
-let userSettings = module.exports = mongoose.model('UserSettings', userSettingsSchema);
+let UserSettings = module.exports = mongoose.model('UserSettings', userSettingsSchema);

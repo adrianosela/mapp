@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const authenticator = require('../auth/authenticator');
 
-router.get('/login', function(req, resp) {
-    resp.send(authenticator.getGoogleAuthUrl());
-});
+//router.get('/login', function(req, resp) {
+//    resp.send(authenticator.getGoogleAuthUrl());
+//});
 
 router.get('/googlecallback', async function(req, resp) {
     await authenticator.getGoogleAuthTokens(req.query.code).then(async function(tokens){

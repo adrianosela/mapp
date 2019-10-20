@@ -2,7 +2,7 @@ let mongoose = require('mongoose');
 
 let userSchema = new mongoose.Schema({
     // id taken from the auth user / user settings
-    id: { type: mongoose.Schema.Types.ObjectId, ref: 'UserSettings', required: true },
+    _id: { type: mongoose.Schema.Types.ObjectId, ref: 'UserSettings', required: true },
     name: { type: String, required: true },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
