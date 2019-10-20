@@ -4,6 +4,7 @@ import 'package:app/components/router.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/resuableFunctions.dart';
+import 'package:app/components/reusableStlyes.dart';
 
 
 class CreatedEventsPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Created Events");
   List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
+  var searchText;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,20 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
               setState(() {
                 if(this.cusIcon.icon == Icons.search) {
                   this.cusIcon = Icon(Icons.cancel);
-                  this.cusWidget = ReusableFunctions.cusWidgetTextField();
+                  this.cusWidget = TextField(
+                    textInputAction: TextInputAction.go,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "search for ...",
+                    ),
+                    style: ReusableStyles.cusWidget(),
+                    onSubmitted: (String str) {
+                      //TODO send to backend
+                      setState(() {
+                        searchText = str;
+                      });
+                    },
+                  );
                 } else {
                   this.cusIcon = Icon(Icons.search);
                   this.cusWidget = Text("Created Events");
