@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 class Event {
 
@@ -9,7 +10,6 @@ class Event {
   final bool public;
 
   Event({this.name, this.description, this.longitude, this.latitude, this.date, this.public});
-  Event.create(this.name, this.description, this.longitude, this.latitude, this.date, this.public);
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
@@ -17,21 +17,20 @@ class Event {
       longitude: json['longitude'],
       latitude: json['latitude'],
       description: json['description'],
-      date: new DateTime.fromMicrosecondsSinceEpoch(json['date']),
+      date: new DateTime.fromMicrosecondsSinceEpoch(json['date']*1000),
       public: json['public'],
     );
   }
 
-  Map toMap() {
-    var map = new Map<String, dynamic>();
+  Map<String, dynamic> toJson() => {
 
-    map['name'] = name;
-    map['longitude'] = longitude.toString();
-    map['latitude'] = latitude.toString();
-    map['description'] = description;
-    map['date'] = date.toUtc().millisecondsSinceEpoch.toString();
-    map['public'] = public.toString();
+    'name' : name,
+    'longitude' : longitude,
+    'latitude' : latitude,
+    'description' : description,
+    'eventDate' : (date.toUtc().millisecondsSinceEpoch/1000).round(),
+    'endsAt' : (date.toUtc().millisecondsSinceEpoch/1000 +1).round(),
+    'public' :  public
+  };
 
-    return map;
-  }
 }
