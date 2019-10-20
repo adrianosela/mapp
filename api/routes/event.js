@@ -32,7 +32,7 @@ router.post('/event', function(req, resp) {
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const eventDate = Number(req.body.eventDate);
-    const eventDuration = Number(req.body.eventDuration);
+    const endsAt = Number(req.body.endsAt);
     const public = req.body.public;
     const invited = req.body.invited;
     // TODO: input validation
@@ -42,7 +42,7 @@ router.post('/event', function(req, resp) {
         description: description,
         location: { type: 'Point', coordinates: [longitude, latitude] },
         date: eventDate,
-        duration: eventDuration,
+        duration: endsAt,
         creator: creator, // TODO: get user id from authenticated token
         public: public,
         invited: invited
