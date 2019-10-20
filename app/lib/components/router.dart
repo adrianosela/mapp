@@ -9,6 +9,7 @@ import 'package:app/screens/friends.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/notifications.dart';
 import 'package:app/screens/pendingInvites.dart';
+import 'package:app/screens/registerScreen.dart';
 import 'package:app/screens/savedEvents.dart';
 
 class Router {
@@ -22,6 +23,7 @@ class Router {
   static const String mapRoute = '/map';
   static const String notificationsRoute = '/notifications';
   static const String pendingInvitesRoute = '/pendingInvites';
+  static const String registerRoute = '/registerRoute';
   static const String savedEventsRoute = '/savedEvents';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -44,6 +46,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => NotificationsPage());
       case pendingInvitesRoute:
         return MaterialPageRoute(builder: (_) => PendingInvitesPage());
+      case registerRoute:
+        return MaterialPageRoute(builder: (_) => RegisterPage());
       case savedEventsRoute:
         return MaterialPageRoute(builder: (_) => SavedEventsPage());
       default:

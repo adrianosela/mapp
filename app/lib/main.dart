@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: EdgeInsets.all(8.0),
                   child: SizedBox(
                     width: 250,
-                    child: ReusableFunctions.loginInputField('username'),
+                    child: ReusableFunctions.loginInputField('email'),
                 ),
               ),
               Padding(

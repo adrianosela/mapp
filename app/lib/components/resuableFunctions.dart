@@ -8,6 +8,8 @@ class ReusableFunctions{
 
   static TextEditingController usernameController = new TextEditingController();
   static TextEditingController passwordController = new TextEditingController();
+  static TextEditingController firstNameController = new TextEditingController();
+  static TextEditingController lastNameController = new TextEditingController();
 
   //TODO
   static void showInSnackBar(String value, BuildContext context) {
@@ -24,18 +26,6 @@ class ReusableFunctions{
       style: ReusableStyles.listItem(),
     );
   }
-
-  //TODO delete?
-  /*static TextField cusWidgetTextField() {
-    return new TextField(
-      textInputAction: TextInputAction.go,
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: "search for ...",
-      ),
-      style: ReusableStyles.cusWidget(),
-    );
-  }*/
 
   //TODO
   static Text titleText(String text) {
@@ -70,10 +60,12 @@ class ReusableFunctions{
         //TODO perform authentication
         var username = usernameController.text;
         var password = passwordController.text;
-        //print(username.toString());
-        //print(password.toString());
         //TODO if successful, then:
-        Navigator.pushNamed(context, Router.mapRoute);
+        if(text == "Register") {
+          Navigator.pushNamed(context, Router.registerRoute);
+        } else {
+          Navigator.pushNamed(context, Router.mapRoute);
+        }
       },
       child: Text(
         text,
@@ -87,7 +79,7 @@ class ReusableFunctions{
   static TextFormField loginInputField(String text) {
     return new TextFormField(
       //TODO add validation?
-      controller: (text == 'username') ? usernameController : passwordController,
+      controller: (text == 'email') ? usernameController : ((text == 'password') ? passwordController : ((text == 'first name') ? firstNameController : lastNameController)),
       decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: text
@@ -97,6 +89,9 @@ class ReusableFunctions{
 
   //TODO
   static String getLoginText(String text) {
-    return (text == 'username') ? usernameController.text.toString() : passwordController.text.toString();
+    if(text == 'email') return usernameController.text;
+    else if (text == 'password') return passwordController.text;
+    else if (text == 'first name') return firstNameController.text;
+    return lastNameController.text;
   }
 }
