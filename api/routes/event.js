@@ -30,13 +30,13 @@ router.post('/event', function(req, resp) {
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const public = req.body.public;
-    // TODO: Add Event Date
+    const eventDate = req.body.date;
     // TODO: input validation
 
     let newEvent = new Event({
         name: name,
         location: { type: 'Point', coordinates: [longitude, latitude] },
-        date: Date.now(),
+        date: eventDate,
         duration: 1000,
         creator: 'some user', // TODO: get user id from authenticated token
         public: public
