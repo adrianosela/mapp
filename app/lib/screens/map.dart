@@ -180,8 +180,8 @@ class _MapPageState extends State<MapPage> {
                     child: RaisedButton(
                       child: Text("Save"),
                       onPressed: () async {
-                        Event event = new Event.create(eventNameCont.text, eventDescriptionCont.text, latlang.longitude, latlang.latitude, eventDate, true);
-                        eventId = await eventController.createEvent("https://mapp-254321.appspot.com/event", body : event.toMap());
+                        Event event = new Event(name : eventNameCont.text, description :eventDescriptionCont.text, longitude : latlang.longitude, latitude :latlang.latitude, date :eventDate, public : true);
+                        eventId = await eventController.createEvent("https://mapp-254321.appspot.com/event", event.toJson());
                         //TODO Figure out what this commented code does
 //                              if (_formKey.currentState.validate()) {
 //

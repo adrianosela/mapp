@@ -11,15 +11,17 @@ class EventController {
   }
 
 
-  Future<String> createEvent(String url, {Map body}) async {
-    return http.post(url, body: body).then((http.Response response) {
+  Future<String> createEvent(String url, body) async {
+    return http.post(url, headers: {"Content-Type": "application/json"}, body: jsonEncode(body)).then((http.Response response) {
       final int statusCode = response.statusCode;
+      print(jsonEncode(body));
       if (statusCode < 200 || statusCode > 400 || json == null) {
+        print(statusCode);
+        print(json);
         throw new Exception("Error while fetching data");
       }
-
       Map<String, dynamic> jsonResponse = json.decode(response.body);
-      return jsonResponse["eventId"];
+      return jsonResponse["data"]["eventId"];
     });
   }
 }
