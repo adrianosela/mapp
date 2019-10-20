@@ -16,7 +16,7 @@ class Event {
       longitude: json['longitude'],
       latitude: json['latitude'],
       description: json['description'],
-      date: json['date'],
+      date: new DateTime.fromMicrosecondsSinceEpoch(json['date']),
       public: json['public'],
     );
   }
@@ -28,9 +28,9 @@ class Event {
     map['longitude'] = longitude;
     map['latitude'] = latitude;
     map['description'] = description;
-    map['date'] = date;
+    map['date'] = date.toUtc().millisecondsSinceEpoch;
     map['public'] = public;
-    
+
     return map;
   }
 }
