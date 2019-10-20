@@ -11,6 +11,8 @@ import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/resuableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
 
+import 'package:app/controllers/eventController.dart';
+import 'package:app/models/eventModel.dart';
 
 
 class MapPage extends StatefulWidget {
@@ -29,11 +31,13 @@ class _MapPageState extends State<MapPage> {
   final _formKey = GlobalKey<FormState>();
   bool isSwitched = true;
   var searchText;
+  var eventDate;
+  var eventId;
 
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
-
+  EventController eventController = EventController();
 
   //TODO sets the initial view of the map needs to be changed to user location
   static const LatLng _center = const LatLng(49.2827, -123.1207);
@@ -105,7 +109,7 @@ class _MapPageState extends State<MapPage> {
                               maxTime: DateTime(2023, 6, 7), onChanged: (date) {
                                 //print('change $date');
                               }, onConfirm: (date) {
-                                //print('confirm $date');
+                                eventDate = date;
                               }, currentTime: DateTime.now(), locale: LocaleType.en);
                         },
                         child: Text(
@@ -175,7 +179,9 @@ class _MapPageState extends State<MapPage> {
                     padding: const EdgeInsets.all(2.0),
                     child: RaisedButton(
                       child: Text("Save"),
-                      onPressed: () {
+                      onPressed: () async {
+                        Event event = new Event.create(eventNameCont.text, eventDescriptionCont.text, latlang.longitude, latlang.latitude, eventDate, true);
+                        eventId = await eventController.createEvent("https://mapp-254321.appspot.com/event", body : event.toMap());
                         //TODO Figure out what this commented code does
 //                              if (_formKey.currentState.validate()) {
 //
@@ -199,7 +205,7 @@ class _MapPageState extends State<MapPage> {
   Future _addMarkerLongPressed(LatLng latlang) async {
     setState(() {
       //TODO need to pass event_id into the MarkerId, using event name for now
-      final MarkerId markerId = MarkerId(eventNameCont.text);
+      final MarkerId markerId = MarkerId(eventId);
       Marker marker = Marker(
         markerId: markerId,
         draggable: false,
