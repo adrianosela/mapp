@@ -43,7 +43,7 @@ router.post('/event', function(req, resp) {
         location: { type: 'Point', coordinates: [longitude, latitude] },
         date: eventDate,
         duration: endsAt,
-        creator: creator, // TODO: get user id from authenticated token
+        creator: creator, 
         public: public,
         invited: invited
     });
