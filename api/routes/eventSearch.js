@@ -18,7 +18,7 @@ router.get('/findEvents', function(req, resp) {
         location: {
             $near: {
                 $maxDistance: radius,
-	            $geometry: { type: "Point", coordinates: [longitude, latitude] }
+                $geometry: { type: "Point", coordinates: [longitude, latitude] }
             }
         },
         public: true

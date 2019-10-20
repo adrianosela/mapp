@@ -9,6 +9,7 @@ class Event {
   final bool public;
 
   Event({this.name, this.description, this.longitude, this.latitude, this.date, this.public});
+  Event.create(this.name, this.description, this.longitude, this.latitude, this.date, this.public);
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
@@ -25,11 +26,11 @@ class Event {
     var map = new Map<String, dynamic>();
 
     map['name'] = name;
-    map['longitude'] = longitude;
-    map['latitude'] = latitude;
+    map['longitude'] = longitude.toString();
+    map['latitude'] = latitude.toString();
     map['description'] = description;
-    map['date'] = date.toUtc().millisecondsSinceEpoch;
-    map['public'] = public;
+    map['date'] = date.toUtc().millisecondsSinceEpoch.toString();
+    map['public'] = public.toString();
 
     return map;
   }

@@ -3,10 +3,13 @@ const router = require('express').Router();
 let User = require('../models/user');
 
 router.get('/searchUsers', function(req, resp) {
-    const userName = req.query.userName;
+    const userInfo = req.query.userName;
 
     const query = {
-        name: { $regex: "^" + userName }
+        $or: [ 
+            { name: { $regex: "^" + userInfo } },
+            { email: { $regex: "^" + userInfo } }
+        ]
     };
 
     User.find(query, function(err, users) {
