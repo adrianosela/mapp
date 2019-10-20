@@ -34,6 +34,7 @@ router.post('/event', function(req, resp) {
     const eventDate = Number(req.body.eventDate);
     const eventDuration = Number(req.body.eventDuration);
     const public = req.body.public;
+    const invited = req.body.invited;
     // TODO: input validation
 
     let newEvent = new Event({
@@ -43,7 +44,8 @@ router.post('/event', function(req, resp) {
         date: eventDate,
         duration: eventDuration,
         creator: creator, // TODO: get user id from authenticated token
-        public: public
+        public: public,
+        invited: invited
     });
 
     newEvent.save(function(err, event) {
