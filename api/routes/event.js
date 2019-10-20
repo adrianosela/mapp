@@ -27,18 +27,22 @@ router.get('/event', function(req, resp) {
  */
 router.post('/event', function(req, resp) {
     const name = req.body.name;
+    const description = req.body.description;
+    const creator = req.token.sub;
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
+    const eventDate = Number(req.body.eventDate);
+    const eventDuration = Number(req.body.eventDuration);
     const public = req.body.public;
-    const eventDate = req.body.date;
     // TODO: input validation
 
     let newEvent = new Event({
         name: name,
+        description: description,
         location: { type: 'Point', coordinates: [longitude, latitude] },
         date: eventDate,
-        duration: 1000,
-        creator: 'some user', // TODO: get user id from authenticated token
+        duration: eventDuration,
+        creator: creator, // TODO: get user id from authenticated token
         public: public
     });
 

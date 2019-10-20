@@ -2,16 +2,18 @@ let mongoose = require('mongoose');
 
 let eventSchema = new mongoose.Schema({
     name: { type: String , required: true },
+    description: { type: String, required: false, default: ""},
+    
     // time/place
     location: {
         type: { type: String, required: true },
         coordinates: []
     },
-    date: { type: Date, required: true },
-    duration: { type: Number, required: true },
+    date: { type: Number, required: true },
+    duration: { type: Number, required: true },     //Approx. duration for Event in Hours
 
     // people
-    creator: { type: String, required: true },
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
     invited: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
     
