@@ -1,6 +1,7 @@
 let mongoose = require('mongoose');
 
 let eventSchema = new mongoose.Schema({
+    name: { type: String , required: true },
     // time/place
     location: {
         type: { type: String, required: true },

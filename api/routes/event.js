@@ -24,12 +24,14 @@ router.get('/event', function(req, resp) {
  * POST /event - create an event (from json request body)
  */
 router.post('/event', function(req, resp) {
+    const name = req.body.name;
     const latitude = Number(req.body.latitude);
     const longitude = Number(req.body.longitude);
     const public = req.body.public;
     // TODO: input validation
 
     var newEvent = new Event({
+        name: name,
         location: { type: 'Point', coordinates: [longitude, latitude] },
         date: Date.now(),
         duration: 1000,
