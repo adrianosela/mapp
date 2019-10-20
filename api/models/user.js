@@ -1,14 +1,10 @@
 let mongoose = require('mongoose');
 
 let userSchema = new mongoose.Schema({
+    // id taken from the auth user / user settings
+    id: { type: mongoose.Schema.Types.ObjectId, ref: 'UserSettings', required: true },
     name: { type: String, required: true },
-    email: { type: String, required: true },
     picture: { type: String, required: true },
-    id: { type: String, required: true }, // google id
-    preferences: {
-        categories: { type: [ String ], required: false, default: [] },
-        publicMode: { type: Boolean, required: false, default: false }
-    },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }]
 });
