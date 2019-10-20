@@ -4,6 +4,7 @@ const config = require('config');
 const routes = require('./routes/mux');
 const db = require('./store/datastore');
 const authenticator = require('./auth/authenticator');
+const notificationsEngine = require('./notifications/notificationsEngine');
 
 // init db
 db.initialize(
@@ -16,6 +17,11 @@ authenticator.initialize(
     config.get('auth.google.clientid'),
     config.get('auth.google.clientsecret'),
     config.get('auth.google.redirecturl')
+);
+
+// init Firebase Cloud Messaging
+notificationsEngine.initialize(
+    config.get('notifications.firebase')
 );
 
 // define http endpoints
