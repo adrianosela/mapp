@@ -4,7 +4,7 @@ const config = require('config');
 const routes = require('./routes/mux');
 const db = require('./store/datastore');
 const authenticator = require('./auth/authenticator');
-const notificationsEngine = require('./notifications/notificationsEngine');
+const notifications = require('./notifications/notifications');
 
 // init db
 db.initialize(
@@ -20,7 +20,7 @@ authenticator.initialize(
 );
 
 // init Firebase Cloud Messaging
-notificationsEngine.initialize(
+notifications.initialize(
     config.get('notifications.firebase')
 );
 
