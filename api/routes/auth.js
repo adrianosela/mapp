@@ -14,7 +14,7 @@ router.post('/register', async function(req, resp) {
 
     // check email is not used
     UserSettings.findOne( {email: req.body.email}, function (err, user) {
-	    if (user) { resp.status(400).send('user with that email already exists'); }
+        if (user) { resp.status(400).send('user with that email already exists'); }
     });
 
     // hash password and store
@@ -22,8 +22,8 @@ router.post('/register', async function(req, resp) {
 
     // populate new user settings schema
     let newUserSettings = new UserSettings({
-	    email: req.body.email,
-	    hash: hashed
+        email: req.body.email,
+        hash: hashed
     });
 
     // save new user settings
@@ -32,24 +32,24 @@ router.post('/register', async function(req, resp) {
         savedUserSettings = await newUserSettings.save();
     }
     catch (e) {
-	    console.log(e);
-	    resp.status(500).send('could not save new user settings');
+        console.log(e);
+        resp.status(500).send('could not save new user settings');
     }
 
     // populate new user schema
     let newUser = new User({
-	    _id: savedUserSettings._id, // same BSON id as user settings
-	    name: req.body.name
+        _id: savedUserSettings._id, // same BSON id as user settings
+        name: req.body.name
     });
 
     // save new user
     let savedUser;
     try {
-	    savedUser = await newUser.save();
+        savedUser = await newUser.save();
     }
     catch (e) {
-	    console.log(e);
-	    resp.status(500).send('could not save new user');
+        console.log(e);
+        resp.status(500).send('could not save new user');
     }
 
     // return saved user
