@@ -1,14 +1,12 @@
 const router = require('express').Router();
-const notificationsEngine = require('../notifications/notificationsEngine');
+const notifications = require('../notifications/notifications');
 const middleware = require('./middleware');
 
+// import Event and User schemas
 let Event = require('../models/event');
 let User = require('../models/user');
 
-/**
- * GET /event - retrieve all data on an event by id.
- *               there should be an 'id' query param
- */
+// retrieve all data on an event by id in query string
 router.get('/event', middleware.verifyToken, async function(req, resp) {
     try {
         let event = await Event.findById(req.query.id);
@@ -25,28 +23,38 @@ router.get('/event', middleware.verifyToken, async function(req, resp) {
     }
 });
 
-/**
- * POST /event - create an event (from json request body)
- */
+// create an event (from json request body)
 router.post('/event', middleware.verifyToken, async function(req, resp) {
     try {
-        const name = req.body.name;
-        const description = req.body.description;
+        // creator from token
         const creator = req.authorization.id;
-        const latitude = Number(req.body.latitude);
-        const longitude = Number(req.body.longitude);
-        const startTime = Number(req.body.startTime);
-        const endTime = Number(req.body.endTime);
-        const public = req.body.public;
-        const invited = req.body.invited;
-        // TODO: input validation
+
+        // event details from req body
+        const {
+            name,
+            description,
+            latitude,
+            longitude,
+            startTime,
+            endTime,
+            public,
+            invited
+        } = req.body;
+
+        // enforce types
+        const lat = Number(latitude);
+        const lon = Number(longitude);
+        const start = Number(startTime);
+        const end = Number(endTime);
+
+        // TODO: event validation method
 
         let newEvent = new Event({
             name: name,
             description: description,
-            location: { type: 'Point', coordinates: [longitude, latitude] },
-            startTime: startTime,
-            endTime: endTime,
+            location: { type: 'Point', coordinates: [lon, lat] },
+            startTime: start,
+            endTime: end,
             creator: creator,
             public: public,
             invited: invited
@@ -60,22 +68,24 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
                 eventId: event._id
             }
         }
-
         resp.json(response);
     }
-    catch (error) {
-        console.log(error);
-        resp.status(500).send('Failed to create event');
+    catch (e) {
+        console.log(e);
+        resp.status(500).send('failed to create event');
     }
 });
 
-router.post('/event/invite', async function(req, resp) {
+// invite people to an event
+router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
     const invited = req.body.invited;
+
+    // TODO: check nonempty
 
     let invitedUsers = []
     for(let userInfo of invited) {
         let query = {
-            $or: [ 
+            $or: [
                 { email: userInfo },
                 { name: userInfo }
             ]
@@ -86,7 +96,7 @@ router.post('/event/invite', async function(req, resp) {
         if (user != null) {
             invitedUsers.push(user);
         }
-        
+
         // TODO: Send notification to user
         // notificationsEngine.invited.push(user.id);
     }
@@ -105,8 +115,8 @@ router.post('/event/invite', async function(req, resp) {
                 eventId: updatedEvent._id
             }
         }
-        
-        resp.json(response);   
+
+        resp.json(response);
     }
     catch (error) {
         console.log(error);
@@ -114,7 +124,10 @@ router.post('/event/invite', async function(req, resp) {
     }
 });
 
-router.put('event', async function(req, resp) {
+// update an event if user is creator
+router.put('event', middleware.verifyToken, async function(req, resp) {
+
+
     try {
         let newEvent = req.body.event;
 

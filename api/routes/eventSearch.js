@@ -1,20 +1,19 @@
 const router = require('express').Router();
 
+// import Event schema
 let Event = require('../models/event');
 
-/**
- * GET /findEvents - get all events within a given radius
- *                   of given latitude and longitude, if 
- *                   event is marked as public
- */
-router.get('/findEvents', function(req, resp) {
+// get all events within a given radius of given latitude
+// and longitude, if event is marked as public
+router.get('/event/search', function(req, resp) {
     const longitude = req.query.longitude;
     const latitude = req.query.latitude;
     const radius = req.query.radius;
-    // TODO: validate lat, lon, rad
+
+    // TODO: validate latitude, longitude, and radius (enforce max - return 400)
 
     const query = {
-    // TODO: filter events by user filters
+        // TODO: include user-set filters
         location: {
             $near: {
                 $maxDistance: radius,

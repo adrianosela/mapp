@@ -1,6 +1,6 @@
 const fcm = require('fcm-notification');
 
-class NotificationsEngine {
+class Notifications {
     constructor() {
         this.fcm = null;
         this.tokens = [];
@@ -34,5 +34,5 @@ class NotificationsEngine {
     }
 }
 
-let notificationsEngine = new NotificationsEngine();
-module.exports = notificationsEngine;
+let notifications = new Notifications();
+module.exports = notifications;

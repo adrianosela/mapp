@@ -1,12 +1,14 @@
 const router = require('express').Router();
 
+// import User schema
 let User = require('../models/user');
 
-router.get('/searchUsers', function(req, resp) {
-    const userInfo = req.query.userName;
+// get users by username regex
+router.get('/user/search', function(req, resp) {
 
+    const userInfo = req.query.username;
     const query = {
-        $or: [ 
+        $or: [
             { name: { $regex: "^" + userInfo } },
             { email: { $regex: "^" + userInfo } }
         ]
@@ -15,11 +17,11 @@ router.get('/searchUsers', function(req, resp) {
     User.find(query, function(err, users) {
         if (err) {
             console.log(err);
-            resp.status(500).send('Could not retrieve users');
+            resp.status(500).send('could not retrieve users');
         }
-
         resp.send(users);
     });
+
 });
 
 module.exports = router;
