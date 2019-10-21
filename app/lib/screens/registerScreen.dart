@@ -115,7 +115,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       userId = await LoginController.registerUser(
                           "https://mapp-254321.appspot.com/register",
                           user.toJson());
-                      print(userId.toString());
 
                       //navigate to map screen
                       Navigator.pushNamed(context, Router.mapRoute);
