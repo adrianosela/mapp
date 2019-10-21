@@ -22,6 +22,8 @@ class _RegisterPageState extends State<RegisterPage> {
   var searchText;
   var userId;
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,9 +62,8 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Container(
+        child: Form(
+          key: _formKey,
           child: Column(
 
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,19 +100,31 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: EdgeInsets.all(8.0),
                   splashColor: Colors.blueAccent,
                   onPressed: () async {
-                    //send new user info to backend
-                    User user = new User(name: ReusableFunctions.getLoginText('name'),
-                        email: ReusableFunctions.getLoginText('email'),
-                        password: ReusableFunctions.getLoginText('password')
-                    );
-                    print("=================");
-                    print(ReusableFunctions.getLoginText('first name'));
-                    print(ReusableFunctions.getLoginText('email'));
-                    //save userId
-                    userId = await LoginController.registerUser("https://mapp-254321.appspot.com/register", user.toJson());
-                    print(userId.toString());
-                    //navigate to map screen
-                    Navigator.pushNamed(context, Router.mapRoute);
+
+                    //check that all form's fields have user-entered values
+                    if (_formKey.currentState.validate()) {
+                      Scaffold
+                          .of(context)
+                          .showSnackBar(SnackBar(content: Text('Processing Data')));
+                    }
+                    else {
+
+                      //send new user info to backend
+                      User user = new User(
+                          name: ReusableFunctions.getLoginText('name'),
+                          email: ReusableFunctions.getLoginText('email'),
+                          password: ReusableFunctions.getLoginText('password')
+                      );
+
+                      //save userId
+                      userId = await LoginController.registerUser(
+                          "https://mapp-254321.appspot.com/register",
+                          user.toJson());
+                      print(userId.toString());
+
+                      //navigate to map screen
+                      Navigator.pushNamed(context, Router.mapRoute);
+                    }
                   },
                   child: Text(
                     "Register",

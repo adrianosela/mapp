@@ -76,7 +76,12 @@ class ReusableFunctions{
   //TODO
   static TextFormField loginInputField(String text) {
     return new TextFormField(
-      //TODO add validation?
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter some text';
+        }
+        return null;
+      },
       controller: (text == 'email') ? usernameController : ((text == 'password') ? passwordController : nameController),
       decoration: InputDecoration(
           border: OutlineInputBorder(),
