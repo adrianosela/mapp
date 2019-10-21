@@ -18,7 +18,7 @@ class Datastore {
      */
     initialize(url, dbName) {
         mongoose.connect(url + '/' + dbName, options).then(() => {
-            console.log('[info] successfully connected to ' + dbName + ' at ' + url);
+            console.log('[info] successfully connected to ' + dbName);
 
             mongoose.connection.on('error', function(err) {
                 console.log('[error] ' + err);

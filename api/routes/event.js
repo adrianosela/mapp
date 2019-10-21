@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const notificationsEngine = require('../notifications/notificationsEngine');
+const middleware = require('./middleware');
 
 let Event = require('../models/event');
 let User = require('../models/user');
@@ -8,7 +9,7 @@ let User = require('../models/user');
  * GET /event - retrieve all data on an event by id.
  *               there should be an 'id' query param
  */
-router.get('/event', async function(req, resp) {
+router.get('/event', middleware.verifyToken, async function(req, resp) {
     try {
         let event = await Event.findById(req.query.id);
 
@@ -27,11 +28,11 @@ router.get('/event', async function(req, resp) {
 /**
  * POST /event - create an event (from json request body)
  */
-router.post('/event', async function(req, resp) {
+router.post('/event', middleware.verifyToken, async function(req, resp) {
     try {
         const name = req.body.name;
         const description = req.body.description;
-        // const creator = req.token.sub;
+        const creator = req.authentication.id;
         const latitude = Number(req.body.latitude);
         const longitude = Number(req.body.longitude);
         const startTime = Number(req.body.startTime);
@@ -46,7 +47,7 @@ router.post('/event', async function(req, resp) {
             location: { type: 'Point', coordinates: [longitude, latitude] },
             startTime: startTime,
             endTime: endTime,
-            creator: "someone",     // TODO: Change it back to token
+            creator: creator,
             public: public,
             invited: invited
         });
@@ -116,7 +117,6 @@ router.post('/event/invite', async function(req, resp) {
 router.put('event', async function(req, resp) {
     try {
         let newEvent = req.body.event;
-
 
         let event = await Event.findByIdAndUpdate(newEvent._id, newEvent);
 

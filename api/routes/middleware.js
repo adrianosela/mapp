@@ -3,6 +3,11 @@ const config = require('config');
 
 let verifyToken = (req, res, next) => {
     let token = req.headers['x-access-token'] || req.headers['authorization'];
+    if (!token) {
+	res.status(401).send('no bearer token in hedaer');
+	return;
+    }
+
     if (token.startsWith('Bearer ')) {
         token = token.slice(7, token.length);
     }
