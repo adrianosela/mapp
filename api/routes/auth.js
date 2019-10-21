@@ -56,7 +56,7 @@ router.post('/register', async function(req, resp) {
     catch (e) {
         console.log(e);
         resp.status(500).send('could not save new user');
-    return;
+        return;
     }
 
     // return saved user
