@@ -56,4 +56,36 @@ router.post('/register', async function(req, resp) {
     resp.json(savedUser);
 });
 
+// trade basic credentials for a signed JWT
+router.post('/login', async function(req, resp) {
+    // check fields are set
+    if (!req.body.email) { resp.status(400).send('no email provided'); }
+    if (!req.body.password) { resp.status(400).send('no password provided'); }
+
+    // fetch user from db
+    let user;
+    try {
+    	user = await UserSettings.findOne({email: req.body.email})
+    	if (!user) {
+    		resp.status(401).send("unauthorized");
+    	}
+    }
+    catch (e) {
+		console.log(e);
+        resp.status(500).send('could not retrieve user');
+    }
+
+    // check hashed password matches stored hash
+    bcrypt.compare(req.body.password, user.hash, function(err, res) {
+    	if (err || !res) {
+    		resp.status(401).send("unauthorized");
+    	}
+    });
+
+    // construct session token
+    let token = jwt.sign({id: user._id}, config.auth.signing_secret, { expiresIn: '24h' });
+
+    resp.json(token);
+});
+
 module.exports = router;
