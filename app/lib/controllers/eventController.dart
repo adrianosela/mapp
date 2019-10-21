@@ -26,16 +26,16 @@ class EventController {
 
     if (response.statusCode == 200) {
       var events = json.decode(response.body);
+
       for (var event in events) {
         allEvents.add(Event.fromJson(event));
       }
-      print(allEvents);
-      return allEvents;
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
 
+    return allEvents;
   }
 
   Future<String> createEvent(String url, body) async {
