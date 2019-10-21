@@ -8,11 +8,12 @@ class Event {
   final String description;
   final DateTime date;
   final bool public;
+  String eventId;
 
   Event({this.name, this.description, this.longitude, this.latitude, this.date, this.public});
 
   factory Event.fromJson(Map<String, dynamic> json) {
-    return Event(
+    Event event = new Event(
       name: json['name'],
       longitude: json['location']['coordinates'][0],
       latitude: json['location']['coordinates'][1],
@@ -20,6 +21,8 @@ class Event {
       date: new DateTime.fromMicrosecondsSinceEpoch(json['startTime']*1000),
       public: json['public'],
     );
+    event.eventId = json['_id'];
+    return event;
   }
 
   Map<String, dynamic> toJson() => {

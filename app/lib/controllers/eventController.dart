@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:app/Models/eventModel.dart';
+import 'package:app/models/eventModel.dart';
 import 'package:http/http.dart' as http;
 
 class EventController {
+
 
   Future<List<Event>> getEvents(int radius, double longitude, double latitude) async {
 
@@ -26,7 +27,8 @@ class EventController {
 
     if (response.statusCode == 200) {
       var events = json.decode(response.body);
-
+      print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      print(events);
       for (var event in events) {
         allEvents.add(Event.fromJson(event));
       }

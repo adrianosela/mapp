@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:app/models/userModel.dart';
+import 'package:app/Models/userModel.dart';
 import 'package:http/http.dart' as http;
 
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as prefix0;
 import 'package:location/location.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
@@ -48,7 +49,6 @@ class _MapPageState extends State<MapPage> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-
   }
 
   @override
@@ -66,8 +66,9 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
       );
-      eventController.getEvents(500000, location.longitude, location.latitude);
+      _addMarkers(location);
     });
+
   }
 
   GoogleMap _initializeMap(){
@@ -193,6 +194,7 @@ class _MapPageState extends State<MapPage> {
 //                              }
                         //TODO Need to pass Title to add to marker
                         _addMarkerLongPressed(latlang);
+
                         //TODO append event to list of created events, show new pin on map?
                         Navigator.of(context).pop();
                       },
@@ -229,6 +231,34 @@ class _MapPageState extends State<MapPage> {
       markers[markerId] = marker;
     });
 
+  }
+
+  Future _addMarkers(location) async {
+
+    List<Event> events = await eventController.getEvents(5000, location.longitude, location.latitude);
+    setState(() {
+      for (Event event in events) {
+        print(event.name);
+        print(event.eventId);
+        final MarkerId markerId = MarkerId(event.eventId);
+
+        final LatLng position = new prefix0.LatLng(event.latitude, event.longitude);
+        Marker marker = Marker(
+          markerId: markerId,
+          draggable: false,
+          position: position,
+          //With this parameter you automatically obtain latitude and longitude
+          infoWindow: InfoWindow(
+            title: event.name,
+            snippet: event.description,
+
+          ),
+          //TODO Change color of marker depending on event type
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+        );
+        markers[markerId] = marker;
+      }
+    });
   }
 
   @override
