@@ -9,8 +9,8 @@ let eventSchema = new mongoose.Schema({
         type: { type: String, required: true },
         coordinates: []
     },
-    date: { type: Number, required: true },
-    endsAt: { type: Number, required: true },
+    startTime: { type: Number, required: true },
+    endTime: { type: Number, required: true },
 
     // people
     creator: { type: String, required: true },
