@@ -34,8 +34,8 @@ router.post('/event', async function(req, resp) {
         const creator = req.token.sub;
         const latitude = Number(req.body.latitude);
         const longitude = Number(req.body.longitude);
-        const eventDate = Number(req.body.eventDate);
-        const endsAt = Number(req.body.endsAt);
+        const startTime = Number(req.body.startTime);
+        const endTime = Number(req.body.endTime);
         const public = req.body.public;
         const invited = req.body.invited;
         // TODO: input validation
@@ -44,8 +44,8 @@ router.post('/event', async function(req, resp) {
             name: name,
             description: description,
             location: { type: 'Point', coordinates: [longitude, latitude] },
-            date: eventDate,
-            duration: endsAt,
+            startTime: startTime,
+            endTime: endTime,
             creator: creator, 
             public: public,
             invited: invited
