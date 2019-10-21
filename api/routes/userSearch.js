@@ -15,7 +15,7 @@ router.get('/searchUsers', function(req, resp) {
     User.find(query, function(err, users) {
         if (err) {
             console.log(err);
-            resp.status(500, 'Could not retrieve users');
+            resp.status(500).send('Could not retrieve users');
         }
 
         resp.send(users);

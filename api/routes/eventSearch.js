@@ -27,7 +27,7 @@ router.get('/findEvents', function(req, resp) {
     Event.find(query, function(err, events) {
         if (err) {
             console.log(err);
-            resp.status(500, 'Could not retrieve events');
+            resp.status(500).send('Could not retrieve events');
         }
 
         resp.send(events);
