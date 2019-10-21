@@ -113,6 +113,19 @@ router.post('/event/invite', async function(req, resp) {
     }
 });
 
-// TODO: Add PUT for updating event
+router.put('event', async function(req, resp) {
+    try {
+        let newEvent = req.body.event;
+
+
+        let event = await Event.findByIdAndUpdate(newEvent._id, newEvent);
+
+        resp.send(event);
+    }
+    catch (error) {
+        console.log(error);
+        resp.status(500).send("Error updating event");
+    }
+});
 
 module.exports = router;
