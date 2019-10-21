@@ -1,5 +1,7 @@
 const router = require('express').Router();
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const config = require('config');
 
 // import User & UserSettings schemas
 let User = require('../models/user');
@@ -8,13 +10,16 @@ let UserSettings = require('../models/userSettings');
 // register a new user into mapp
 router.post('/register', async function(req, resp) {
     // check fields are set
-    if (!req.body.email) { resp.status(400).send('no email provided'); }
-    if (!req.body.password) { resp.status(400).send('no password provided'); }
-    if (!req.body.name) { resp.status(400).send('no preffered name provided'); }
+    if (!req.body.email) { resp.status(400).send('no email provided'); return; }
+    if (!req.body.password) { resp.status(400).send('no password provided'); return; }
+    if (!req.body.name) { resp.status(400).send('no preffered name provided'); return; }
 
     // check email is not used
     UserSettings.findOne( {email: req.body.email}, function (err, user) {
-        if (user) { resp.status(400).send('user with that email already exists'); }
+        if (user) {
+	    resp.status(400).send('user with that email already exists');
+	    return;
+	}
     });
 
     // hash password and store
@@ -34,6 +39,7 @@ router.post('/register', async function(req, resp) {
     catch (e) {
         console.log(e);
         resp.status(500).send('could not save new user settings');
+	return;
     }
 
     // populate new user schema
@@ -50,6 +56,7 @@ router.post('/register', async function(req, resp) {
     catch (e) {
         console.log(e);
         resp.status(500).send('could not save new user');
+	return;
     }
 
     // return saved user
@@ -59,8 +66,8 @@ router.post('/register', async function(req, resp) {
 // trade basic credentials for a signed JWT
 router.post('/login', async function(req, resp) {
     // check fields are set
-    if (!req.body.email) { resp.status(400).send('no email provided'); }
-    if (!req.body.password) { resp.status(400).send('no password provided'); }
+    if (!req.body.email) { resp.status(400).send('no email provided'); return; }
+    if (!req.body.password) { resp.status(400).send('no password provided'); return; }
 
     // fetch user from db
     let user;
@@ -68,24 +75,41 @@ router.post('/login', async function(req, resp) {
     	user = await UserSettings.findOne({email: req.body.email})
     	if (!user) {
     		resp.status(401).send("unauthorized");
+		return;
     	}
     }
     catch (e) {
-		console.log(e);
-        resp.status(500).send('could not retrieve user');
+	console.log(e);
+        resp.status(500).send();
+	return;
     }
 
-    // check hashed password matches stored hash
-    bcrypt.compare(req.body.password, user.hash, function(err, res) {
-    	if (err || !res) {
-    		resp.status(401).send("unauthorized");
-    	}
-    });
-
+    // check whether hashed password matches stored hash
+    try {
+	const match = await bcrypt.compare(req.body.password, user.hash);
+        if (!match) {
+	    resp.status(401).send("unauthorized");
+            return;
+	}
+    }
+    catch (e) {
+	console.log(e);
+	resp.status(500).send();
+	return;
+    }
+    
     // construct session token
-    let token = jwt.sign({id: user._id}, config.auth.signing_secret, { expiresIn: '24h' });
+    let token;
+    try {
+        token = await jwt.sign({id: user._id}, config.auth.signing_secret, { expiresIn: '24h' });
+    }
+    catch (e) {
+	console.trace(e);
+	resp.status(401).send("unauthorized");
+	return;
+    }
 
-    resp.json(token);
+    resp.json({token: token});
 });
 
 module.exports = router;
