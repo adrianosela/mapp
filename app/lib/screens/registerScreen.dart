@@ -4,6 +4,9 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/resuableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
+import 'package:app/components/router.dart';
+import 'package:app/models/userModel.dart';
+import 'package:app/controllers/loginController.dart';
 
 
 class RegisterPage extends StatefulWidget {
@@ -17,6 +20,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Register");
   var searchText;
+  var userId;
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +62,8 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Container(
+        child: Form(
+          key: _formKey,
           child: Column(
 
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,14 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
                   width: 250,
-                  child: ReusableFunctions.loginInputField('first name'),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: 250,
-                  child: ReusableFunctions.loginInputField('last name'),
+                  child: ReusableFunctions.loginInputField('name'),
                 ),
               ),
               Padding(
@@ -94,7 +92,45 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               SizedBox(
                 width: 250,
-                child: ReusableFunctions.loginButton(context, "Register"),
+                child: FlatButton(
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  disabledColor: Colors.grey,
+                  disabledTextColor: Colors.black,
+                  padding: EdgeInsets.all(8.0),
+                  splashColor: Colors.blueAccent,
+                  onPressed: () async {
+
+                    //check that all form's fields have user-entered values
+                    if (_formKey.currentState.validate()) {
+                      Scaffold
+                          .of(context)
+                          .showSnackBar(SnackBar(content: Text('Processing Data')));
+                    }
+                    else {
+
+                      //send new user info to backend
+                      User user = new User(
+                          name: ReusableFunctions.getLoginText('name'),
+                          email: ReusableFunctions.getLoginText('email'),
+                          password: ReusableFunctions.getLoginText('password')
+                      );
+
+                      //save userId
+                      userId = await LoginController.registerUser(
+                          "https://mapp-254321.appspot.com/register",
+                          user.toJson());
+                      print(userId.toString());
+
+                      //navigate to map screen
+                      Navigator.pushNamed(context, Router.mapRoute);
+                    }
+                  },
+                  child: Text(
+                    "Register",
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                )
               ),
             ],
           ),
