@@ -103,11 +103,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                     //check that all form's fields have user-entered values
                     if (_formKey.currentState.validate()) {
-                      Scaffold
-                          .of(context)
-                          .showSnackBar(SnackBar(content: Text('Processing Data')));
-                    }
-                    else {
 
                       //send new user info to backend
                       User user = new User(
