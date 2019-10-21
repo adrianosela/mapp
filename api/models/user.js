@@ -6,8 +6,8 @@ let userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
-    going: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event', required: false }],
-    created: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event', required: false }]
+    subscribedEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event', required: false }],
+    createdEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event', required: false }]
 });
 
 let User = module.exports = mongoose.model('User', userSchema);
