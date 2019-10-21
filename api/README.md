@@ -2,15 +2,15 @@
 
 The back end is written in Node (JavaScript) using the [Express](https://expressjs.com/) web framework.
 
-### [Running](#running)
+### [Run](#running)
 * [On Your Machine](#run-on-your-machine)
 * [In Docker Container](#run-in-docker)
 
-### [Deploying](#deploying)
+### [Deploy](#deploying)
 * [Acquire Deployment Credentials](#acquire-deployment-credentials)
 * [Deploy to Google App Engine](#deploy-to-google-app-engine)
 
-### [Secrets Management](#secrets-management)
+### [Secrets Mgmt.](#secrets-management)
 * [Using SOPS](#using-SOPS)
 
 ## Running
