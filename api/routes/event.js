@@ -13,14 +13,14 @@ router.get('/event', async function(req, resp) {
         let event = await Event.findById(req.query.id);
 
         if (!event) {
-            resp.status(404, 'Event not found');
+            resp.status(404).send('Event not found');
         }
 
         resp.json(event);
     }
     catch (error) {
         console.log(error);
-        resp.status(500, 'Could not retrieve event');
+        resp.status(500).send('Could not retrieve event');
     }
 });
 
@@ -109,7 +109,7 @@ router.post('/event/invite', async function(req, resp) {
     }
     catch (error) {
         console.log(error);
-        resp.status(500, "Can't Invite Users to Event");
+        resp.status(500).send("Can't Invite Users to Event");
     }
 });
 
