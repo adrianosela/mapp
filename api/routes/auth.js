@@ -17,9 +17,9 @@ router.post('/register', async function(req, resp) {
     // check email is not used
     UserSettings.findOne( {email: req.body.email}, function (err, user) {
         if (user) {
-	    resp.status(400).send('user with that email already exists');
-	    return;
-	}
+            resp.status(400).send('user with that email already exists');
+            return;
+        }
     });
 
     // hash password and store
@@ -39,7 +39,7 @@ router.post('/register', async function(req, resp) {
     catch (e) {
         console.log(e);
         resp.status(500).send('could not save new user settings');
-	return;
+        return;
     }
 
     // populate new user schema
@@ -56,7 +56,7 @@ router.post('/register', async function(req, resp) {
     catch (e) {
         console.log(e);
         resp.status(500).send('could not save new user');
-	return;
+    return;
     }
 
     // return saved user
@@ -72,30 +72,30 @@ router.post('/login', async function(req, resp) {
     // fetch user from db
     let user;
     try {
-    	user = await UserSettings.findOne({email: req.body.email})
-    	if (!user) {
-    		resp.status(401).send("unauthorized");
-		return;
-    	}
+        user = await UserSettings.findOne({email: req.body.email})
+        if (!user) {
+            resp.status(401).send("unauthorized");
+            return;
+        }
     }
     catch (e) {
-	console.log(e);
+        console.log(e);
         resp.status(500).send();
-	return;
+        return;
     }
 
     // check whether hashed password matches stored hash
     try {
-	const match = await bcrypt.compare(req.body.password, user.hash);
+        const match = await bcrypt.compare(req.body.password, user.hash);
         if (!match) {
-	    resp.status(401).send("unauthorized");
+            resp.status(401).send("unauthorized");
             return;
-	}
+        }
     }
     catch (e) {
-	console.log(e);
-	resp.status(500).send();
-	return;
+        console.log(e);
+        resp.status(500).send();
+        return;
     }
     
     // construct session token
@@ -104,9 +104,9 @@ router.post('/login', async function(req, resp) {
         token = await jwt.sign({id: user._id}, config.auth.signing_secret, { expiresIn: '24h' });
     }
     catch (e) {
-	console.trace(e);
-	resp.status(401).send("unauthorized");
-	return;
+        console.trace(e);
+        resp.status(401).send("unauthorized");
+        return;
     }
 
     resp.json({token: token});
