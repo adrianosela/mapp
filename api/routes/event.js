@@ -31,7 +31,7 @@ router.post('/event', async function(req, resp) {
     try {
         const name = req.body.name;
         const description = req.body.description;
-        const creator = req.token.sub;
+        // const creator = req.token.sub;
         const latitude = Number(req.body.latitude);
         const longitude = Number(req.body.longitude);
         const startTime = Number(req.body.startTime);
@@ -46,7 +46,7 @@ router.post('/event', async function(req, resp) {
             location: { type: 'Point', coordinates: [longitude, latitude] },
             startTime: startTime,
             endTime: endTime,
-            creator: creator, 
+            creator: "someone",     // TODO: Change it back to token
             public: public,
             invited: invited
         });

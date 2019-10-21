@@ -13,7 +13,7 @@ let eventSchema = new mongoose.Schema({
     endTime: { type: Number, required: true },
 
     // people
-    creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    creator: { type: String, required: true },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
     invited: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
     

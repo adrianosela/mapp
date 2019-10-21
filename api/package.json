@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/adrianosela/mapp#readme",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "config": "^3.2.2",
     "express": "^4.17.1",
     "fcm-notification": "^2.0.0",
