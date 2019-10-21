@@ -8,8 +8,7 @@ class ReusableFunctions{
 
   static TextEditingController usernameController = new TextEditingController();
   static TextEditingController passwordController = new TextEditingController();
-  static TextEditingController firstNameController = new TextEditingController();
-  static TextEditingController lastNameController = new TextEditingController();
+  static TextEditingController nameController = new TextEditingController();
 
   //TODO
   static void showInSnackBar(String value, BuildContext context) {
@@ -57,13 +56,13 @@ class ReusableFunctions{
       padding: EdgeInsets.all(8.0),
       splashColor: Colors.blueAccent,
       onPressed: () {
-        //TODO perform authentication
         var username = usernameController.text;
         var password = passwordController.text;
-        //TODO if successful, then:
         if(text == "Register") {
           Navigator.pushNamed(context, Router.registerRoute);
         } else {
+          //TODO perform authentication
+          //Sring result = await LoginController.loginUser("https://mapp-254321.appspot.com/" + "userId");
           Navigator.pushNamed(context, Router.mapRoute);
         }
       },
@@ -72,14 +71,13 @@ class ReusableFunctions{
         style: TextStyle(fontSize: 20.0),
       ),
     );
-
   }
 
   //TODO
   static TextFormField loginInputField(String text) {
     return new TextFormField(
       //TODO add validation?
-      controller: (text == 'email') ? usernameController : ((text == 'password') ? passwordController : ((text == 'first name') ? firstNameController : lastNameController)),
+      controller: (text == 'email') ? usernameController : ((text == 'password') ? passwordController : nameController),
       decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: text
@@ -91,7 +89,6 @@ class ReusableFunctions{
   static String getLoginText(String text) {
     if(text == 'email') return usernameController.text;
     else if (text == 'password') return passwordController.text;
-    else if (text == 'first name') return firstNameController.text;
-    return lastNameController.text;
+    return nameController.text;
   }
 }
