@@ -39,6 +39,8 @@ class _MapPageState extends State<MapPage> {
   TextEditingController eventDescriptionCont = TextEditingController();
   EventController eventController = EventController();
 
+
+
   //TODO sets the initial view of the map needs to be changed to user location
   static const LatLng _center = const LatLng(49.2827, -123.1207);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
@@ -46,6 +48,7 @@ class _MapPageState extends State<MapPage> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+
   }
 
   @override
@@ -63,6 +66,7 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
       );
+      eventController.getEvents(500000, location.longitude, location.latitude);
     });
   }
 

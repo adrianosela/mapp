@@ -14,10 +14,10 @@ class Event {
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
       name: json['name'],
-      longitude: json['longitude'],
-      latitude: json['latitude'],
+      longitude: json['location']['coordinates'][0],
+      latitude: json['location']['coordinates'][1],
       description: json['description'],
-      date: new DateTime.fromMicrosecondsSinceEpoch(json['date']*1000),
+      date: new DateTime.fromMicrosecondsSinceEpoch(json['startTime']*1000),
       public: json['public'],
     );
   }
@@ -28,8 +28,8 @@ class Event {
     'longitude' : longitude,
     'latitude' : latitude,
     'description' : description,
-    'eventDate' : (date.toUtc().millisecondsSinceEpoch/1000).round(),
-    'endsAt' : (date.toUtc().millisecondsSinceEpoch/1000 +1).round(),
+    'startTime' : (date.toUtc().millisecondsSinceEpoch/1000).round(),
+    'endTime' : (date.toUtc().millisecondsSinceEpoch/1000 +1).round(),
     'public' :  public
   };
 
