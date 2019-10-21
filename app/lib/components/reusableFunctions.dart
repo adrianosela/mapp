@@ -47,7 +47,7 @@ class ReusableFunctions{
   }
 
   //TODO
-  static FlatButton loginButton(BuildContext context, String text){
+  static FlatButton loginButton(BuildContext context, String text, GlobalKey<FormState> _formKey){
     return new FlatButton(
       color: Colors.blue,
       textColor: Colors.white,
@@ -61,9 +61,11 @@ class ReusableFunctions{
         if(text == "Register") {
           Navigator.pushNamed(context, Router.registerRoute);
         } else {
-          //TODO perform authentication
-          //Sring result = await LoginController.loginUser("https://mapp-254321.appspot.com/" + "userId");
-          Navigator.pushNamed(context, Router.mapRoute);
+          if (_formKey.currentState.validate()) {
+            //TODO perform authentication
+            //Sring result = await LoginController.loginUser("https://mapp-254321.appspot.com/" + "userId");
+            Navigator.pushNamed(context, Router.mapRoute);
+          }
         }
       },
       child: Text(

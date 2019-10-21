@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
-import 'package:app/components/resuableFunctions.dart';
+import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
 import 'package:app/components/router.dart';
 import 'package:app/models/userModel.dart';

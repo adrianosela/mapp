@@ -1,4 +1,4 @@
-import 'package:app/components/resuableFunctions.dart';
+import 'package:app/components/reusableFunctions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/components/router.dart';
@@ -34,6 +34,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called
@@ -45,7 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Container(
+        child: Form(
+          key: _formKey,
           child: Column(
 
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,11 +70,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                 width: 250,
-                child: ReusableFunctions.loginButton(context, "Login"),
+                child: ReusableFunctions.loginButton(context, "Login", _formKey),
               ),
               SizedBox(
                   width: 250,
-                child: ReusableFunctions.loginButton(context, "Register"),
+                child: ReusableFunctions.loginButton(context, "Register", _formKey),
               ),
             ],
           ),
