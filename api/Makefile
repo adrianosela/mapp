@@ -3,17 +3,23 @@ HASH:=$(shell git rev-parse --verify --short HEAD)
 
 all: build
 
-deploy:
+deploy: decrypt-conf-prod
 	gcloud app deploy
 
 up: build down
 	docker run -d --name $(NAME)_service -p 8080:80 $(NAME)
 
-build: decrypt-conf
+build: decrypt-conf-dev
 	docker build -t $(NAME) .
 
-decrypt-conf:
-	sops -d config/encrypted.json > config/default.json
+decrypt-conf-prod:
+	sops -d config/encrypted-prod.json > config/production.json
+
+decrypt-conf-dev:
+	sops -d config/encrypted-dev.json > config/default.json
 
 down:
 	(docker stop $(NAME)_service || true) && (docker rm $(NAME)_service || true)
+
+clean:
+	rm config/production.json config/default.json
