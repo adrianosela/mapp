@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const config = require('config');
+const middleware = require('./middleware');
 
 // import User & UserSettings schemas
 let User = require('../models/user');
@@ -101,7 +102,7 @@ router.post('/login', async function(req, resp) {
     // construct session token
     let token;
     try {
-        token = await jwt.sign({id: user._id}, config.auth.signing_secret, { expiresIn: '24h' });
+        token = await jwt.sign({id: user._id, email:user.email}, config.auth.signing_secret, { expiresIn: '24h' });
     }
     catch (e) {
         console.trace(e);
@@ -110,6 +111,10 @@ router.post('/login', async function(req, resp) {
     }
 
     resp.json({token: token});
+});
+
+router.get('/whoami', middleware.verifyToken, async function(req, resp) {
+    resp.json(req.authorization);
 });
 
 module.exports = router;
