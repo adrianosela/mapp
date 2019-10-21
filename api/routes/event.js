@@ -32,7 +32,7 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
     try {
         const name = req.body.name;
         const description = req.body.description;
-        const creator = req.authentication.id;
+        const creator = req.authorization.id;
         const latitude = Number(req.body.latitude);
         const longitude = Number(req.body.longitude);
         const startTime = Number(req.body.startTime);
