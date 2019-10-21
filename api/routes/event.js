@@ -70,9 +70,9 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
         }
         resp.json(response);
     }
-    catch (e) {
-        console.log(e);
-        resp.status(500).send('failed to create event');
+    catch (error) {
+        console.log(error);
+        resp.status(500).send('Failed to create event');
     }
 });
 
@@ -125,8 +125,7 @@ router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
 });
 
 // update an event if user is creator
-router.put('event', middleware.verifyToken, async function(req, resp) {
-
+router.put('/event', middleware.verifyToken, async function(req, resp) {
 
     try {
         let newEvent = req.body.event;
