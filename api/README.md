@@ -32,3 +32,16 @@ or using the makefile target:
 ```
 make up
 ```
+
+### Deploy
+
+Note that you are required to have privileged ```GOOGLE_APPLICATION_CREDENTIALS``` in the environment to deploy. 
+
+```
+gcloud app deploy
+```
+
+or using the makefile target:
+```
+make deploy
+```
