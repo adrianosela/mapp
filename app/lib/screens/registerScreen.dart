@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
-import 'package:app/components/resuableFunctions.dart';
+import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
 import 'package:app/components/router.dart';
 import 'package:app/models/userModel.dart';
@@ -103,11 +103,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                     //check that all form's fields have user-entered values
                     if (_formKey.currentState.validate()) {
-                      Scaffold
-                          .of(context)
-                          .showSnackBar(SnackBar(content: Text('Processing Data')));
-                    }
-                    else {
 
                       //send new user info to backend
                       User user = new User(
@@ -120,7 +115,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       userId = await LoginController.registerUser(
                           "https://mapp-254321.appspot.com/register",
                           user.toJson());
-                      print(userId.toString());
 
                       //navigate to map screen
                       Navigator.pushNamed(context, Router.mapRoute);

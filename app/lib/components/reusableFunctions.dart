@@ -3,12 +3,15 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:app/components/router.dart';
 import 'package:app/components/reusableStlyes.dart';
+import 'package:app/models/userModel.dart';
+import 'package:app/controllers/loginController.dart';
 
 class ReusableFunctions{
 
   static TextEditingController usernameController = new TextEditingController();
   static TextEditingController passwordController = new TextEditingController();
   static TextEditingController nameController = new TextEditingController();
+  static var userToken;
 
   //TODO
   static void showInSnackBar(String value, BuildContext context) {
@@ -46,8 +49,9 @@ class ReusableFunctions{
     );
   }
 
-  //TODO
-  static FlatButton loginButton(BuildContext context, String text){
+  ///login/ register button constructor
+  static FlatButton loginButton(BuildContext context, String text, GlobalKey<FormState> _formKey){
+
     return new FlatButton(
       color: Colors.blue,
       textColor: Colors.white,
@@ -55,15 +59,28 @@ class ReusableFunctions{
       disabledTextColor: Colors.black,
       padding: EdgeInsets.all(8.0),
       splashColor: Colors.blueAccent,
-      onPressed: () {
-        var username = usernameController.text;
-        var password = passwordController.text;
+      onPressed: () async {
+
         if(text == "Register") {
+
           Navigator.pushNamed(context, Router.registerRoute);
+
         } else {
-          //TODO perform authentication
-          //Sring result = await LoginController.loginUser("https://mapp-254321.appspot.com/" + "userId");
-          Navigator.pushNamed(context, Router.mapRoute);
+          if (_formKey.currentState.validate()) {
+
+            User user = new User(
+                name: nameController.text,
+                email: usernameController.text,
+                password: passwordController.text
+            );
+
+            //save user token
+            userToken = await LoginController.loginUser(
+                "https://mapp-254321.appspot.com/login",
+                user.toJson());
+
+            Navigator.pushNamed(context, Router.mapRoute);
+          }
         }
       },
       child: Text(
@@ -73,7 +90,7 @@ class ReusableFunctions{
     );
   }
 
-  //TODO
+  ///input field constructor
   static TextFormField loginInputField(String text) {
     return new TextFormField(
       validator: (value) {
@@ -90,10 +107,15 @@ class ReusableFunctions{
     );
   }
 
-  //TODO
+  ///returns input field text
   static String getLoginText(String text) {
     if(text == 'email') return usernameController.text;
     else if (text == 'password') return passwordController.text;
     return nameController.text;
+  }
+
+  ///returns user token
+  static String getToken() {
+    return userToken;
   }
 }
