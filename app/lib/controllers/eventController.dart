@@ -18,14 +18,14 @@ class EventController {
 
     var uri = Uri.https(
         "mapp-254321.appspot.com",
-        "/findEvents",
+        "/event/search",
         query,
     );
 
     final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
 
     List<Event> allEvents = new List<Event>();
-
+    print(response.body);
     if (response.statusCode == 200) {
       var events = json.decode(response.body);
       print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
