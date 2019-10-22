@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class EventController {
 
 
-  Future<List<Event>> getEvents(int radius, double longitude, double latitude) async {
+  Future<List<Event>> getEvents(int radius, double longitude, double latitude, token) async {
 
     Map<String, String> query = {
       'radius' : radius.toString(),
@@ -21,10 +21,11 @@ class EventController {
         query,
     );
 
-    final response = await http.get(uri);
+    final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
 
     List<Event> allEvents = new List<Event>();
 
+    print(response.body);
     if (response.statusCode == 200) {
       var events = json.decode(response.body);
       print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -36,12 +37,11 @@ class EventController {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
-
     return allEvents;
   }
 
-  Future<String> createEvent(String url, body) async {
-    return http.post(url, headers: {"Content-Type": "application/json"}, body: jsonEncode(body)).then((http.Response response) {
+  Future<String> createEvent(String url, token, body) async {
+    return http.post(url, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"}, body: jsonEncode(body)).then((http.Response response) {
 
       final int statusCode = response.statusCode;
 
