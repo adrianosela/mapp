@@ -80,6 +80,22 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
     }
 });
 
+// update an event if user is creator
+router.put('/event', middleware.verifyToken, async function(req, resp) {
+
+    try {
+        let newEvent = req.body.event;
+
+        let event = await Event.findByIdAndUpdate(newEvent._id, newEvent);
+
+        resp.send(event);
+    }
+    catch (error) {
+        console.log(error);
+        resp.status(500).send("Error updating event");
+    }
+});
+
 // invite people to an event
 router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
     const invited = req.body.invited;
@@ -121,20 +137,34 @@ router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
     }
 });
 
-// update an event if user is creator
-router.put('/event', middleware.verifyToken, async function(req, resp) {
+// get all events within a given radius of given latitude
+// and longitude, if event is marked as public
+router.get('/event/search', function(req, resp) {
+    const longitude = req.query.longitude;
+    const latitude = req.query.latitude;
+    const radius = req.query.radius;
 
-    try {
-        let newEvent = req.body.event;
+    // TODO: validate latitude, longitude, and radius (enforce max - return 400)
 
-        let event = await Event.findByIdAndUpdate(newEvent._id, newEvent);
+    const query = {
+        // TODO: include user-set filters
+        location: {
+            $near: {
+                $maxDistance: radius,
+                $geometry: { type: "Point", coordinates: [longitude, latitude] }
+            }
+        },
+        public: true
+    };
 
-        resp.send(event);
-    }
-    catch (error) {
-        console.log(error);
-        resp.status(500).send("Error updating event");
-    }
+    Event.find(query, function(err, events) {
+        if (err) {
+            console.log(err);
+            resp.status(500).send('Could not retrieve events');
+        }
+
+        resp.send(events);
+    });
 });
 
 module.exports = router;
