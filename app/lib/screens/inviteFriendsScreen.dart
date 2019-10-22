@@ -29,6 +29,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Invite Friends");
   List<String> rows;
+  List<String> ids;
   var searchText;
 
 
@@ -121,13 +122,12 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
 
   ///TODO
   _getUsers() async {
-    var response = await UserController.getUser(userId);
+    var response = await UserController.getUserFollowing(userToken);
     if(response != null) {
-      for(String item in response) {
-
-        //TODO potentially might need to add a call to retrieve user's name
-        rows.add(item);
-      }
+      response.forEach((id, name){
+          ids.add(id);
+          rows.add(name);
+      });
     }
   }
 }

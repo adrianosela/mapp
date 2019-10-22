@@ -180,7 +180,7 @@ class _MapPageState extends State<MapPage> {
                       ),
                       IconButton(
                         onPressed: () async {
-                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId)));
+                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId, userToken: userToken)));
                         },
                         icon: Icon(Icons.add),
                       ),
