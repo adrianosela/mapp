@@ -4,11 +4,13 @@ const router = express.Router();
 // parse received json bodies
 router.use(express.json());
 
-router.use(require('./healthcheck'));
 router.use(require('./auth'));
-router.use(require('./event'));
-router.use(require('./eventSearch'));
 router.use(require('./user'));
-router.use(require('./userSearch'));
+router.use(require('./event'));
+
+// healthcheck endpoint
+router.get('/healthcheck', function (req, res) {
+  	res.send('server is up and running!');
+});
 
 module.exports = router;
