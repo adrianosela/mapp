@@ -5,6 +5,7 @@ const middleware = require('./middleware');
 // import Event and User schemas
 let Event = require('../models/event');
 let User = require('../models/user');
+let UserSettings = require('../models/userSettings');
 
 // retrieve all data on an event by id in query string
 router.get('/event', middleware.verifyToken, async function(req, resp) {
@@ -83,34 +84,28 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
 router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
     const invited = req.body.invited;
 
+    let userSettings = await UserSettings.find({
+        '_id': { $in: invited }
+    })
     // TODO: check nonempty
-
-    let invitedUsers = []
-    for(let userInfo of invited) {
-        let query = {
-            $or: [
-                { email: userInfo },
-                { name: userInfo }
-            ]
-        }
-
-        let user = await User.findOne(query);
-
-        if (user != null) {
-            invitedUsers.push(user);
-        }
-
-        // TODO: Send notification to user
-        // notificationsEngine.invited.push(user.id);
+    let invitedUsersTokens = [];
+    for(let user of userSettings) {
+        invitedUsersTokens.push(user.fcmToken);
     }
 
     try {
         const filter = { _id: req.body.eventId };
-        const update = { invited: invitedUsers };
+        const update = { invited: invited };
         let updatedEvent = await Event.findOneAndUpdate(filter, update, {
             new: true,       // Flag for returning updated event
             useFindAndModify: false
         });
+
+        let notification = {
+            title: "New Event Invitation",
+            body: `You have been invited to ${updatedEvent.eventName} by ${updatedEvent.creator}`
+        }
+        notifications.notify(notification, invitedUsersTokens);
 
         let response = {
             message: 'Event updated with invited users',
@@ -118,7 +113,6 @@ router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
                 eventId: updatedEvent._id
             }
         }
-
         resp.json(response);
     }
     catch (error) {
