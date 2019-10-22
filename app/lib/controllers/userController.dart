@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 
 class UserController {
-  static Future<String> getUser(String id) async {
+  static Future<List<String>> getUser(String id) async {
 
     Map<String, String> query = {
       'id' : id
@@ -17,17 +17,21 @@ class UserController {
       query,
     );
 
+    List<String> following = new List<String>();
+
     final response = await http.get(uri);
 
-    //TODO edit this
     if (response.statusCode == 200) {
-      var events = json.decode(response.body);
-      print("+++++++++++++++++++++");
-      print(events);
+      var userContainer = json.decode(response.body);
+      if(userContainer[1] != null) {
+        for (var instance in userContainer[1]) {
+          following.add(userContainer[1].fromJson(instance).toString());
+        }
+      }
     } else {
       // If that response was not OK, throw an error.
-      throw Exception('Failed to load get');
+      throw Exception('Failed to load post');
     }
-    return null;
+    return following;
   }
 }

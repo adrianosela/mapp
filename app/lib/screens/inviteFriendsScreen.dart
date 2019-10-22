@@ -7,6 +7,8 @@ import 'package:app/components/reusableStlyes.dart';
 
 import 'package:app/controllers/userController.dart';
 
+
+
 class InviteFriendsPage extends StatefulWidget {
 
   final String userId;
@@ -23,14 +25,15 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Invite Friends");
-  List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
+  List<String> rows;
   var searchText;
 
 
   @override
   void initState() {
     super.initState();
-    var response = UserController.getUser(userId);
+    //fetch user's friends
+    _getUsers();
   }
 
   @override
@@ -85,7 +88,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   }
 
   _buildRow(BuildContext context, int index) {
-    while (index < rows.length) {
+    while (rows != null && index < rows.length) {
       final item = rows[index];
       return ListTile(
         //TODO make title clickable
@@ -96,8 +99,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
               IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
-                    setState(() {
-                      //rows.removeAt(index);
+                    setState(() async {
                       ReusableFunctions.showInSnackBar(
                           "Friend Invited", context);
                       //TODO send call to backend
@@ -107,6 +109,16 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
             ]
         ),
       );
+    }
+  }
+
+  ///TODO
+  _getUsers() async {
+    var response = await UserController.getUser(userId);
+    if(response != null) {
+      for(String item in response) {
+        rows.add(item);
+      }
     }
   }
 }
