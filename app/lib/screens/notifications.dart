@@ -5,6 +5,8 @@ import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 class NotificationsPage extends StatefulWidget {
 
@@ -18,6 +20,34 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Widget cusWidget = Text("Notifications");
   List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
   var searchText;
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    super.initState();
+
+    //TODO notifications test
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {
+        print('on message $message');
+        return null;
+      },
+      onResume: (Map<String, dynamic> message) {
+        print('on resume $message');
+        return null;
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print('on launch $message');
+        return null;
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.getToken().then((token){
+      print(token);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

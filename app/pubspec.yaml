@@ -27,6 +27,7 @@ dependencies:
   flutter_datetime_picker: ^1.2.6
   location: ^2.3.5
   http: ^0.12.0+2
+  firebase_messaging: ^5.1.6
 
 dev_dependencies:
   flutter_test:
