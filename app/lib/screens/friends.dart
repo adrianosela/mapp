@@ -5,6 +5,8 @@ import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
 
+import 'package:app/controllers/userController.dart';
+
 
 class FriendsPage extends StatefulWidget {
 
@@ -18,6 +20,14 @@ class _FriendsPageState extends State<FriendsPage> {
   Widget cusWidget = Text("Friends");
   List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
   var searchText;
+
+  @override
+  void initState() {
+    super.initState();
+      //TODO find a way to retrieve user id
+      //TODO parse and save who user follows in a list to be passed to listbuilder
+      var response = UserController.getUser('gsdgb');
+  }
 
   @override
   Widget build(BuildContext context) {

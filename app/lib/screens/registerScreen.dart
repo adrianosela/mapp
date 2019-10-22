@@ -4,9 +4,9 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
-import 'package:app/components/router.dart';
 import 'package:app/models/userModel.dart';
 import 'package:app/controllers/loginController.dart';
+import 'package:app/components/router.dart';
 
 
 class RegisterPage extends StatefulWidget {
@@ -115,7 +115,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       userId = await LoginController.registerUser(
                           "https://mapp-254321.appspot.com/register",
                           user.toJson());
-
                       //navigate to map screen
                       Navigator.pushNamed(context, Router.mapRoute);
                     }
