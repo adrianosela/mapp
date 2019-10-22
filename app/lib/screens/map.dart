@@ -19,19 +19,19 @@ import 'package:app/models/eventModel.dart';
 
 class MapPage extends StatefulWidget {
 
-  //passing user id from register screen
   final String userId;
-  MapPage({this.userId});
+  final String userToken;
+  MapPage({this.userId, this.userToken});
 
   @override
-  _MapPageState createState() => _MapPageState(userId: userId);
+  _MapPageState createState() => _MapPageState(userId: userId, userToken: userToken);
 }
 
 class _MapPageState extends State<MapPage> {
 
-  //passing user id from register screen
   final String userId;
-  _MapPageState({this.userId});
+  final String userToken;
+  _MapPageState({this.userId, this.userToken});
 
   GoogleMapController mapController;
   Location location = Location();
@@ -133,6 +133,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(2.0),
+                    //TODO calculate and send to backend properly
                     child: ReusableFunctions.formInput("enter event duration (hours)", eventDurationCont),
                   ),
                   Row(
@@ -200,7 +201,7 @@ class _MapPageState extends State<MapPage> {
                               public: true);
 
                           eventId = await eventController.createEvent(
-                              "https://mapp-254321.appspot.com/event", event
+                              "https://mapp-254321.appspot.com/event", userToken, event
                               .toJson());
 
                           //TODO Need to pass Title to add to marker
@@ -247,7 +248,7 @@ class _MapPageState extends State<MapPage> {
 
   Future _addMarkers(location) async {
 
-    List<Event> events = await eventController.getEvents(5000, location.longitude, location.latitude);
+    List<Event> events = await eventController.getEvents(5000, location.longitude, location.latitude, userToken);
     setState(() {
       for (Event event in events) {
         print(event.name);

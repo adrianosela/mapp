@@ -5,6 +5,7 @@ import 'package:app/components/router.dart';
 import 'package:app/components/reusableStlyes.dart';
 import 'package:app/models/userModel.dart';
 import 'package:app/controllers/loginController.dart';
+import 'package:app/screens/map.dart';
 
 class ReusableFunctions{
 
@@ -85,7 +86,7 @@ class ReusableFunctions{
                 "https://mapp-254321.appspot.com/login",
                 user.toJson());
 
-            Navigator.pushNamed(context, Router.mapRoute);
+            Navigator.push(context, new MaterialPageRoute(builder: (context) => new MapPage(userToken: userToken.toString())));
           }
         }
       },

@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 
 
 class UserController {
+
+  ///TODO
   static Future<List<String>> getUser(String id) async {
 
     Map<String, String> query = {
@@ -33,5 +35,21 @@ class UserController {
       throw Exception('Failed to load post');
     }
     return following;
+  }
+
+
+  ///TODO finish this
+  static Future<String> followUser(String url, body, token) async {
+    return http.post(url, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"}, body: jsonEncode(body)).then((http.Response response) {
+      final int statusCode = response.statusCode;
+      print(jsonEncode(body));
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        print(statusCode);
+        print(json);
+        throw new Exception("Error while fetching data");
+      }
+
+      return null;
+    });
   }
 }
