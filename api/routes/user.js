@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const middleware = require('./middleware');
 
 let User = require('../models/user');
 
@@ -18,9 +19,9 @@ router.get('/user', async function(req, res) {
 });
 
 // TODO: Prevent duplicate follow, input validation
-router.post('/user/follow', async function(req, res) {
+router.post('/user/follow', middleware.verifyToken, async function(req, res) {
     try {
-        const userId = req.body.userId;
+        const userId = req.authorization.id;
         const userToFollowId = req.body.userToFollowId;
 
         let userToFollow = await User.findById(userToFollowId);
