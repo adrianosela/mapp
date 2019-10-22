@@ -84,11 +84,13 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
 router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
     const invited = req.body.invited;
 
+    let userSettings = await UserSettings.find({
+        '_id': { $in: invited }
+    })
     // TODO: check nonempty
     let invitedUsersTokens = [];
-    for(let userId of invited) {
-        let userSettings = await UserSettings.findOne(userId);
-        invitedUsersTokens.push(userSettings.fcmToken);
+    for(let user of userSettings) {
+        invitedUsersTokens.push(user.fcmToken);
     }
 
     try {
