@@ -8,25 +8,32 @@ import 'package:app/components/reusableStlyes.dart';
 import 'package:app/controllers/userController.dart';
 
 
-class FriendsPage extends StatefulWidget {
+
+class InviteFriendsPage extends StatefulWidget {
+
+  final String userId;
+  InviteFriendsPage({this.userId});
 
   @override
-  _FriendsPageState createState() => _FriendsPageState();
+  _InviteFriendsPageState createState() => _InviteFriendsPageState(userId: userId);
 }
 
-class _FriendsPageState extends State<FriendsPage> {
+class _InviteFriendsPageState extends State<InviteFriendsPage> {
+
+  final String userId;
+  _InviteFriendsPageState({this.userId});
 
   Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Friends");
-  List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
+  Widget cusWidget = Text("Invite Friends");
+  List<String> rows;
   var searchText;
+
 
   @override
   void initState() {
     super.initState();
-      //TODO find a way to retrieve user id
-      //TODO parse and save who user follows in a list to be passed to listbuilder
-      var response = UserController.getUser('gsdgb');
+    //fetch user's friends
+    _getUsers();
   }
 
   @override
@@ -57,7 +64,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   );
                 } else {
                   this.cusIcon = Icon(Icons.search);
-                  this.cusWidget = Text("Friends");
+                  this.cusWidget = Text("Invite Friends");
                 }
               });
             },
@@ -67,14 +74,21 @@ class _FriendsPageState extends State<FriendsPage> {
         ],
       ),
       body: ListView.builder(
-       // itemCount: this.count,
         itemBuilder: (context, index) => this._buildRow(context, index)
       ),
+        floatingActionButton: new FloatingActionButton(
+            elevation: 0.0,
+            child: new Icon(Icons.check),
+            backgroundColor: Colors.blue,
+            onPressed: (){
+              Navigator.of(context).pop();
+            }
+        )
     );
   }
 
   _buildRow(BuildContext context, int index) {
-    while (index < rows.length) {
+    while (rows != null && index < rows.length) {
       final item = rows[index];
       return ListTile(
         //TODO make title clickable
@@ -83,16 +97,28 @@ class _FriendsPageState extends State<FriendsPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: Icon(Icons.more_horiz),
+                  icon: Icon(Icons.add),
                   onPressed: () {
-                    setState(() {
-                      //TODO
+                    setState(() async {
+                      ReusableFunctions.showInSnackBar(
+                          "Friend Invited", context);
+                      //TODO send call to backend
                     });
                   }
               ),
             ]
         ),
       );
+    }
+  }
+
+  ///TODO
+  _getUsers() async {
+    var response = await UserController.getUser(userId);
+    if(response != null) {
+      for(String item in response) {
+        rows.add(item);
+      }
     }
   }
 }

@@ -4,9 +4,10 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
-import 'package:app/components/router.dart';
 import 'package:app/models/userModel.dart';
 import 'package:app/controllers/loginController.dart';
+import 'package:app/screens/map.dart';
+
 
 
 class RegisterPage extends StatefulWidget {
@@ -117,7 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           user.toJson());
 
                       //navigate to map screen
-                      Navigator.pushNamed(context, Router.mapRoute);
+                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new MapPage(userId: userId.toString())));
                     }
                   },
                   child: Text(

@@ -40,6 +40,12 @@ class ReusableFunctions{
   //TODO
   static TextFormField formInput(String text, [TextEditingController controller]) {
     return new TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter some text';
+        }
+        return null;
+      },
       textInputAction: TextInputAction.go,
       decoration: InputDecoration(
         hintText: text,

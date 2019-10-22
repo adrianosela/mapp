@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/screens/inviteFriendsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
@@ -18,11 +19,19 @@ import 'package:app/models/eventModel.dart';
 
 class MapPage extends StatefulWidget {
 
+  //passing user id from register screen
+  final String userId;
+  MapPage({this.userId});
+
   @override
-  _MapPageState createState() => _MapPageState();
+  _MapPageState createState() => _MapPageState(userId: userId);
 }
 
 class _MapPageState extends State<MapPage> {
+
+  //passing user id from register screen
+  final String userId;
+  _MapPageState({this.userId});
 
   GoogleMapController mapController;
   Location location = Location();
@@ -38,9 +47,8 @@ class _MapPageState extends State<MapPage> {
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
+  TextEditingController eventDurationCont = TextEditingController();
   EventController eventController = EventController();
-
-
 
   //TODO sets the initial view of the map needs to be changed to user location
   static const LatLng _center = const LatLng(49.2827, -123.1207);
@@ -68,7 +76,6 @@ class _MapPageState extends State<MapPage> {
       );
       _addMarkers(location);
     });
-
   }
 
   GoogleMap _initializeMap(){
@@ -125,10 +132,8 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ),
                   Padding(
-                    //TODO change this to location picker
                     padding: EdgeInsets.all(2.0),
-                    child: TextFormField(
-                    ),
+                    child: ReusableFunctions.formInput("enter event duration (hours)", eventDurationCont),
                   ),
                   Row(
                     children: <Widget>[
@@ -173,8 +178,8 @@ class _MapPageState extends State<MapPage> {
                         width: 110,
                       ),
                       IconButton(
-                        onPressed: (){
-                          //TODO show a list of friends? open search menu?
+                        onPressed: () async {
+                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId)));
                         },
                         icon: Icon(Icons.add),
                       ),
@@ -185,18 +190,25 @@ class _MapPageState extends State<MapPage> {
                     child: RaisedButton(
                       child: Text("Save"),
                       onPressed: () async {
-                        Event event = new Event(name : eventNameCont.text, description :eventDescriptionCont.text, longitude : latlang.longitude, latitude :latlang.latitude, date :eventDate, public : true);
-                        eventId = await eventController.createEvent("https://mapp-254321.appspot.com/event", event.toJson());
-                        //TODO Figure out what this commented code does
-//                              if (_formKey.currentState.validate()) {
-//
-//                                _formKey.currentState.save();
-//                              }
-                        //TODO Need to pass Title to add to marker
-                        _addMarkerLongPressed(latlang);
+                        if(_formKey.currentState.validate()) {
 
-                        //TODO append event to list of created events, show new pin on map?
-                        Navigator.of(context).pop();
+                          Event event = new Event(name: eventNameCont.text,
+                              description: eventDescriptionCont.text,
+                              longitude: latlang.longitude,
+                              latitude: latlang.latitude,
+                              date: eventDate,
+                              public: true);
+
+                          eventId = await eventController.createEvent(
+                              "https://mapp-254321.appspot.com/event", event
+                              .toJson());
+
+                          //TODO Need to pass Title to add to marker
+                          _addMarkerLongPressed(latlang);
+
+                          //TODO append event to list of created events, show new pin on map?
+                          Navigator.of(context).pop();
+                        }
                       },
                     ),
                   )
@@ -285,11 +297,7 @@ class _MapPageState extends State<MapPage> {
                                   setState(() {
                                     searchText = str;
                                   });
-                                  //print(searchText);
                                 },
-                                //onChanged: (searchText) {
-                                  //print(searchText.toString());
-                                //},
                               );
                           } else {
                               this.cusIcon = Icon(Icons.search);
