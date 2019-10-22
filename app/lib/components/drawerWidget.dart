@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 
 import 'package:app/components/router.dart';
+import 'package:app/screens/friends.dart';
 
 
 class MyDrawer extends StatefulWidget {
+  final String userId;
+  final String userToken;
+  MyDrawer({this.userId, this.userToken});
+
   @override
-  _MyDrawerState createState() => _MyDrawerState();
+  _MyDrawerState createState() => _MyDrawerState(userId: userId, userToken: userToken);
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+  final String userId;
+  final String userToken;
+  _MyDrawerState({this.userId, this.userToken});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +49,8 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 title: Text('Friends'),
                 onTap: () {
-                  Navigator.pushNamed(context, Router.friendsRoute);
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FriendsPage(userId: userId, userToken: userToken)));
+                  //Navigator.pushNamed(context, Router.friendsRoute);
                 },
               ),
               ListTile(

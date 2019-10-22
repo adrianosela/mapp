@@ -94,9 +94,8 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   _buildRow(BuildContext context, int index) {
     while (rows != null && index < rows.length) {
       final item = rows[index];
+      final id = ids[index];
       return ListTile(
-        //TODO add user id/name?? as the key
-        //key: ,
         //TODO make title clickable
         title: ReusableFunctions.listItemText(item),
         trailing: Row(
@@ -108,8 +107,9 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
                     setState(() async {
 
                       ReusableFunctions.showInSnackBar("Friend Invited", context);
-                      //TODO fix body of the call (instead of null)
-                      var response = await EventController.inviteToEvent("https://mapp-254321.appspot.com/user/invite", null, userToken);
+                      var response = await EventController.inviteToEvent("https://mapp-254321.appspot.com/event/invite", id, userToken);
+                      print("=================invited user to event response");
+                      print(response);
 
                     });
                   }
