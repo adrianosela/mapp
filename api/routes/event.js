@@ -85,28 +85,15 @@ router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
     const invited = req.body.invited;
 
     // TODO: check nonempty
-    let invitedUsers = [];
     let invitedUsersTokens = [];
-    for(let userInfo of invited) {
-        let query = {
-            $or: [
-                { email: userInfo },
-                { name: userInfo }
-            ]
-        }
-
-        let user = await User.findOne(query);
-        if (user != null) {
-            invitedUsers.push(user);
-
-            let userSettings = await UserSettings.findOne(user._id);
-            invitedUsersTokens.push(userSettings.fcmToken);
-        }
+    for(let userId of invited) {
+        let userSettings = await UserSettings.findOne(userId);
+        invitedUsersTokens.push(userSettings.fcmToken);
     }
 
     try {
         const filter = { _id: req.body.eventId };
-        const update = { invited: invitedUsers };
+        const update = { invited: invited };
         let updatedEvent = await Event.findOneAndUpdate(filter, update, {
             new: true,       // Flag for returning updated event
             useFindAndModify: false
