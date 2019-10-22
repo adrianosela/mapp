@@ -14,6 +14,7 @@ import 'package:app/components/reusableStlyes.dart';
 
 import 'package:app/controllers/eventController.dart';
 import 'package:app/models/eventModel.dart';
+import 'package:app/components/router.dart';
 
 
 class MapPage extends StatefulWidget {
@@ -39,8 +40,6 @@ class _MapPageState extends State<MapPage> {
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
   EventController eventController = EventController();
-
-
 
   //TODO sets the initial view of the map needs to be changed to user location
   static const LatLng _center = const LatLng(49.2827, -123.1207);
@@ -124,12 +123,6 @@ class _MapPageState extends State<MapPage> {
                         )
                     ),
                   ),
-                  Padding(
-                    //TODO change this to location picker
-                    padding: EdgeInsets.all(2.0),
-                    child: TextFormField(
-                    ),
-                  ),
                   Row(
                     children: <Widget>[
                       Container(
@@ -174,7 +167,7 @@ class _MapPageState extends State<MapPage> {
                       ),
                       IconButton(
                         onPressed: (){
-                          //TODO show a list of friends? open search menu?
+                          Navigator.pushNamed(context, Router.inviteRoute);
                         },
                         icon: Icon(Icons.add),
                       ),
