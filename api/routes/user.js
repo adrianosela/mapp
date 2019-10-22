@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const middleware = require('./middleware');
 
 let User = require('../models/user');
 
@@ -14,6 +15,40 @@ router.get('/user', async function(req, res) {
     catch (error) {
         console.log(error);
         res.status(500).send('Could not retrieve user');
+    }
+});
+
+// TODO: Prevent duplicate follow, input validation
+router.post('/user/follow', middleware.verifyToken, async function(req, res) {
+    try {
+        const userId = req.authorization.id;
+        const userToFollowId = req.body.userToFollowId;
+
+        let userToFollow = await User.findById(userToFollowId);
+        if (!userToFollow) {
+            res.status(404).send('User to follow not found');
+        }
+
+        let user = await User.findById(userId);
+        if (!user) {
+            res.status(404).send('Requesting user not found');
+        }
+
+        user.following.push(userToFollowId);
+        await User.findByIdAndUpdate(user._id, user, {
+            useFindAndModify: false
+        });
+
+        userToFollow.followers.push(user._id);
+        await User.findByIdAndUpdate(userToFollow._id, userToFollow, {
+            useFindAndModify: false
+        });
+
+        res.send('Successfully followed requested user');
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send('Could not follow user');
     }
 });
 
