@@ -56,7 +56,6 @@ class _MapPageState extends State<MapPage> {
 
 
   void _onMapCreated(GoogleMapController controller) {
-    //print("------------------------------------" + userToken);
     mapController = controller;
   }
 

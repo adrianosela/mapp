@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 class EventController {
 
 
+  ///TODO
   Future<List<Event>> getEvents(int radius, double longitude, double latitude, token) async {
 
     Map<String, String> query = {
@@ -25,7 +26,6 @@ class EventController {
 
     List<Event> allEvents = new List<Event>();
 
-    print(response.body);
     if (response.statusCode == 200) {
       var events = json.decode(response.body);
       print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -40,6 +40,8 @@ class EventController {
     return allEvents;
   }
 
+
+  ///TODO
   Future<String> createEvent(String url, token, body) async {
     return http.post(url, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"}, body: jsonEncode(body)).then((http.Response response) {
 
@@ -53,4 +55,20 @@ class EventController {
       return jsonResponse["data"]["eventId"];
     });
   }
+
+
+  ///TODO
+  static Future<String> inviteToEvent(String url, token, body) async {
+    return http.post(url, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"}, body: jsonEncode(body)).then((http.Response response) {
+
+      final int statusCode = response.statusCode;
+
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        throw new Exception("Error while fetching data");
+      }
+
+      return null;
+    });
+  }
+
 }

@@ -5,6 +5,7 @@ import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
 
+import 'package:app/controllers/eventController.dart';
 import 'package:app/controllers/userController.dart';
 
 
@@ -12,16 +13,18 @@ import 'package:app/controllers/userController.dart';
 class InviteFriendsPage extends StatefulWidget {
 
   final String userId;
-  InviteFriendsPage({this.userId});
+  final String userToken;
+  InviteFriendsPage({this.userId, this.userToken});
 
   @override
-  _InviteFriendsPageState createState() => _InviteFriendsPageState(userId: userId);
+  _InviteFriendsPageState createState() => _InviteFriendsPageState(userId: userId, userToken: userToken);
 }
 
 class _InviteFriendsPageState extends State<InviteFriendsPage> {
 
   final String userId;
-  _InviteFriendsPageState({this.userId});
+  final String userToken;
+  _InviteFriendsPageState({this.userId, this.userToken});
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Invite Friends");
@@ -91,8 +94,10 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       return ListTile(
+        //TODO add user id/name?? as the key
+        //key: ,
         //TODO make title clickable
-        title: ReusableFunctions.listItemText("Item " + item),
+        title: ReusableFunctions.listItemText(item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -100,9 +105,11 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
                   icon: Icon(Icons.add),
                   onPressed: () {
                     setState(() async {
-                      ReusableFunctions.showInSnackBar(
-                          "Friend Invited", context);
-                      //TODO send call to backend
+
+                      ReusableFunctions.showInSnackBar("Friend Invited", context);
+                      //TODO fix body of the call (instead of null)
+                      var response = await EventController.inviteToEvent("https://mapp-254321.appspot.com/user/invite", null, userToken);
+
                     });
                   }
               ),
@@ -117,6 +124,8 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     var response = await UserController.getUser(userId);
     if(response != null) {
       for(String item in response) {
+
+        //TODO potentially might need to add a call to retrieve user's name
         rows.add(item);
       }
     }
