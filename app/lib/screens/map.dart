@@ -180,7 +180,7 @@ class _MapPageState extends State<MapPage> {
                       ),
                       IconButton(
                         onPressed: () async {
-                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId)));
+                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId, userToken: userToken)));
                         },
                         icon: Icon(Icons.add),
                       ),
@@ -277,7 +277,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      drawer: MyDrawer(userId: userId, userToken: userToken),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[

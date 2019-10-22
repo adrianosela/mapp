@@ -9,24 +9,30 @@ import 'package:app/controllers/userController.dart';
 
 
 class FriendsPage extends StatefulWidget {
+  final String userId;
+  final String userToken;
+  FriendsPage({this.userId, this.userToken});
 
   @override
-  _FriendsPageState createState() => _FriendsPageState();
+  _FriendsPageState createState() => _FriendsPageState(userId: userId, userToken: userToken);
 }
 
 class _FriendsPageState extends State<FriendsPage> {
+  final String userId;
+  final String userToken;
+  _FriendsPageState({this.userId, this.userToken});
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Friends");
-  List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
+  List<String> rows;
+  List<String> ids;
   var searchText;
 
   @override
   void initState() {
     super.initState();
-      //TODO find a way to retrieve user id
-      //TODO parse and save who user follows in a list to be passed to listbuilder
-      var response = UserController.getUser('gsdgb');
+    //fetch user's friends
+    _getUsers();
   }
 
   @override
@@ -74,11 +80,12 @@ class _FriendsPageState extends State<FriendsPage> {
   }
 
   _buildRow(BuildContext context, int index) {
-    while (index < rows.length) {
+    while (rows != null && index < rows.length) {
       final item = rows[index];
+      final id = ids[index];
       return ListTile(
         //TODO make title clickable
-        title: ReusableFunctions.listItemText("Item " + item),
+        title: ReusableFunctions.listItemText(item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -86,13 +93,24 @@ class _FriendsPageState extends State<FriendsPage> {
                   icon: Icon(Icons.more_horiz),
                   onPressed: () {
                     setState(() {
-                      //TODO
+                      //TODO delete user popup??
                     });
                   }
               ),
             ]
         ),
       );
+    }
+  }
+
+  ///TODO
+  _getUsers() async {
+    var response = await UserController.getUserFollowing(userToken);
+    if(response != null) {
+      response.forEach((id, name){
+        ids.add(id);
+        rows.add(name);
+      });
     }
   }
 }
