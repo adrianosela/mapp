@@ -9,11 +9,17 @@ import 'package:app/controllers/userController.dart';
 
 class InviteFriendsPage extends StatefulWidget {
 
+  final String userId;
+  InviteFriendsPage({this.userId});
+
   @override
-  _InviteFriendsPageState createState() => _InviteFriendsPageState();
+  _InviteFriendsPageState createState() => _InviteFriendsPageState(userId: userId);
 }
 
 class _InviteFriendsPageState extends State<InviteFriendsPage> {
+
+  final String userId;
+  _InviteFriendsPageState({this.userId});
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Invite Friends");
@@ -24,9 +30,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   @override
   void initState() {
     super.initState();
-    //TODO find a way to retrieve user id
-    //TODO parse and save who user follows in a list to be passed to listbuilder
-    var response = UserController.getUser('gsdgb');
+    var response = UserController.getUser(userId);
   }
 
   @override

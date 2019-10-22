@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/screens/inviteFriendsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
@@ -14,16 +15,23 @@ import 'package:app/components/reusableStlyes.dart';
 
 import 'package:app/controllers/eventController.dart';
 import 'package:app/models/eventModel.dart';
-import 'package:app/components/router.dart';
 
 
 class MapPage extends StatefulWidget {
 
+  //passing user id from register screen
+  final String userId;
+  MapPage({this.userId});
+
   @override
-  _MapPageState createState() => _MapPageState();
+  _MapPageState createState() => _MapPageState(userId: userId);
 }
 
 class _MapPageState extends State<MapPage> {
+
+  //passing user id from register screen
+  final String userId;
+  _MapPageState({this.userId});
 
   GoogleMapController mapController;
   Location location = Location();
@@ -68,7 +76,6 @@ class _MapPageState extends State<MapPage> {
       );
       _addMarkers(location);
     });
-
   }
 
   GoogleMap _initializeMap(){
@@ -171,8 +178,8 @@ class _MapPageState extends State<MapPage> {
                         width: 110,
                       ),
                       IconButton(
-                        onPressed: (){
-                          Navigator.pushNamed(context, Router.inviteRoute);
+                        onPressed: () async {
+                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId)));
                         },
                         icon: Icon(Icons.add),
                       ),
@@ -290,11 +297,7 @@ class _MapPageState extends State<MapPage> {
                                   setState(() {
                                     searchText = str;
                                   });
-                                  //print(searchText);
                                 },
-                                //onChanged: (searchText) {
-                                  //print(searchText.toString());
-                                //},
                               );
                           } else {
                               this.cusIcon = Icon(Icons.search);
