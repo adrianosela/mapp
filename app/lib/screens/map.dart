@@ -65,8 +65,6 @@ class _MapPageState extends State<MapPage> {
     mapController = controller;
   }
 
-
-
   @override
   void initState() {
     super.initState();
