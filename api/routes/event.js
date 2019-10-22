@@ -10,7 +10,6 @@ let User = require('../models/user');
 router.get('/event', middleware.verifyToken, async function(req, resp) {
     try {
         let event = await Event.findById(req.query.id);
-
         if (!event) {
             resp.status(404).send('Event not found');
         }
@@ -61,6 +60,10 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
         });
 
         let event = await newEvent.save();
+
+        let creatorUser = await User.findById(creator);
+        creatorUser.createdEvents.push(event._id);
+        await creatorUser.save();
 
         let response = {
             message: 'Event created successfully!',
