@@ -54,6 +54,12 @@ class _MapPageState extends State<MapPage> {
   static const LatLng _center = const LatLng(49.2827, -123.1207);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
+  //Set map Screen only once
+  bool mapSet = false;
+
+  //Fetch events every N location updates
+  int locationCount = 0;
+  int updateEvents = 10;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -63,18 +69,24 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     location.onLocationChanged().listen((location) async {
-      mapController?.moveCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(
-              location.latitude,
-              location.longitude,
+      if (!mapSet){
+        mapSet = true;
+        mapController?.moveCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(
+                location.latitude,
+                location.longitude,
+              ),
+              zoom: 13.0,
             ),
-            zoom: 13.0,
           ),
-        ),
-      );
-      _addMarkers(location);
+        );
+      }
+      if (locationCount%updateEvents == 0){
+        _addMarkers(location);
+      }
+      locationCount++;
     });
   }
 
