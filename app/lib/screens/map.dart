@@ -39,6 +39,7 @@ class _MapPageState extends State<MapPage> {
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
+  TextEditingController eventDurationCont = TextEditingController();
   EventController eventController = EventController();
 
   //TODO sets the initial view of the map needs to be changed to user location
@@ -123,6 +124,10 @@ class _MapPageState extends State<MapPage> {
                         )
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: ReusableFunctions.formInput("enter event duration (hours)", eventDurationCont),
+                  ),
                   Row(
                     children: <Widget>[
                       Container(
@@ -178,18 +183,25 @@ class _MapPageState extends State<MapPage> {
                     child: RaisedButton(
                       child: Text("Save"),
                       onPressed: () async {
-                        Event event = new Event(name : eventNameCont.text, description :eventDescriptionCont.text, longitude : latlang.longitude, latitude :latlang.latitude, date :eventDate, public : true);
-                        eventId = await eventController.createEvent("https://mapp-254321.appspot.com/event", event.toJson());
-                        //TODO Figure out what this commented code does
-//                              if (_formKey.currentState.validate()) {
-//
-//                                _formKey.currentState.save();
-//                              }
-                        //TODO Need to pass Title to add to marker
-                        _addMarkerLongPressed(latlang);
+                        if(_formKey.currentState.validate()) {
 
-                        //TODO append event to list of created events, show new pin on map?
-                        Navigator.of(context).pop();
+                          Event event = new Event(name: eventNameCont.text,
+                              description: eventDescriptionCont.text,
+                              longitude: latlang.longitude,
+                              latitude: latlang.latitude,
+                              date: eventDate,
+                              public: true);
+
+                          eventId = await eventController.createEvent(
+                              "https://mapp-254321.appspot.com/event", event
+                              .toJson());
+
+                          //TODO Need to pass Title to add to marker
+                          _addMarkerLongPressed(latlang);
+
+                          //TODO append event to list of created events, show new pin on map?
+                          Navigator.of(context).pop();
+                        }
                       },
                     ),
                   )
