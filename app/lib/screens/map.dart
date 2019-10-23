@@ -113,18 +113,16 @@ class _MapPageState extends State<MapPage> {
     });
 
     _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        //ReusableFunctions.showInSnackBar("$message", context);
+      onMessage: (Map<String, dynamic> message) async {
+        setState(() {
+          msg = "$message";
+        });
         print('on message $message');
-        msg = message;
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>> done notif");
       },
       onResume: (Map<String, dynamic> message) {
-        //ReusableFunctions.showInSnackBar("$message", context);
         print('on resume $message');
       },
       onLaunch: (Map<String, dynamic> message) {
-        //ReusableFunctions.showInSnackBar("$message", context);
         print('on launch $message');
       },
     );
@@ -334,7 +332,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(userId: userId, userToken: userToken),
+      drawer: MyDrawer(userId: userId, userToken: userToken, msg: msg),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[

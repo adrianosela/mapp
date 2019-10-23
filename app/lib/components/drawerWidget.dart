@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/router.dart';
 import 'package:app/screens/friends.dart';
-
+import 'package:app/screens/notifications.dart';
 
 class MyDrawer extends StatefulWidget {
   final String userId;
   final String userToken;
-  MyDrawer({this.userId, this.userToken});
+  final String msg;
+  MyDrawer({this.userId, this.userToken, this.msg});
 
   @override
-  _MyDrawerState createState() => _MyDrawerState(userId: userId, userToken: userToken);
+  _MyDrawerState createState() => _MyDrawerState(userId: userId, userToken: userToken, msg: msg);
 }
 
 class _MyDrawerState extends State<MyDrawer> {
   final String userId;
   final String userToken;
-  _MyDrawerState({this.userId, this.userToken});
+  final String msg;
+  _MyDrawerState({this.userId, this.userToken, this.msg});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,8 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 title: Text('Notifications'),
                 onTap: () {
-                  Navigator.pushNamed(context, Router.notificationsRoute);
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationsPage(msg: msg)));
+                  //Navigator.pushNamed(context, Router.notificationsRoute);
                 },
               ),
               ListTile(
