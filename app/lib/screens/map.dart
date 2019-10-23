@@ -31,8 +31,8 @@ class _MapPageState extends State<MapPage> {
 
   final String userId;
   final String userToken;
-  final List<String> usersToInvite;
-  _MapPageState({this.userId, this.userToken, this.usersToInvite});
+  _MapPageState({this.userId, this.userToken});
+  List<String> usersToInvite;
 
   GoogleMapController mapController;
   Location location = Location();
@@ -193,7 +193,10 @@ class _MapPageState extends State<MapPage> {
                       ),
                       IconButton(
                         onPressed: () async {
-                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId, userToken: userToken)));
+                          final result = await Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId, userToken: userToken)));
+                          print('--------------------_+++++');
+                          print(result);
+                          usersToInvite = result;
                         },
                         icon: Icon(Icons.add),
                       ),
@@ -206,7 +209,7 @@ class _MapPageState extends State<MapPage> {
                       onPressed: () async {
                         if(_formKey.currentState.validate()) {
 
-                          print("-----------------------");
+                          print("--------------users that will be invited to event");
                           print(usersToInvite);
 
                           Event event = new Event(name: eventNameCont.text,
@@ -220,9 +223,6 @@ class _MapPageState extends State<MapPage> {
                           eventId = await eventController.createEvent(
                               "https://mapp-254321.appspot.com/event", userToken, event
                               .toJson());
-
-                          print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                          print(eventId);
 
                           //TODO Need to pass Title to add to marker
                           _addMarkerLongPressed(latlang);

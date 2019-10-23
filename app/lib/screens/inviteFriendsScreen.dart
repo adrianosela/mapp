@@ -4,8 +4,6 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
-
-import 'package:app/controllers/eventController.dart';
 import 'package:app/controllers/userController.dart';
 
 
@@ -86,7 +84,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
             child: new Icon(Icons.check),
             backgroundColor: Colors.blue,
             onPressed: () async {
-              Navigator.pop(context, {usersToInvite: usersToInvite});//of(context).pop(usersToInvite: usersToInvite);
+              Navigator.pop(context, usersToInvite);
             }
         )
     );
