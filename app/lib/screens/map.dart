@@ -16,6 +16,10 @@ import 'package:app/components/reusableStlyes.dart';
 import 'package:app/controllers/eventController.dart';
 import 'package:app/models/eventModel.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:app/controllers/loginController.dart';
+import 'package:app/models/fcmToken.dart';
+
 
 class MapPage extends StatefulWidget {
 
@@ -44,6 +48,7 @@ class _MapPageState extends State<MapPage> {
   var searchText;
   var eventDate;
   var eventId;
+  var msg;
 
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
@@ -65,6 +70,9 @@ class _MapPageState extends State<MapPage> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
 
   @override
   void initState() {
@@ -89,6 +97,37 @@ class _MapPageState extends State<MapPage> {
       }
       locationCount++;
     });
+
+    //TODO notifications test
+    _firebaseMessaging.getToken().then((token){
+      print('-----------------------------------------------------------------------------------------------');
+      FCM fcm = new FCM(token: token);
+      LoginController.postFCM(fcm.toJson(), userToken);
+
+      print('---------------------------------');
+      print(userId);
+
+      print("-----------------");
+      print(userToken);
+      //print(token);
+    });
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {
+        //ReusableFunctions.showInSnackBar("$message", context);
+        print('on message $message');
+        msg = message;
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>> done notif");
+      },
+      onResume: (Map<String, dynamic> message) {
+        //ReusableFunctions.showInSnackBar("$message", context);
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        //ReusableFunctions.showInSnackBar("$message", context);
+        print('on launch $message');
+      },
+    );
   }
 
   GoogleMap _initializeMap(){
