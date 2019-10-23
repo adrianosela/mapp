@@ -98,7 +98,7 @@ router.post('/login', async function(req, resp) {
         resp.status(500).send();
         return;
     }
-    
+
     // construct session token
     let token;
     try {
@@ -111,25 +111,6 @@ router.post('/login', async function(req, resp) {
     }
 
     resp.json({token: token});
-});
-
-router.post('/fcmToken', middleware.verifyToken, async function(req, res) {
-    try {
-        const userId = req.authorization.id;
-        const userFcmToken = req.body.fcmToken;
-
-        let userSettings = await UserSettings.findById(userId);
-
-        userSettings.fcmToken = userFcmToken;
-        await userSettings.save();
-
-        // return the received fcm token as confirmation
-        res.json({token: userFcmToken});
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).send("Error storing FCM Token");
-    }
 });
 
 router.get('/whoami', middleware.verifyToken, async function(req, resp) {
