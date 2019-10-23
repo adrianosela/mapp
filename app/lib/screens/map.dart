@@ -32,6 +32,7 @@ class _MapPageState extends State<MapPage> {
   final String userId;
   final String userToken;
   _MapPageState({this.userId, this.userToken});
+  List<String> usersToInvite;
 
   GoogleMapController mapController;
   Location location = Location();
@@ -192,7 +193,8 @@ class _MapPageState extends State<MapPage> {
                       ),
                       IconButton(
                         onPressed: () async {
-                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId, userToken: userToken)));
+                          final result = await Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId, userToken: userToken)));
+                          usersToInvite = result;
                         },
                         icon: Icon(Icons.add),
                       ),
@@ -205,12 +207,16 @@ class _MapPageState extends State<MapPage> {
                       onPressed: () async {
                         if(_formKey.currentState.validate()) {
 
+                          print("--------------users that will be invited to event");
+                          print(usersToInvite);
+
                           Event event = new Event(name: eventNameCont.text,
                               description: eventDescriptionCont.text,
                               longitude: latlang.longitude,
                               latitude: latlang.latitude,
                               date: eventDate,
-                              public: true);
+                              public: true,
+                              invited: usersToInvite);
 
                           eventId = await eventController.createEvent(
                               "https://mapp-254321.appspot.com/event", userToken, event
