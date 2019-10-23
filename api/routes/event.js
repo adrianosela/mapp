@@ -82,7 +82,7 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
 
             let notification = {
                 title: "New Event Invitation",
-                body: `You have been invited to ${updatedEvent.eventName} by ${updatedEvent.creator}`
+                body: `You have been invited to ${event.name} by ${event.creator}`
             }
             notifications.notify(notification, invitedUsersTokens);
         }
@@ -140,7 +140,7 @@ router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
 
         let notification = {
             title: "New Event Invitation",
-            body: `You have been invited to ${updatedEvent.eventName} by ${updatedEvent.creator}`
+            body: `You have been invited to ${updatedEvent.name} by ${updatedEvent.creator}`
         }
         notifications.notify(notification, invitedUsersTokens);
 
