@@ -122,6 +122,9 @@ router.post('/fcmToken', middleware.verifyToken, async function(req, res) {
 
         userSettings.fcmToken = userFcmToken;
         await userSettings.save();
+
+	// return the received fcm token as confirmation
+	resp.json({token: userFcmToken});
     }
     catch (error) {
         console.log(error);
