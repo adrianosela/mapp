@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -42,12 +41,9 @@ class UserController {
   ///TODO
   static Future<Map<String, String>> getUserFollowing(token) async {
 
-    Map<String, String> query = {};
-
     var uri = Uri.https(
       "mapp-254321.appspot.com",
-      "/user/following",
-      query,
+      "/user/following"
     );
 
     Map<String, String> following = new Map<String, String>();
@@ -58,7 +54,7 @@ class UserController {
       var userContainer = json.decode(response.body);
       if(userContainer != null) {
         for(var instance in userContainer) {
-          following[userContainer.fromJson(instance["id"]).toString()] = userContainer.fromJson(instance["name"]).toString();
+          following[instance["id"].toString()] = instance["name"].toString();
         }
       }
     } else {

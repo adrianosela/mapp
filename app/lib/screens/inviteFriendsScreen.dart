@@ -28,8 +28,9 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Invite Friends");
-  List<String> rows;
-  List<String> ids;
+  List<String> rows = new List<String>();
+  List<String> ids = new List<String>();
+  List<String> usersToInvite = new List<String>();
   var searchText;
 
 
@@ -78,14 +79,14 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
         ],
       ),
       body: ListView.builder(
-        itemBuilder: (context, index) => this._buildRow(context, index)
+        itemBuilder:  (context, index) => this._buildRow(context, index)
       ),
         floatingActionButton: new FloatingActionButton(
             elevation: 0.0,
             child: new Icon(Icons.check),
             backgroundColor: Colors.blue,
-            onPressed: (){
-              Navigator.of(context).pop();
+            onPressed: () async {
+              Navigator.pop(context, {usersToInvite: usersToInvite});//of(context).pop(usersToInvite: usersToInvite);
             }
         )
     );
@@ -105,12 +106,8 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
                   icon: Icon(Icons.add),
                   onPressed: () {
                     setState(() async {
-
                       ReusableFunctions.showInSnackBar("Friend Invited", context);
-                      var response = await EventController.inviteToEvent("https://mapp-254321.appspot.com/event/invite", id, userToken);
-                      print("=================invited user to event response");
-                      print(response);
-
+                      usersToInvite.add(id);
                     });
                   }
               ),
@@ -124,9 +121,9 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   _getUsers() async {
     var response = await UserController.getUserFollowing(userToken);
     if(response != null) {
-      response.forEach((id, name){
-          ids.add(id);
-          rows.add(name);
+      response.forEach((key, value){
+          ids.add(key);
+          rows.add(value);
       });
     }
   }

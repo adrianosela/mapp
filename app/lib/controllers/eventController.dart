@@ -67,7 +67,7 @@ class EventController {
         throw new Exception("Error while fetching data");
       }
 
-      return null;
+      return statusCode.toString();
     });
   }
 

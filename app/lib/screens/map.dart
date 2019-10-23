@@ -31,7 +31,8 @@ class _MapPageState extends State<MapPage> {
 
   final String userId;
   final String userToken;
-  _MapPageState({this.userId, this.userToken});
+  final List<String> usersToInvite;
+  _MapPageState({this.userId, this.userToken, this.usersToInvite});
 
   GoogleMapController mapController;
   Location location = Location();
@@ -205,16 +206,23 @@ class _MapPageState extends State<MapPage> {
                       onPressed: () async {
                         if(_formKey.currentState.validate()) {
 
+                          print("-----------------------");
+                          print(usersToInvite);
+
                           Event event = new Event(name: eventNameCont.text,
                               description: eventDescriptionCont.text,
                               longitude: latlang.longitude,
                               latitude: latlang.latitude,
                               date: eventDate,
-                              public: true);
+                              public: true,
+                              invited: usersToInvite);
 
                           eventId = await eventController.createEvent(
                               "https://mapp-254321.appspot.com/event", userToken, event
                               .toJson());
+
+                          print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                          print(eventId);
 
                           //TODO Need to pass Title to add to marker
                           _addMarkerLongPressed(latlang);

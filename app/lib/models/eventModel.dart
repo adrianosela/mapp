@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Event {
 
   final String name;
@@ -8,9 +6,10 @@ class Event {
   final String description;
   final DateTime date;
   final bool public;
+  final List<String> invited;
   String eventId;
 
-  Event({this.name, this.description, this.longitude, this.latitude, this.date, this.public});
+  Event({this.name, this.description, this.longitude, this.latitude, this.date, this.public, this.invited});
 
   factory Event.fromJson(Map<String, dynamic> json) {
     Event event = new Event(
@@ -33,7 +32,8 @@ class Event {
     'description' : description,
     'startTime' : (date.toUtc().millisecondsSinceEpoch/1000).round(),
     'endTime' : (date.toUtc().millisecondsSinceEpoch/1000 +1).round(),
-    'public' :  public
+    'public' :  public,
+    'invited' : invited
   };
 
 }

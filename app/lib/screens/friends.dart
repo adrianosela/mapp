@@ -24,8 +24,8 @@ class _FriendsPageState extends State<FriendsPage> {
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Friends");
-  List<String> rows;
-  List<String> ids;
+  List<String> rows = new List<String>();
+  List<String> ids = new List<String>();
   var searchText;
 
   @override
