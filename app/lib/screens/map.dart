@@ -194,8 +194,6 @@ class _MapPageState extends State<MapPage> {
                       IconButton(
                         onPressed: () async {
                           final result = await Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId, userToken: userToken)));
-                          print('--------------------_+++++');
-                          print(result);
                           usersToInvite = result;
                         },
                         icon: Icon(Icons.add),
