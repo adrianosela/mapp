@@ -20,14 +20,17 @@ router.post('/register', async function(req, resp) {
     const { email, password, name } = req.body;
 
     // validate inputs
-    if (!email) { return resp.status(400).send('no email provided'); }
-    if (!password) { return resp.status(400).send('no password provided'); }
-    if (!name) { return resp.status(400).send('no preferred name provided'); }
+    if (!email) { return resp.status(400).send('No email provided'); }
+    if (!password) { return resp.status(400).send('No password provided'); }
+    if (!name) { return resp.status(400).send('No preferred name provided'); }
+    if (!emailIsValid(email)) {
+        return resp.status(400).send('Email provided is invalid');
+    }
 
     // check email is not used
     UserSettings.findOne( {email: req.body.email}, function (err, user) {
         if (user) {
-            return resp.status(400).send('user with that email already exists');
+            return resp.status(400).send('User with that email already exists');
         }
     });
 
@@ -47,7 +50,7 @@ router.post('/register', async function(req, resp) {
     }
     catch (e) {
         console.log('[error] ' + e);
-        return resp.status(500).send('could not save new user settings');
+        return resp.status(500).send('Could not save new user settings');
     }
 
     // populate new user schema
@@ -63,7 +66,7 @@ router.post('/register', async function(req, resp) {
     }
     catch (e) {
         console.log(`[error] ${e}`);
-        return resp.status(500).send('could not save new user');
+        return resp.status(500).send('Could not save new user');
     }
 
     // return saved user
@@ -76,8 +79,8 @@ router.post('/login', async function(req, resp) {
     const { email, password } = req.body;
 
     // check fields are set
-    if (!email) { return resp.status(400).send('no email provided'); }
-    if (!password) { return resp.status(400).send('no password provided'); }
+    if (!email) { return resp.status(400).send('No email provided'); }
+    if (!password) { return resp.status(400).send('No password provided'); }
 
     // fetch user from db
     let user;
@@ -85,7 +88,7 @@ router.post('/login', async function(req, resp) {
         user = await UserSettings.findOne({email: req.body.email})
         // note that we are returning a 401 - Unauthorized instead of
         // 404 - NotFound in order not expose whether a given email exists
-        if (!user) { return resp.status(401).send("unauthorized"); }
+        if (!user) { return resp.status(401).send("Unauthorized"); }
     }
     catch (e) {
         console.log(`[error] ${e}`);
@@ -96,7 +99,7 @@ router.post('/login', async function(req, resp) {
     try {
         const match = await bcrypt.compare(req.body.password, user.hash);
         if (!match) {
-            resp.status(401).send("unauthorized");
+            resp.status(401).send("Unauthorized");
             return;
         }
     }
@@ -112,7 +115,7 @@ router.post('/login', async function(req, resp) {
     }
     catch (e) {
         console.log(`[error] ${e}`);
-        return resp.status(401).send("unauthorized");
+        return resp.status(401).send("Unauthorized");
     }
 
     resp.json({token: token});
