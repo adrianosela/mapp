@@ -15,7 +15,7 @@ let eventSchema = new mongoose.Schema({
     // people
     creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
-    invited: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
+    invited: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false, default: [] }],
     
     // metadata
     categories: { type: [ String ], required: false, default: [] },

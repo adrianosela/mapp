@@ -70,6 +70,23 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
         creatorUser.createdEvents.push(event._id);
         await creatorUser.save();
 
+        if (invited != null && invited.length != 0) {
+            let userSettings = await UserSettings.find({
+                '_id': { $in: invited }
+            })
+            
+            let invitedUsersTokens = [];
+            for(let user of userSettings) {
+                invitedUsersTokens.push(user.fcmToken);
+            }
+
+            let notification = {
+                title: "New Event Invitation",
+                body: `You have been invited to ${updatedEvent.eventName} by ${updatedEvent.creator}`
+            }
+            notifications.notify(notification, invitedUsersTokens);
+        }
+
         let response = {
             message: 'Event created successfully!',
             data: {
