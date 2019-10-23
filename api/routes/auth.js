@@ -8,18 +8,29 @@ const middleware = require('./middleware');
 let User = require('../models/user');
 let UserSettings = require('../models/userSettings');
 
+// email validation function
+function emailIsValid(email) {
+  let regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regex.test(email);
+}
+
 // register a new user into mapp
 router.post('/register', async function(req, resp) {
-    // check fields are set
-    if (!req.body.email) { resp.status(400).send('no email provided'); return; }
-    if (!req.body.password) { resp.status(400).send('no password provided'); return; }
-    if (!req.body.name) { resp.status(400).send('no preffered name provided'); return; }
+    // read request body
+    const { email, password, name } = req.body;
+
+    // validate inputs
+    if (!email) { return resp.status(400).send('No email provided'); }
+    if (!password) { return resp.status(400).send('No password provided'); }
+    if (!name) { return resp.status(400).send('No preferred name provided'); }
+    if (!emailIsValid(email)) {
+        return resp.status(400).send('Email provided is invalid');
+    }
 
     // check email is not used
     UserSettings.findOne( {email: req.body.email}, function (err, user) {
         if (user) {
-            resp.status(400).send('user with that email already exists');
-            return;
+            return resp.status(400).send('User with that email already exists');
         }
     });
 
@@ -38,9 +49,8 @@ router.post('/register', async function(req, resp) {
         savedUserSettings = await newUserSettings.save();
     }
     catch (e) {
-        console.log(e);
-        resp.status(500).send('could not save new user settings');
-        return;
+        console.log('[error] ' + e);
+        return resp.status(500).send('Could not save new user settings');
     }
 
     // populate new user schema
@@ -55,9 +65,8 @@ router.post('/register', async function(req, resp) {
         savedUser = await newUser.save();
     }
     catch (e) {
-        console.log(e);
-        resp.status(500).send('could not save new user');
-        return;
+        console.log(`[error] ${e}`);
+        return resp.status(500).send('Could not save new user');
     }
 
     // return saved user
@@ -66,37 +75,37 @@ router.post('/register', async function(req, resp) {
 
 // trade basic credentials for a signed JWT
 router.post('/login', async function(req, resp) {
+    // read request body
+    const { email, password } = req.body;
+
     // check fields are set
-    if (!req.body.email) { resp.status(400).send('no email provided'); return; }
-    if (!req.body.password) { resp.status(400).send('no password provided'); return; }
+    if (!email) { return resp.status(400).send('No email provided'); }
+    if (!password) { return resp.status(400).send('No password provided'); }
 
     // fetch user from db
     let user;
     try {
         user = await UserSettings.findOne({email: req.body.email})
-        if (!user) {
-            resp.status(401).send("unauthorized");
-            return;
-        }
+        // note that we are returning a 401 - Unauthorized instead of
+        // 404 - NotFound in order not expose whether a given email exists
+        if (!user) { return resp.status(401).send("Unauthorized"); }
     }
     catch (e) {
-        console.log(e);
-        resp.status(500).send();
-        return;
+        console.log(`[error] ${e}`);
+        return resp.status(500).send();
     }
 
     // check whether hashed password matches stored hash
     try {
         const match = await bcrypt.compare(req.body.password, user.hash);
         if (!match) {
-            resp.status(401).send("unauthorized");
+            resp.status(401).send("Unauthorized");
             return;
         }
     }
     catch (e) {
-        console.log(e);
-        resp.status(500).send();
-        return;
+        console.log(`[error] ${e}`);
+        return resp.status(500).send();
     }
 
     // construct session token
@@ -105,9 +114,8 @@ router.post('/login', async function(req, resp) {
         token = await jwt.sign({id: user._id, email:user.email}, config.auth.signing_secret, { expiresIn: '24h' });
     }
     catch (e) {
-        console.trace(e);
-        resp.status(401).send("unauthorized");
-        return;
+        console.log(`[error] ${e}`);
+        return resp.status(401).send("Unauthorized");
     }
 
     resp.json({token: token});
