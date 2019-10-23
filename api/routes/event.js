@@ -47,7 +47,11 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
         const start = Number(startTime);
         const end = Number(endTime);
 
-        // TODO: event validation method
+        if (!name) { return resp.status(400).send("no event name provided"); }
+        if (!description) { return resp.status(400).send("no event description provided"); }
+        if (!lat || !lon) { return resp.status(400).send("invalid coordinates"); }
+        if (!start) { return resp.status(400).send("no start time provided"); }
+        if (!end) { return resp.status(400).send("no end time provided"); }
 
         let newEvent = new Event({
             name: name,
