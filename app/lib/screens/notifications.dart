@@ -8,16 +8,28 @@ import 'package:app/components/reusableStlyes.dart';
 
 class NotificationsPage extends StatefulWidget {
 
+  final String msg;
+  NotificationsPage({this.msg});
+
   @override
-  _NotificationsPageState createState() => _NotificationsPageState();
+  _NotificationsPageState createState() => _NotificationsPageState(msg: msg);
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
 
+  final String msg;
+  _NotificationsPageState({this.msg});
+
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Notifications");
-  List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
+  List<String> rows = new List<String>(); //["1", "2", "3", "4", "5", "6", "7"];
   var searchText;
+
+  @override
+  void initState() {
+    super.initState();
+    rows.add(msg);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +76,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 
   _buildRow(BuildContext context, int index) {
-    while (index < rows.length) {
+    while (rows != null && index < rows.length) {
       final item = rows[index];
       return ListTile(
           //TODO make title clickable
