@@ -36,7 +36,9 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   void initState() {
     super.initState();
     //fetch user's friends
-    _getUsers();
+    _getUsers().then((result) {
+      setState(() {});
+    });
   }
 
   @override
@@ -103,7 +105,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
               IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () {
-                    setState(() async {
+                    setState(() {
                       ReusableFunctions.showInSnackBar("Friend Invited", context);
                       usersToInvite.add(id);
                     });
