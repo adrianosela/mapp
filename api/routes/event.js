@@ -10,16 +10,18 @@ let UserSettings = require('../models/userSettings');
 // retrieve all data on an event by id in query string
 router.get('/event', middleware.verifyToken, async function(req, resp) {
     try {
-        let event = await Event.findById(req.query.id);
-        if (!event) {
-            resp.status(404).send('Event not found');
-        }
+        const eventId = req.query.id;
+        if (!eventId) { return resp.status(400).send("no event id in query string"); }
 
+        let event = await Event.findById(eventId);
+        if (!event) {
+            return resp.status(404).send('Event not found');
+        }
         resp.json(event);
     }
-    catch (error) {
-        console.log(error);
-        resp.status(500).send('Could not retrieve event');
+    catch (e) {
+        console.log(`[error] ${e}`);
+        return resp.status(500).send('Could not retrieve event');
     }
 });
 
@@ -74,7 +76,7 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
             let userSettings = await UserSettings.find({
                 '_id': { $in: invited }
             })
-            
+
             let invitedUsersTokens = [];
             for(let user of userSettings) {
                 invitedUsersTokens.push(user.fcmToken);
@@ -95,9 +97,9 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
         }
         resp.json(response);
     }
-    catch (error) {
-        console.log(error);
-        resp.status(500).send('Failed to create event');
+    catch (e) {
+        console.log(`[error] ${e}`);
+        return resp.status(500).send('Failed to create event');
     }
 });
 
@@ -111,9 +113,9 @@ router.put('/event', middleware.verifyToken, async function(req, resp) {
 
         resp.send(event);
     }
-    catch (error) {
-        console.log(error);
-        resp.status(500).send("Error updating event");
+    catch (e) {
+        console.log(`[error] ${e}`);
+        return resp.status(500).send("Error updating event");
     }
 });
 
@@ -152,9 +154,9 @@ router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
         }
         resp.json(response);
     }
-    catch (error) {
-        console.log(error);
-        resp.status(500).send("Can't Invite Users to Event");
+    catch (e) {
+        console.log(`[error] ${e}`);
+        return resp.status(500).send("Can't Invite Users to Event");
     }
 });
 
@@ -180,10 +182,9 @@ router.get('/event/search', function(req, resp) {
 
     Event.find(query, function(err, events) {
         if (err) {
-            console.log(err);
-            resp.status(500).send('Could not retrieve events');
+            console.log(`[error] ${err}`);
+            return resp.status(500).send('Could not retrieve events');
         }
-
         resp.send(events);
     });
 });
