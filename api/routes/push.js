@@ -32,6 +32,15 @@ router.post('/push', middleware.verifyToken, async function(req, res) {
 
         let userToNotify = await UserSettings.findById(uid);
 
+        if (!userToNotify) {
+          return res.status(400).send("user does not exist");
+        }
+
+        if (!userToNotify.fcmToken) { // should never happen
+          console.log(`tried to send notification to ${userToNotify.name} but they had no valid FCM token`);
+          return res.status(400).send("user does not have valid fcm token");
+        }
+
         let notification = {
             title: "New Test Notification!",
             body: `You received a test push notification from ${req.authorization.email}`
