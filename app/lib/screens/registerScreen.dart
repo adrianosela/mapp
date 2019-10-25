@@ -92,40 +92,51 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                width: 250,
-                child: FlatButton(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.black,
-                  padding: EdgeInsets.all(8.0),
-                  splashColor: Colors.blueAccent,
-                  onPressed: () async {
+                  width: 250,
+                  child: FlatButton(
+                    color: Colors.blue,
+                    textColor: Colors.white,
+                    disabledColor: Colors.grey,
+                    disabledTextColor: Colors.black,
+                    padding: EdgeInsets.all(8.0),
+                    splashColor: Colors.blueAccent,
+                    onPressed: () async {
 
-                    //check that all form's fields have user-entered values
-                    if (_formKey.currentState.validate()) {
+                      //check that all form's fields have user-entered values
+                      if (_formKey.currentState.validate()) {
 
-                      //send new user info to backend
-                      User user = new User(
-                          name: ReusableFunctions.getLoginText('name'),
-                          email: ReusableFunctions.getLoginText('email'),
-                          password: ReusableFunctions.getLoginText('password')
-                      );
+                        //send new user info to backend
+                        User user = new User(
+                            name: ReusableFunctions.getLoginText('name'),
+                            email: ReusableFunctions.getLoginText('email'),
+                            password: ReusableFunctions.getLoginText('password')
+                        );
 
-                      //save userId
-                      userId = await LoginController.registerUser(
-                          "https://mapp-254321.appspot.com/register",
-                          user.toJson());
+                        var response = await LoginController.registerUser(
+                            "https://mapp-254321.appspot.com/register",
+                            user.toJson());
 
-                      //navigate to map screen
-                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new MapPage(userId: userId.toString())));
-                    }
-                  },
-                  child: Text(
-                    "Register",
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                )
+                        if(response == "User with that email already exists"
+                            || response == "Unauthorized"
+                            || response == "Could not save new user"
+                            || response == "Could not save new user settings") {
+                          //alert error to the user
+                          ReusableFunctions.ackAlert(context, response);
+                        } else {
+                          //save userId
+                          userId = response;
+                          //navigate to map screen
+                          Navigator.push(context, new MaterialPageRoute(builder: (
+                              context) =>
+                          new MapPage(userId: userId.toString())));
+                        }
+                      }
+                    },
+                    child: Text(
+                      "Register",
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  )
               ),
             ],
           ),

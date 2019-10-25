@@ -17,8 +17,8 @@ class ReusableFunctions{
   //TODO
   static void showInSnackBar(String value, BuildContext context) {
     Scaffold.of(context).showSnackBar(new SnackBar(
-        content: new Text(value),
-        duration: const Duration(seconds: 2),
+      content: new Text(value),
+      duration: const Duration(seconds: 2),
     ));
   }
 
@@ -56,7 +56,7 @@ class ReusableFunctions{
     );
   }
 
-  ///login/ register button constructor
+  /// login/ register button constructor
   static FlatButton loginButton(BuildContext context, String text, GlobalKey<FormState> _formKey){
 
     return new FlatButton(
@@ -81,12 +81,22 @@ class ReusableFunctions{
                 password: passwordController.text
             );
 
-            //save user token
-            userToken = await LoginController.loginUser(
+            var response = await LoginController.loginUser(
                 "https://mapp-254321.appspot.com/login",
                 user.toJson());
 
-            Navigator.push(context, new MaterialPageRoute(builder: (context) => new MapPage(userToken: userToken.toString())));
+            if(response == "User with that email already exists"
+                || response == "Unauthorized"
+                || response == "Could not save new user") {
+              //alert error to the user
+              ReusableFunctions.ackAlert(context, response);
+            } else {
+              //save user token
+              userToken = response;
+              Navigator.push(context, new MaterialPageRoute(
+                  builder: (context) => new MapPage(
+                      userToken: userToken.toString())));
+            }
           }
         }
       },
@@ -100,7 +110,11 @@ class ReusableFunctions{
   ///input field constructor
   static TextFormField loginInputField(String text) {
     return new TextFormField(
+      obscureText: (text == 'password') ? true : false,
       validator: (value) {
+        if(text == 'email' && !RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+          return 'Invalid email';
+        }
         if (value.isEmpty) {
           return 'Please enter some text';
         }
@@ -124,5 +138,26 @@ class ReusableFunctions{
   ///returns user token
   static String getToken() {
     return userToken;
+  }
+
+  ///TODO add styling?
+  static Future<void> ackAlert(BuildContext context, String response) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(response),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

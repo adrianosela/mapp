@@ -55,25 +55,25 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 250,
-                    child: ReusableFunctions.loginInputField('email'),
+                padding: EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 250,
+                  child: ReusableFunctions.loginInputField('email'),
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 250,
-                    child: ReusableFunctions.loginInputField('password'),
-                  ),
+                padding: EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 250,
+                  child: ReusableFunctions.loginInputField('password'),
+                ),
               ),
               SizedBox(
                 width: 250,
                 child: ReusableFunctions.loginButton(context, "Login", _formKey),
               ),
               SizedBox(
-                  width: 250,
+                width: 250,
                 child: ReusableFunctions.loginButton(context, "Register", _formKey),
               ),
             ],
