@@ -32,7 +32,9 @@ class _FriendsPageState extends State<FriendsPage> {
   void initState() {
     super.initState();
     //fetch user's friends
-    _getUsers();
+    _getUsers().then((result) {
+      setState(() {});
+    });
   }
 
   @override
@@ -73,8 +75,8 @@ class _FriendsPageState extends State<FriendsPage> {
         ],
       ),
       body: ListView.builder(
-       // itemCount: this.count,
-        itemBuilder: (context, index) => this._buildRow(context, index)
+        // itemCount: this.count,
+          itemBuilder: (context, index) => this._buildRow(context, index)
       ),
     );
   }
@@ -89,6 +91,14 @@ class _FriendsPageState extends State<FriendsPage> {
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    setState(() {
+                      //TODO add to event page with list of events
+                    });
+                  }
+              ),
               IconButton(
                   icon: Icon(Icons.more_horiz),
                   onPressed: () {
