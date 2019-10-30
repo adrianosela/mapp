@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/screens/inviteFriendsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
@@ -15,14 +16,27 @@ import 'package:app/components/reusableStlyes.dart';
 import 'package:app/controllers/eventController.dart';
 import 'package:app/models/eventModel.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:app/controllers/loginController.dart';
+import 'package:app/models/fcmToken.dart';
+
 
 class MapPage extends StatefulWidget {
 
+  final String userId;
+  final String userToken;
+  MapPage({this.userId, this.userToken});
+
   @override
-  _MapPageState createState() => _MapPageState();
+  _MapPageState createState() => _MapPageState(userId: userId, userToken: userToken);
 }
 
 class _MapPageState extends State<MapPage> {
+
+  final String userId;
+  final String userToken;
+  _MapPageState({this.userId, this.userToken});
+  List<String> usersToInvite;
 
   GoogleMapController mapController;
   Location location = Location();
@@ -34,41 +48,84 @@ class _MapPageState extends State<MapPage> {
   var searchText;
   var eventDate;
   var eventId;
+  var msg;
 
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
+  TextEditingController eventDurationCont = TextEditingController();
   EventController eventController = EventController();
-
-
 
   //TODO sets the initial view of the map needs to be changed to user location
   static const LatLng _center = const LatLng(49.2827, -123.1207);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
+  //Set map Screen only once
+  bool mapSet = false;
+
+  //Fetch events every N location updates
+  int locationCount = 0;
+  int updateEvents = 10;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+
   @override
   void initState() {
     super.initState();
     location.onLocationChanged().listen((location) async {
-      mapController?.moveCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(
-              location.latitude,
-              location.longitude,
+      if (!mapSet){
+        mapSet = true;
+        mapController?.moveCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(
+                location.latitude,
+                location.longitude,
+              ),
+              zoom: 13.0,
             ),
-            zoom: 13.0,
           ),
-        ),
-      );
-      _addMarkers(location);
+        );
+      }
+      if (locationCount%updateEvents == 0){
+        _addMarkers(location);
+      }
+      locationCount++;
     });
 
+    //TODO notifications test
+    _firebaseMessaging.getToken().then((token){
+      print('-----------------------------------------------------------------------------------------------');
+      FCM fcm = new FCM(token: token);
+      LoginController.postFCM(fcm.toJson(), userToken);
+
+      print('---------------------------------');
+      print(userId);
+
+      print("-----------------");
+      print(userToken);
+      //print(token);
+    });
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        setState(() {
+          msg = "$message";
+        });
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) {
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print('on launch $message');
+      },
+    );
   }
 
   GoogleMap _initializeMap(){
@@ -125,10 +182,9 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ),
                   Padding(
-                    //TODO change this to location picker
                     padding: EdgeInsets.all(2.0),
-                    child: TextFormField(
-                    ),
+                    //TODO calculate and send to backend properly
+                    child: ReusableFunctions.formInput("enter event duration (hours)", eventDurationCont),
                   ),
                   Row(
                     children: <Widget>[
@@ -173,8 +229,9 @@ class _MapPageState extends State<MapPage> {
                         width: 110,
                       ),
                       IconButton(
-                        onPressed: (){
-                          //TODO show a list of friends? open search menu?
+                        onPressed: () async {
+                          final result = await Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId, userToken: userToken)));
+                          usersToInvite = result;
                         },
                         icon: Icon(Icons.add),
                       ),
@@ -185,18 +242,29 @@ class _MapPageState extends State<MapPage> {
                     child: RaisedButton(
                       child: Text("Save"),
                       onPressed: () async {
-                        Event event = new Event(name : eventNameCont.text, description :eventDescriptionCont.text, longitude : latlang.longitude, latitude :latlang.latitude, date :eventDate, public : true);
-                        eventId = await eventController.createEvent("https://mapp-254321.appspot.com/event", event.toJson());
-                        //TODO Figure out what this commented code does
-//                              if (_formKey.currentState.validate()) {
-//
-//                                _formKey.currentState.save();
-//                              }
-                        //TODO Need to pass Title to add to marker
-                        _addMarkerLongPressed(latlang);
+                        if(_formKey.currentState.validate()) {
 
-                        //TODO append event to list of created events, show new pin on map?
-                        Navigator.of(context).pop();
+                          print("--------------users that will be invited to event");
+                          print(usersToInvite);
+
+                          Event event = new Event(name: eventNameCont.text,
+                              description: eventDescriptionCont.text,
+                              longitude: latlang.longitude,
+                              latitude: latlang.latitude,
+                              date: eventDate,
+                              public: true,
+                              invited: usersToInvite);
+
+                          eventId = await eventController.createEvent(
+                              "https://mapp-254321.appspot.com/event", userToken, event
+                              .toJson());
+
+                          //TODO Need to pass Title to add to marker
+                          _addMarkerLongPressed(latlang);
+
+                          //TODO append event to list of created events, show new pin on map?
+                          Navigator.of(context).pop();
+                        }
                       },
                     ),
                   )
@@ -235,7 +303,7 @@ class _MapPageState extends State<MapPage> {
 
   Future _addMarkers(location) async {
 
-    List<Event> events = await eventController.getEvents(5000, location.longitude, location.latitude);
+    List<Event> events = await eventController.getEvents(5000, location.longitude, location.latitude, userToken);
     setState(() {
       for (Event event in events) {
         print(event.name);
@@ -264,7 +332,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      drawer: MyDrawer(userId: userId, userToken: userToken, msg: msg),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[
@@ -285,11 +353,7 @@ class _MapPageState extends State<MapPage> {
                                   setState(() {
                                     searchText = str;
                                   });
-                                  //print(searchText);
                                 },
-                                //onChanged: (searchText) {
-                                  //print(searchText.toString());
-                                //},
                               );
                           } else {
                               this.cusIcon = Icon(Icons.search);

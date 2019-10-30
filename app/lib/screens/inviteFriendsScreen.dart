@@ -4,29 +4,33 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
-
 import 'package:app/controllers/userController.dart';
 
 
-class FriendsPage extends StatefulWidget {
+
+class InviteFriendsPage extends StatefulWidget {
+
   final String userId;
   final String userToken;
-  FriendsPage({this.userId, this.userToken});
+  InviteFriendsPage({this.userId, this.userToken});
 
   @override
-  _FriendsPageState createState() => _FriendsPageState(userId: userId, userToken: userToken);
+  _InviteFriendsPageState createState() => _InviteFriendsPageState(userId: userId, userToken: userToken);
 }
 
-class _FriendsPageState extends State<FriendsPage> {
+class _InviteFriendsPageState extends State<InviteFriendsPage> {
+
   final String userId;
   final String userToken;
-  _FriendsPageState({this.userId, this.userToken});
+  _InviteFriendsPageState({this.userId, this.userToken});
 
   Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Friends");
+  Widget cusWidget = Text("Invite Friends");
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
+  List<String> usersToInvite = new List<String>();
   var searchText;
+
 
   @override
   void initState() {
@@ -65,7 +69,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   );
                 } else {
                   this.cusIcon = Icon(Icons.search);
-                  this.cusWidget = Text("Friends");
+                  this.cusWidget = Text("Invite Friends");
                 }
               });
             },
@@ -75,9 +79,16 @@ class _FriendsPageState extends State<FriendsPage> {
         ],
       ),
       body: ListView.builder(
-        // itemCount: this.count,
-          itemBuilder: (context, index) => this._buildRow(context, index)
+        itemBuilder:  (context, index) => this._buildRow(context, index)
       ),
+        floatingActionButton: new FloatingActionButton(
+            elevation: 0.0,
+            child: new Icon(Icons.check),
+            backgroundColor: Colors.blue,
+            onPressed: () async {
+              Navigator.pop(context, usersToInvite);
+            }
+        )
     );
   }
 
@@ -95,15 +106,8 @@ class _FriendsPageState extends State<FriendsPage> {
                   icon: Icon(Icons.add),
                   onPressed: () {
                     setState(() {
-                      //TODO add to event page with list of events
-                    });
-                  }
-              ),
-              IconButton(
-                  icon: Icon(Icons.more_horiz),
-                  onPressed: () {
-                    setState(() {
-                      //TODO delete user popup??
+                      ReusableFunctions.showInSnackBar("Friend Invited", context);
+                      usersToInvite.add(id);
                     });
                   }
               ),
@@ -117,9 +121,9 @@ class _FriendsPageState extends State<FriendsPage> {
   _getUsers() async {
     var response = await UserController.getUserFollowing(userToken);
     if(response != null) {
-      response.forEach((id, name){
-        ids.add(id);
-        rows.add(name);
+      response.forEach((key, value){
+          ids.add(key);
+          rows.add(value);
       });
     }
   }
