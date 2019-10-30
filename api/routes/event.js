@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const isValidCoordinates = require('is-valid-coordinates')
 const notifications = require('../notifications/notifications');
 const middleware = require('./middleware');
 
@@ -11,11 +12,13 @@ let UserSettings = require('../models/userSettings');
 router.get('/event', middleware.verifyToken, async function(req, resp) {
     try {
         const eventId = req.query.id;
-        if (!eventId) { return resp.status(400).send("no event id in query string"); }
+        if (!eventId) {
+          return resp.status(400).send("no event id in query string");
+        }
 
         let event = await Event.findById(eventId);
         if (!event) {
-            return resp.status(404).send('Event not found');
+          return resp.status(404).send('Event not found');
         }
         resp.json(event);
     }
@@ -49,11 +52,23 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
         const start = Number(startTime);
         const end = Number(endTime);
 
+        // validate inputs
         if (!name) { return resp.status(400).send("no event name provided"); }
         if (!description) { return resp.status(400).send("no event description provided"); }
-        if (!lat || !lon) { return resp.status(400).send("invalid coordinates"); }
+        if (!lat || !lon) { return resp.status(400).send("no coordinates provided"); }
         if (!start) { return resp.status(400).send("no start time provided"); }
         if (!end) { return resp.status(400).send("no end time provided"); }
+        if (!isValidCoordinates(lon, lat)) {
+          return resp.status(400).send("invalid coordinates");
+        }
+        if (end < Date.now()) {
+          return resp.status(400).send("event end time cannot be before now");
+        }
+
+        // avoid null array
+        if (!invited) {
+          invited = [];
+        }
 
         let newEvent = new Event({
             name: name,
@@ -105,12 +120,12 @@ router.post('/event', middleware.verifyToken, async function(req, resp) {
 
 // update an event if user is creator
 router.put('/event', middleware.verifyToken, async function(req, resp) {
-
     try {
         let newEvent = req.body.event;
-
+        if (!newEvent) {
+          return resp.status(400).send("no event id specified")
+        }
         let event = await Event.findByIdAndUpdate(newEvent._id, newEvent);
-
         resp.send(event);
     }
     catch (e) {
@@ -123,10 +138,14 @@ router.put('/event', middleware.verifyToken, async function(req, resp) {
 router.post('/event/invite', middleware.verifyToken, async function(req, resp) {
     const invited = req.body.invited;
 
+    if (!invited) {
+      invited = [];
+    }
+
     let userSettings = await UserSettings.find({
         '_id': { $in: invited }
     })
-    // TODO: check nonempty
+
     let invitedUsersTokens = [];
     for(let user of userSettings) {
         invitedUsersTokens.push(user.fcmToken);
@@ -167,10 +186,26 @@ router.get('/event/search', function(req, resp) {
     const latitude = req.query.latitude;
     const radius = req.query.radius;
 
-    // TODO: validate latitude, longitude, and radius (enforce max - return 400)
+    const lat = Number(latitude);
+    const lon = Number(longitude);
+    const rad = Number(radius);
+
+    if (!lat || !lon) {
+      return resp.status(400).send("no coordinates provided");
+    }
+    if (!isValidCoordinates(lon, lat)) {
+      return resp.status(400).send("invalid coordinates");
+    }
+
+    if (!radius) {
+      return resp.status(400).send("no radius specified");
+    }
+
+    if (radius > 100000) {
+      return resp.status(400).send("radius cannot exceed 100,000 (100km)");
+    }
 
     const query = {
-        // TODO: include user-set filters
         location: {
             $near: {
                 $maxDistance: radius,

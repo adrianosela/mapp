@@ -10,6 +10,10 @@ router.post('/fcmToken', middleware.verifyToken, async function(req, res) {
         const userId = req.authorization.id;
         const userFcmToken = req.body.fcmToken;
 
+        if (!userFcmToken) {
+          return res.status(400).send("No fcm token supplied");
+        }
+
         let userSettings = await UserSettings.findById(userId);
 
         userSettings.fcmToken = userFcmToken;
@@ -18,8 +22,8 @@ router.post('/fcmToken', middleware.verifyToken, async function(req, res) {
         // return the received fcm token as confirmation
         res.json({token: userFcmToken});
     }
-    catch (error) {
-        console.log(error);
+    catch (e) {
+        console.log(`[error] ${e}`);
         res.status(500).send("Error storing FCM Token");
     }
 });
@@ -28,7 +32,9 @@ router.post('/fcmToken', middleware.verifyToken, async function(req, res) {
 router.post('/push', middleware.verifyToken, async function(req, res) {
     try {
         const uid = req.body.userId;
-        if (!uid) { return res.status(400).send("no user id specified"); }
+        if (!uid) {
+          return res.status(400).send("no user id specified");
+        }
 
         let userToNotify = await UserSettings.findById(uid);
 
@@ -49,8 +55,8 @@ router.post('/push', middleware.verifyToken, async function(req, res) {
 
         res.json({success: true, message: "user notified"});
     }
-    catch (error) {
-        console.log(error);
+    catch (e) {
+        console.log(`[error] ${e}`);
         res.status(500).send("Error sending push notification");
     }
 });
