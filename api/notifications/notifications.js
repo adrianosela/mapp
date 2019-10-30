@@ -1,28 +1,28 @@
-const fcm = require('fcm-notification');
+const fcm = require("fcm-notification");
 
 class Notifications {
-    constructor() {
-        this.fcm = null;
-    }
+  constructor() {
+    this.fcm = null;
+  }
 
-    initialize(fcmSettings) {
-        this.fcm = new fcm(fcmSettings);
-    }
+  initialize(fcmSettings) {
+    this.fcm = new fcm(fcmSettings);
+  }
 
-    notify(data, usersTokens) {
-        const message = {
-            notification: {
-                title: data.title,
-                body: data.body
-            }
-        };
+  notify(data, usersTokens) {
+    const message = {
+      notification: {
+        title: data.title,
+        body: data.body
+      }
+    };
 
-        this.fcm.sendToMultipleToken(message, usersTokens, function(err, resp) {
-            if (err) {
-                console.log(err);
-            }
-        });
-    }
+    this.fcm.sendToMultipleToken(message, usersTokens, function(err, resp) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
 }
 
 let notifications = new Notifications();
