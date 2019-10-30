@@ -54,7 +54,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 title: Text('Friends'),
                 onTap: () {
                   //TODO remove userid, usertoken
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FriendsPage(userId: userId, userToken: userToken, events: events)));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FriendsPage(userToken: userToken, events: events)));
                 },
               ),
               ListTile(

@@ -54,7 +54,18 @@ class _EditEventPageState extends State<EditEventPage> {
           MyPopupMenu.createPopup(context),
         ],
       ),
-      body: Center(),
+      body: Center(
+
+      ),
+        floatingActionButton: new FloatingActionButton(
+            elevation: 0.0,
+            child: new Icon(Icons.check),
+            backgroundColor: Colors.blue,
+            onPressed: () async {
+              //TODO send call to backend to edit the event
+              Navigator.pop(context);
+            }
+        )
     );
   }
 }
