@@ -46,14 +46,12 @@ class _MyDrawerState extends State<MyDrawer> {
                 title: Text('Notifications'),
                 onTap: () {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationsPage(msg: msg)));
-                  //Navigator.pushNamed(context, Router.notificationsRoute);
                 },
               ),
               ListTile(
                 title: Text('Friends'),
                 onTap: () {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new FriendsPage(userId: userId, userToken: userToken)));
-                  //Navigator.pushNamed(context, Router.friendsRoute);
                 },
               ),
               ListTile(
@@ -72,12 +70,6 @@ class _MyDrawerState extends State<MyDrawer> {
                 title: Text('Pending Invites'),
                 onTap: () {
                   Navigator.pushNamed(context, Router.pendingInvitesRoute);
-                },
-              ),
-              ListTile(
-                title: Text('Calendar'),
-                onTap: () {
-                  Navigator.pushNamed(context, Router.calendarRoute);
                 },
               ),
             ],
