@@ -10,20 +10,18 @@ import 'package:app/controllers/userController.dart';
 
 
 class FriendsPage extends StatefulWidget {
-  final String userId;
   final String userToken;
   final  Map<String, String> events;
-  FriendsPage({this.userId, this.userToken, this.events});
+  FriendsPage({this.userToken, this.events});
 
   @override
-  _FriendsPageState createState() => _FriendsPageState(userId: userId, userToken: userToken, events: events);
+  _FriendsPageState createState() => _FriendsPageState(userToken: userToken, events: events);
 }
 
 class _FriendsPageState extends State<FriendsPage> {
-  final String userId;
   final String userToken;
   final  Map<String, String> events;
-  _FriendsPageState({this.userId, this.userToken, this.events});
+  _FriendsPageState({this.userToken, this.events});
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Friends");

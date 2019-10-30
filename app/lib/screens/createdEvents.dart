@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:app/components/router.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 
 class CreatedEventsPage extends StatefulWidget {
@@ -13,12 +13,20 @@ class CreatedEventsPage extends StatefulWidget {
   _CreatedEventsPageState createState() => _CreatedEventsPageState();
 }
 
+
 class _CreatedEventsPageState extends State<CreatedEventsPage> {
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Created Events");
+  //TODO get actual events list
   List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
   var searchText;
+  bool isSwitched = true;
+  var eventDate;
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController eventNameCont = TextEditingController();
+  TextEditingController eventDescriptionCont = TextEditingController();
+  TextEditingController eventDurationCont = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +76,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
     while (index < rows.length) {
       final item = rows[index];
       return ListTile(
-        //TODO make title clickable
+        //TODO make title clickable??
         title: ReusableFunctions.listItemText("Item " + item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -77,7 +85,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                   icon: Icon(Icons.edit),
                   onPressed: () {
                     setState(() {
-                      Navigator.pushNamed(context, Router.editEventRoute);
+                      _Update();
+                      //Navigator.pushNamed(context, Router.editEventRoute);
                     });
                   }
               ),
@@ -86,4 +95,97 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
       );
     }
   }
+
+  _Update() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ReusableFunctions.titleText("Create New Event"),
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: ReusableFunctions.formInput("enter event name", eventNameCont),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: ReusableFunctions.formInput("enter event description", eventDescriptionCont),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: FlatButton(
+                        onPressed: () {
+                          DatePicker.showDatePicker(context,
+                              showTitleActions: true,
+                              minTime: DateTime(2019, 3, 5),
+                              maxTime: DateTime(2023, 6, 7), onChanged: (date) {
+                                //print('change $date');
+                              }, onConfirm: (date) {
+                                eventDate = date;
+                              }, currentTime: DateTime.now(), locale: LocaleType.en);
+                        },
+                        child: Text(
+                          'pick event date',
+                          style: TextStyle(color: Colors.blue),
+                        )
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                    //TODO calculate and send to backend properly
+                    child: ReusableFunctions.formInput("enter event duration (hours)", eventDurationCont),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          "Private Event?",
+                          style: TextStyle(
+                            //TODO
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                      ),
+                      Container(
+                        child: Switch(
+                          value: isSwitched,
+                          onChanged: (value) {
+                            setState(() {
+                              isSwitched = value;
+                            });
+                          },
+                          activeTrackColor: Colors.lightBlueAccent,
+                          activeColor: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: RaisedButton(
+                      child: Text("Save"),
+                      onPressed: () async {
+                        if(_formKey.currentState.validate()) {
+
+                          // TODO backend event update call
+                          // TODO snackbar saying event updated
+                          Navigator.of(context).pop();
+                        }
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
 }
