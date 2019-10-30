@@ -5,15 +5,20 @@ let User = require('../models/user');
 
 router.get('/user', async function(req, res) {
     try {
-        let user = await User.findById(req.query.id);
+        const id = req.query.id;
+        if (!id) {
+          return res.status(404).send("no id specified");
+        }
+
+        let user = await User.findById(id);
         if(!user) {
             res.status(404).send("User not found");
         }
 
         res.json(user);
     }
-    catch (error) {
-        console.log(error);
+    catch (e) {
+        console.log(`[error] ${e}`);
         res.status(500).send("Could not retrieve user");
     }
 });
@@ -41,8 +46,8 @@ router.get('/user/followers', middleware.verifyToken, async function(req, res) {
 
         res.json(response);
     }
-    catch (error) {
-        console.log(error);
+    catch (e) {
+        console.log(`[error] ${e}`);
         res.status(500).send("Could not retrieve user's followers");
     }
 });
@@ -70,8 +75,8 @@ router.get('/user/following', middleware.verifyToken, async function(req, res) {
 
         res.json(response);
     }
-    catch (error) {
-        console.log(error);
+    catch (e) {
+        console.log(`[error] ${e}`);
         res.status(500).send("Could not retrieve user's following");
     }
 });
@@ -81,6 +86,9 @@ router.post('/user/follow', middleware.verifyToken, async function(req, res) {
     try {
         const userId = req.authorization.id;
         const userToFollowId = req.body.userToFollowId;
+        if (!userToFollowId) {
+          return res.status(400).send("no user to follow specified");
+        }
 
         let userToFollow = await User.findById(userToFollowId);
         if (!userToFollow) {

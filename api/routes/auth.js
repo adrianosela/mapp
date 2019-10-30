@@ -49,7 +49,7 @@ router.post('/register', async function(req, resp) {
         savedUserSettings = await newUserSettings.save();
     }
     catch (e) {
-        console.log('[error] ' + e);
+        console.log(`[error] ${e}`);
         return resp.status(500).send('Could not save new user settings');
     }
 
