@@ -121,7 +121,7 @@ let login = async function(req, resp) {
     return resp.status(401).send("Unauthorized");
   }
 
-  resp.json({ token: token });
+  resp.json({ token });
 };
 
 let whoami = async function(req, resp) {
