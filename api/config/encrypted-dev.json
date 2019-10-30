@@ -6,12 +6,7 @@
 		"name": "ENC[AES256_GCM,data:g3drHvTz,iv:dEfwvPvcDw5FpjwLsmEPMyOC5BfsevkoC7frkPOkfNM=,tag:oy1JcIC8goXIgGpI3AQ8ig==,type:str]"
 	},
 	"auth": {
-		"signing_secret": "ENC[AES256_GCM,data:VGq/b1dpKBmpRczHjjBoN1wX7Ql9AntYwHl1vBP45x7dxMRLhc2984Qq5PCNalN+SW/OGp9GaVS2Frlx+zDIwkj8zE0CBpxK6Kj8+EiR+ifj3t2LfLl/82Ok9vXfVlSBYok1,iv:8KrySOlwq0Jd8KIBTy1xZaeH15L2L9eAzVRtE/DQBkg=,tag:M9YjBPW7/oFRKi545+7zYg==,type:str]",
-		"google": {
-			"clientid": "ENC[AES256_GCM,data:m6Ob8SYddYJRmfCP8fa87V3+lm27rlV6It5uc4LoYw0m8KmZkInvATBBBvb8wV4MU0kaKoN2TPETvhWR75dLmlEgeLvMaiE=,iv:/UQE2F8PL6JMw9LNNJNP/pIFy+8fInxz29n0PHDLkoA=,tag:cvqyiZ0nIPMP7Ma6FQXU8Q==,type:str]",
-			"clientsecret": "ENC[AES256_GCM,data:Sp8YszXeB8H+TuCfiAtZH9Sd45GiCy6d,iv:R5cx8wb3LDDE7byy8ueZGTcMphFRtxf9Pi6eC01fDh0=,tag:c3jjmB+HS+OaOHikrdXmpQ==,type:str]",
-			"redirecturl": "ENC[AES256_GCM,data:I/fzWu3PvkAnrkxkt62ISZ7AEm+Q8tXWPZ0nhqDJyA==,iv:9pjbI5JyFlGZ/e58sqSNqM7AgzDY8JohHyai5vSZ03I=,tag:wpkDgFVDkVEdZhCxPimRtw==,type:str]"
-		}
+		"signing_secret": "ENC[AES256_GCM,data:VGq/b1dpKBmpRczHjjBoN1wX7Ql9AntYwHl1vBP45x7dxMRLhc2984Qq5PCNalN+SW/OGp9GaVS2Frlx+zDIwkj8zE0CBpxK6Kj8+EiR+ifj3t2LfLl/82Ok9vXfVlSBYok1,iv:8KrySOlwq0Jd8KIBTy1xZaeH15L2L9eAzVRtE/DQBkg=,tag:M9YjBPW7/oFRKi545+7zYg==,type:str]"
 	},
 	"notifications": {
 		"firebase": {
@@ -37,8 +32,8 @@
 			}
 		],
 		"azure_kv": null,
-		"lastmodified": "2019-10-21T06:23:37Z",
-		"mac": "ENC[AES256_GCM,data:pYMjiwy7VAJm9PmSp/CY70kcLIhIxHNGwUr1rL5Eh1TPr+T1L5j9ZL15EvfVir3IqezsbluWEtCa6gdffPNIa4b3KOFw7YjNQC54bitkhzPPhUjsdWynrMC2lje0vs5ZnYOddmmGCfLckaRDqHTBgTDDcwKclaLy0pC9d6nj6a4=,iv:GuxHmsibMroTQ//888YRjusg+hj4BjY+ajSIaLSg2FQ=,tag:lPu1rOC6TYdLV/NPUYpTLA==,type:str]",
+		"lastmodified": "2019-10-30T19:12:07Z",
+		"mac": "ENC[AES256_GCM,data:cPVrw+j5/2GMm4cylVwET2Rzd4/iTjGcHIKAgXfuy9WvjYEW1Lx9dRhtDYo1jsnPkw5N0XM5WXP4aIUaKlWVItNK9NdHvcWr38VBVWl0/CJzYCEhEGWkx1mapK+1Q60z0UE6QB7NqMhJ4fNDcCHyQrmJUYCAeZeEonojLWGENdI=,iv:LrjyPwgUSuybYwNTBeonZNC7ZoCHQvlnK8PUOrHSEgo=,tag:XANFkg9GKmfLy/5LBNt84g==,type:str]",
 		"pgp": null,
 		"unencrypted_suffix": "_unencrypted",
 		"version": "3.4.0"
