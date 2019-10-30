@@ -1,16 +1,11 @@
 const bcrypt = require("bcrypt");
 const config = require("config");
 const jwt = require("jsonwebtoken");
+const emailValidator = require("email-validator");
 
 // import User & UserSettings schemas
 let User = require("../models/user");
 let UserSettings = require("../models/userSettings");
-
-// email validation function
-function emailIsValid(email) {
-  let regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return regex.test(email);
-}
 
 let register = async function(req, resp) {
   // read request body
@@ -26,7 +21,7 @@ let register = async function(req, resp) {
   if (!name) {
     return resp.status(400).send("No preferred name provided");
   }
-  if (!emailIsValid(email)) {
+  if (!emailValidator.validate(email)) {
     return resp.status(400).send("Email provided is invalid");
   }
 
