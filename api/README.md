@@ -26,7 +26,7 @@ node index.js
 
 ### Run In Docker
 
-##### build docker image:
+#### build docker image:
 
 ```
 docker build -t mapp
@@ -38,7 +38,7 @@ or using the makefile target:
 make build
 ```
 
-##### run docker image:
+#### run docker image:
 
 ```
 docker run -d --name mapp_service -p 8080:80 mapp
