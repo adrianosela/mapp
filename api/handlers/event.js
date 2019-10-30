@@ -94,7 +94,7 @@ let createEvent = async function(req, resp) {
     creatorUser.createdEvents.push(event._id);
     await creatorUser.save();
 
-    if (invited != null && invited.length != 0) {
+    if (invited != null && invited.length !== 0) {
       let userSettings = await UserSettings.find({
         _id: { $in: invited }
       });
