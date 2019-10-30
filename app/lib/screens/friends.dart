@@ -4,6 +4,7 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
+import 'package:app/screens/inviteToEventsScreen.dart';
 
 import 'package:app/controllers/userController.dart';
 
@@ -11,16 +12,18 @@ import 'package:app/controllers/userController.dart';
 class FriendsPage extends StatefulWidget {
   final String userId;
   final String userToken;
-  FriendsPage({this.userId, this.userToken});
+  final  Map<String, String> events;
+  FriendsPage({this.userId, this.userToken, this.events});
 
   @override
-  _FriendsPageState createState() => _FriendsPageState(userId: userId, userToken: userToken);
+  _FriendsPageState createState() => _FriendsPageState(userId: userId, userToken: userToken, events: events);
 }
 
 class _FriendsPageState extends State<FriendsPage> {
   final String userId;
   final String userToken;
-  _FriendsPageState({this.userId, this.userToken});
+  final  Map<String, String> events;
+  _FriendsPageState({this.userId, this.userToken, this.events});
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Friends");
@@ -93,10 +96,8 @@ class _FriendsPageState extends State<FriendsPage> {
             children: <Widget>[
               IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () {
-                    setState(() {
-                      //TODO add to event page with list of events
-                    });
+                  onPressed: () async {
+                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteToEventsPage(events: events, userId: id)));
                   }
               ),
               IconButton(

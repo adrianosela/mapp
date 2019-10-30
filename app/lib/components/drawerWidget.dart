@@ -8,17 +8,19 @@ class MyDrawer extends StatefulWidget {
   final String userId;
   final String userToken;
   final String msg;
-  MyDrawer({this.userId, this.userToken, this.msg});
+  final Map<String, String> events;
+  MyDrawer({this.userId, this.userToken, this.msg, this.events});
 
   @override
-  _MyDrawerState createState() => _MyDrawerState(userId: userId, userToken: userToken, msg: msg);
+  _MyDrawerState createState() => _MyDrawerState(userId: userId, userToken: userToken, msg: msg, events: events);
 }
 
 class _MyDrawerState extends State<MyDrawer> {
   final String userId;
   final String userToken;
   final String msg;
-  _MyDrawerState({this.userId, this.userToken, this.msg});
+  final Map<String, String> events;
+  _MyDrawerState({this.userId, this.userToken, this.msg, this.events});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,8 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 title: Text('Friends'),
                 onTap: () {
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FriendsPage(userId: userId, userToken: userToken)));
+                  //TODO remove userid, usertoken
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FriendsPage(userId: userId, userToken: userToken, events: events)));
                 },
               ),
               ListTile(

@@ -50,6 +50,8 @@ class _MapPageState extends State<MapPage> {
   var eventId;
   var msg;
 
+  Map<String, String> eventsInRadius = new Map<String, String>();
+
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
@@ -244,9 +246,6 @@ class _MapPageState extends State<MapPage> {
                       onPressed: () async {
                         if(_formKey.currentState.validate()) {
 
-                          print("--------------users that will be invited to event");
-                          print(usersToInvite);
-
                           Event event = new Event(name: eventNameCont.text,
                               description: eventDescriptionCont.text,
                               longitude: latlang.longitude,
@@ -308,6 +307,9 @@ class _MapPageState extends State<MapPage> {
       for (Event event in events) {
         print(event.name);
         print(event.eventId);
+
+        eventsInRadius[event.eventId] =  event.name;
+
         final MarkerId markerId = MarkerId(event.eventId);
 
         final LatLng position = new prefix0.LatLng(event.latitude, event.longitude);
@@ -332,7 +334,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(userId: userId, userToken: userToken, msg: msg),
+      drawer: MyDrawer(userId: userId, userToken: userToken, msg: msg, events: eventsInRadius),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[
