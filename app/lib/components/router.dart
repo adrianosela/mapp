@@ -7,6 +7,7 @@ import 'package:app/screens/editEventPage.dart';
 import 'package:app/screens/editSettingsPage.dart';
 import 'package:app/screens/friends.dart';
 import 'package:app/screens/inviteFriendsScreen.dart';
+import 'package:app/screens/inviteToEventsScreen.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/notifications.dart';
 import 'package:app/screens/pendingInvites.dart';
@@ -22,6 +23,7 @@ class Router {
   static const String editSettingsRoute = '/editSettings';
   static const String friendsRoute = '/friends';
   static const String inviteRoute = '/inviteFriends';
+  static const String inviteToRoute = '/inviteToEvents';
   static const String mapRoute = '/map';
   static const String notificationsRoute = '/notifications';
   static const String pendingInvitesRoute = '/pendingInvites';
@@ -44,6 +46,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => FriendsPage());
       case inviteRoute:
         return MaterialPageRoute(builder: (_) => InviteFriendsPage());
+      case inviteToRoute:
+        return MaterialPageRoute(builder: (_) => InviteToEventsPage());
       case mapRoute:
         return MaterialPageRoute(builder: (_) => MapPage());
       case notificationsRoute:

@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class EventController {
 
 
-  ///TODO
+  ///get all the public events in within user-preset radius
   Future<List<Event>> getEvents(int radius, double longitude, double latitude, token) async {
 
     Map<String, String> query = {

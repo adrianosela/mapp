@@ -124,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ReusableFunctions.ackAlert(context, response);
                         } else {
                           //save userId
-                          userId = response;
+                          user.userId = response;
                           //navigate to map screen
                           Navigator.push(context, new MaterialPageRoute(builder: (
                               context) =>

@@ -22,7 +22,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Notifications");
-  List<String> rows = new List<String>(); //["1", "2", "3", "4", "5", "6", "7"];
+  List<String> rows = new List<String>();
   var searchText;
 
   @override
