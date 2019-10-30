@@ -5,6 +5,9 @@ const middleware = require("../handlers/middleware");
 // get a user (by user id)
 router.get("/user", userHandlers.get);
 
+// get self
+router.get("/user/me", middleware.verifyToken, userHandlers.me);
+
 // get user followers (by user id)
 router.get("/user/followers", middleware.verifyToken, userHandlers.followers);
 

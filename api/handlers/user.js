@@ -4,16 +4,27 @@ let User = require("../models/user");
 
 let getUser = async function(req, res) {
   try {
-    const id = req.query.id;
-    if (!id) {
-      return res.status(404).send("no id specified");
+    const userEmail = req.query.email;
+    if (!userEmail) {
+      return res.status(400).send("no email specified");
     }
-
-    let user = await User.findById(id);
+    let user = await User.findOne({ email: userEmail });
     if (!user) {
-      res.status(404).send("User not found");
+      return res.status(404).send("user not found");
     }
+    res.json(user);
+  } catch (e) {
+    console.log(`[error] ${e}`);
+    res.status(500).send("Could not retrieve user");
+  }
+};
 
+let getSelf = async function(req, res) {
+  try {
+    let user = await User.findById(req.authorization.id);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
     res.json(user);
   } catch (e) {
     console.log(`[error] ${e}`);
@@ -133,6 +144,7 @@ let searchUsers = async function(req, resp) {
 
 module.exports = {
   get: getUser,
+  me: getSelf,
   followers: getFollowers,
   following: getFollowing,
   follow: followUser,
