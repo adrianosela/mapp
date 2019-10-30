@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:8.16.2-jessie
 
 COPY . .
 
