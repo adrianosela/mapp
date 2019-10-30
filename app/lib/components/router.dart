@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:app/main.dart';
-import 'package:app/screens/calendar.dart';
 import 'package:app/screens/createdEvents.dart';
 import 'package:app/screens/editSettingsPage.dart';
 import 'package:app/screens/friends.dart';
@@ -16,7 +15,6 @@ import 'package:app/screens/savedEvents.dart';
 class Router {
 
   static const String homeRoute = '/';
-  static const String calendarRoute = '/calendar';
   static const String createdEventsRoute = '/createdEvents';
   static const String editSettingsRoute = '/editSettings';
   static const String friendsRoute = '/friends';
@@ -32,8 +30,6 @@ class Router {
     switch (settings.name) {
       case homeRoute:
         return MaterialPageRoute(builder: (_) => MyHomePage());
-      case calendarRoute:
-        return MaterialPageRoute(builder: (_) => CalendarPage());
       case createdEventsRoute:
         return MaterialPageRoute(builder: (_) => CreatedEventsPage());
       case editSettingsRoute:
