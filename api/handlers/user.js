@@ -21,6 +21,19 @@ let getUser = async function(req, res) {
   }
 };
 
+let getSelf = async function(req, res) {
+  try {
+    let user = await User.findById(req.authorization.id);
+    if (!user) {
+      res.status(404).send("User not found");
+    }
+    res.json(user);
+  } catch (e) {
+    console.log(`[error] ${e}`);
+    res.status(500).send("Could not retrieve user");
+  }
+};
+
 let getFollowers = async function(req, res) {
   try {
     const userId = req.authorization.id;
@@ -133,6 +146,7 @@ let searchUsers = async function(req, resp) {
 
 module.exports = {
   get: getUser,
+  me: getSelf,
   followers: getFollowers,
   following: getFollowing,
   follow: followUser,
