@@ -77,7 +77,7 @@ let getFollowing = async function(req, res) {
   }
 };
 
-let follow = async function(req, res) {
+let followUser = async function(req, res) {
   try {
     const userId = req.authorization.id;
     const userToFollowId = req.body.userToFollowId;
@@ -113,7 +113,7 @@ let follow = async function(req, res) {
 };
 
 // get users by username regex
-let search = async function(req, resp) {
+let searchUsers = async function(req, resp) {
   const userInfo = req.query.username;
   const query = {
     $or: [
@@ -135,6 +135,6 @@ module.exports = {
   get: getUser,
   followers: getFollowers,
   following: getFollowing,
-  follow: follow,
-  search: search
+  follow: followUser,
+  search: searchUsers
 };

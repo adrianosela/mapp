@@ -128,8 +128,4 @@ let whoami = async function(req, resp) {
   resp.json(req.authorization);
 };
 
-module.exports = {
-  register: register,
-  login: login,
-  whoami: whoami
-};
+module.exports = { register, login, whoami };
