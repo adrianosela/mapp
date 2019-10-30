@@ -28,8 +28,8 @@ class Datastore {
 
         this.connection = mongoose.connection;
       })
-      .catch(err => {
-        console.log("[error] could not establish connection with DB: " + err);
+      .catch((err) => {
+        console.log(`[error] could not establish connection with DB: ${err}`);
       });
   }
 
