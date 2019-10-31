@@ -24,5 +24,8 @@ down:
 lint:
 	npm run lint
 
+tests:
+	npm run test
+
 clean:
 	rm config/production.json config/default.json
