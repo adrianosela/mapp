@@ -11,7 +11,7 @@ router.use(require("./event")); // events
 
 // healthcheck endpoint
 router.get("/healthcheck", function(req, res) {
-  res.send("Server is up and running!");
+    res.send("Server is up and running!");
 });
 
 module.exports = router;
