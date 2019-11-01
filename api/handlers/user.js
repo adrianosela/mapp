@@ -115,6 +115,35 @@ let getPendingInvites = async function(req, res) {
     }
 };
 
+let getSubscribedEvents = async function(req, res) {
+    try {
+        const userId = req.authorization.id;
+        let user = await User.findById(userId);
+        if (!user) {
+            res.status(404).send("Requesting user not found");
+        }
+
+        let subscribedEvents = await Event.find({
+            _id: { $in: user.subscribedEvents }
+        });
+
+        let response = [];
+        for (let event of subscribedEvents) {
+            let eventObject = {
+                id: event._id,
+                name: event.name
+            };
+            response.push(eventObject);
+        }
+
+        res.json(response);
+    }
+    catch (e) {
+        console.log(`[error] ${e}`);
+        res.status(500).send("Could not retrieve user's subscribed events");
+    }
+};
+
 let followUser = async function(req, res) {
     try {
         const userId = req.authorization.id;
@@ -216,6 +245,7 @@ module.exports = {
     followers: getFollowers,
     following: getFollowing,
     pending: getPendingInvites,
+    subscribed: getSubscribedEvents,
     follow: followUser,
     subscribe: subscribeToEvents,
     search: searchUsers
