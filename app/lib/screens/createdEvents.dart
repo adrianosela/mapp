@@ -78,7 +78,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  ReusableFunctions.titleText("Create New Event"),
+                  ReusableFunctions.titleText("Update Event"),
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: ReusableFunctions.formInput("enter event name", eventNameCont),

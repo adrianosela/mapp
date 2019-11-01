@@ -38,7 +38,7 @@ class MyPopupMenu {
 
   static void choiceAction(String choice) {
     if(choice == Constants.Logout) {
-      Navigator.pushNamed(mycontext, Router.homeRoute);
+      Navigator.pushNamedAndRemoveUntil(mycontext, Router.homeRoute, (_) => false);
     } else if (choice == Constants.Settings) {
       Navigator.pushNamed(mycontext, Router.editSettingsRoute);
     }
