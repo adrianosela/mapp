@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:app/screens/inviteFriendsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as prefix0;
+import 'dart:io' show Platform;
 import 'package:location/location.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
@@ -14,11 +14,12 @@ import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
 
 import 'package:app/controllers/eventController.dart';
-import 'package:app/models/eventModel.dart';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:app/controllers/loginController.dart';
+
+import 'package:app/models/eventModel.dart';
 import 'package:app/models/fcmToken.dart';
+
+import 'package:app/screens/inviteFriendsScreen.dart';
 
 
 class MapPage extends StatefulWidget {
@@ -100,29 +101,32 @@ class _MapPageState extends State<MapPage> {
       locationCount++;
     });
 
-    //TODO notifications test
-    _firebaseMessaging.getToken().then((token){
-      print('-----------------------------------------------------------------------------------------------');
-      FCM fcm = new FCM(token: token);
-      LoginController.postFCM(fcm.toJson(), userToken);
+    ///only show notifications for Android
+    if (Platform.isAndroid) {
+      _firebaseMessaging.getToken().then((token) {
+        print(
+            '-----------------------------------------------------------------------------------------------');
+        FCM fcm = new FCM(token: token);
+        LoginController.postFCM(fcm.toJson(), userToken);
 
-      print('---------------------------------');
-      print(userId);
+        print('---------------------------------');
+        print(userId);
 
-      print("-----------------");
-      print(userToken);
-      //print(token);
-    });
+        print("-----------------");
+        print(userToken);
+        //print(token);
+      });
 
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        setState(() {
-          msg = "$message";
-        });
-        _showNotification();
-        print('on message $message');
-      }
-    );
+      _firebaseMessaging.configure(
+          onMessage: (Map<String, dynamic> message) async {
+            setState(() {
+              msg = "$message";
+            });
+            _showNotification();
+            print('on message $message');
+          }
+      );
+    }
   }
 
   GoogleMap _initializeMap(){
