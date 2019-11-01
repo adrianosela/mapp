@@ -1,4 +1,5 @@
 let User = require("../models/user");
+let Event = require("../models/event");
 
 let getUser = async function(req, res) {
     try {
@@ -96,6 +97,7 @@ let getFollowing = async function(req, res) {
 let followUser = async function(req, res) {
     try {
         const userId = req.authorization.id;
+
         const userToFollowId = req.body.userToFollowId;
         if (!userToFollowId) {
             return res.status(400).send("No user to follow specified");
@@ -123,14 +125,48 @@ let followUser = async function(req, res) {
 
         res.send("Successfully followed requested user");
     } 
-    catch (error) {
-        console.log(error);
+    catch (e) {
+        console.log(`[error] ${e}`);
         res.status(500).send("Could not follow user");
     }
 };
 
+let subscribeToEvents = async function(req, res) {
+    const userId = req.authorization.id;
+
+    const eventIds = req.body.eventIds;
+    if (!eventIds || eventIds.length == 0) {
+        return res.status(400).send("No events to subscribe to");
+    }
+
+    try {
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send("Requesting user not found");
+        }
+
+        let events = await Event.find({
+            _id: { $in: eventIds }
+        });
+
+        for (let event of events) {
+            user.subscribedEvents.push(event._id);
+            event.followers.push(userId);
+            await event.save();
+        }
+
+        await user.save(); 
+
+        res.send(user.subscribedEvents);
+    }
+    catch (e) {
+        console.log(`[error] ${e}`);
+        res.status(500).send("Could not subscribe to events");
+    }
+};
+
 // get users by username regex
-let searchUsers = async function(req, resp) {
+let searchUsers = async function(req, res) {
     const userInfo = req.query.username;
     const query = {
         $or: [
@@ -142,9 +178,9 @@ let searchUsers = async function(req, resp) {
     User.find(query, function(err, users) {
         if (err) {
             console.log(err);
-            resp.status(500).send("Could not retrieve users");
+            res.status(500).send("Could not retrieve users");
         }
-        resp.send(users);
+        res.send(users);
     });
 };
 
@@ -154,5 +190,6 @@ module.exports = {
     followers: getFollowers,
     following: getFollowing,
     follow: followUser,
+    subscribe: subscribeToEvents,
     search: searchUsers
 };
