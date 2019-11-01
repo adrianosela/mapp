@@ -39,7 +39,7 @@ class Router {
       case inviteToRoute:
         return MaterialPageRoute(builder: (_) => InviteToEventsPage());
       case mapRoute:
-        return MaterialPageRoute(builder: (_) => MapPage());
+        return MaterialPageRoute(builder: (_) => new MapPage());
       case pendingInvitesRoute:
         return MaterialPageRoute(builder: (_) => PendingInvitesPage());
       case registerRoute:
