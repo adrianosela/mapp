@@ -5,14 +5,27 @@ import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 
 class PendingInvitesPage extends StatefulWidget {
+  final String userToken;
+  PendingInvitesPage({this.userToken});
 
   @override
-  _PendingInvitesPageState createState() => _PendingInvitesPageState();
+  _PendingInvitesPageState createState() => _PendingInvitesPageState(userToken: userToken);
 }
 
 class _PendingInvitesPageState extends State<PendingInvitesPage> {
 
+  final String userToken;
+  _PendingInvitesPageState({this.userToken});
+
   List<String> rows = new List<String>();
+
+  @override
+  void initState() {
+    super.initState();
+    _getPendingInvites().then((result) {
+      setState(() {});
+    });
+  }
 
 
   @override
@@ -67,5 +80,9 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
         ),
       );
     }
+  }
+
+  //TODO finish this call
+  _getPendingInvites() async {
   }
 }
