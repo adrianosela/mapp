@@ -21,9 +21,6 @@ decrypt-conf-dev:
 down:
 	(docker stop $(NAME)_service || true) && (docker rm $(NAME)_service || true)
 
-fix:
-	eslint ./ --fix
-
 lint:
 	npm run lint
 
