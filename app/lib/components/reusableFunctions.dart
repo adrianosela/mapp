@@ -97,6 +97,11 @@ class ReusableFunctions{
                   builder: (context) => new MapPage(
                       userToken: userToken.toString())));
             }
+
+            ///cleanup
+            nameController.clear();
+            usernameController.clear();
+            passwordController.clear();
           }
         }
       },
@@ -130,9 +135,19 @@ class ReusableFunctions{
 
   ///returns input field text
   static String getLoginText(String text) {
-    if(text == 'email') return usernameController.text;
-    else if (text == 'password') return passwordController.text;
-    return nameController.text;
+    var returnText;
+
+    if(text == 'email') {
+      returnText = usernameController.text;
+      usernameController.clear();
+    } else if (text == 'password') {
+      returnText = passwordController.text;
+      passwordController.clear();
+    } else {
+      returnText = nameController.text;
+      nameController.clear();
+    }
+    return returnText;
   }
 
   ///returns user token

@@ -1,6 +1,10 @@
+import 'package:app/screens/createdEvents.dart';
 import 'package:flutter/material.dart';
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
+
 import 'package:app/components/router.dart';
+
 import 'package:app/screens/friends.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -18,6 +22,20 @@ class _MyDrawerState extends State<MyDrawer> {
   final String userToken;
   final Map<String, String> events;
   _MyDrawerState({this.userId, this.userToken, this.events});
+
+  //TODO works but getting a bunch of errors when reloading map page??
+  // TODO test on an actual device and see if events pop up
+  /*@override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+  ///forces back navigation to map screen
+  bool myInterceptor(bool stopDefaultButtonEvent) {
+    Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+    return true;
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +62,13 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 title: Text('Friends'),
                 onTap: () {
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FriendsPage(userToken: userToken, events: events)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FriendsPage(userToken: userToken, events: events)));
                 },
               ),
               ListTile(
                 title: Text('Created Events'),
                 onTap: () {
-                  Navigator.pushNamed(context, Router.createdEventsRoute);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CreatedEventsPage(userToken: userToken)));
                 },
               ),
               ListTile(

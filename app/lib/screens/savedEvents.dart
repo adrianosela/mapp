@@ -6,24 +6,22 @@ import 'package:app/components/reusableFunctions.dart';
 
 
 class SavedEventsPage extends StatefulWidget {
-
   @override
   _SavedEventsPageState createState() => _SavedEventsPageState();
 }
 
+
 class _SavedEventsPageState extends State<SavedEventsPage> {
 
-  Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Saved Events");
-  List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
-  var searchText;
+  List<String> rows = new List<String>();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: cusWidget,
+        title: Text("Saved Events"),
         actions: <Widget>[
           MyPopupMenu.createPopup(context),
         ],
@@ -40,7 +38,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
       final item = rows[index];
       return ListTile(
         //TODO make title clickable
-        title: ReusableFunctions.listItemText("Item " + item),
+        title: ReusableFunctions.listItemText(item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

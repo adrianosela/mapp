@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+
+import 'package:app/controllers/userController.dart';
 
 
 class CreatedEventsPage extends StatefulWidget {
+  final String userToken;
+  CreatedEventsPage({this.userToken});
 
   @override
-  _CreatedEventsPageState createState() => _CreatedEventsPageState();
+  _CreatedEventsPageState createState() => _CreatedEventsPageState(userToken: userToken);
 }
 
 
 class _CreatedEventsPageState extends State<CreatedEventsPage> {
 
-  Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Created Events");
-  //TODO get actual events list
-  List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
-  var searchText;
+  final String userToken;
+  _CreatedEventsPageState({this.userToken});
+
+  List<String> rows = new List<String>();
+
+  ///vars for edit event alert dialog
   bool isSwitched = true;
   var eventDate;
   final _formKey = GlobalKey<FormState>();
@@ -27,12 +33,22 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   TextEditingController eventDescriptionCont = TextEditingController();
   TextEditingController eventDurationCont = TextEditingController();
 
+
+  @override
+  void initState() {
+    super.initState();
+    _getCreatedEvents().then((result) {
+      setState(() {});
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: cusWidget,
+        title: Text("Created Events"),
         actions: <Widget>[
           MyPopupMenu.createPopup(context),
         ],
@@ -57,8 +73,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                   icon: Icon(Icons.edit),
                   onPressed: () {
                     setState(() {
-                      _Update();
-                      //Navigator.pushNamed(context, Router.editEventRoute);
+                      _update();
                     });
                   }
               ),
@@ -68,7 +83,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
     }
   }
 
-  _Update() {
+  _update() {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -158,6 +173,13 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
             ),
           );
         });
+  }
+
+  //TODO need to fix this
+  _getCreatedEvents() async {
+    var response = await UserController.getUserObject(userToken);
+    print("-NNNNNNNNNNNNNNNNNNNNNNNNNNN-----------");
+    print(response);
   }
 
 }
