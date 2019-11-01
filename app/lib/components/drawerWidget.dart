@@ -2,25 +2,22 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/router.dart';
 import 'package:app/screens/friends.dart';
-import 'package:app/screens/notifications.dart';
 
 class MyDrawer extends StatefulWidget {
   final String userId;
   final String userToken;
-  final String msg;
   final Map<String, String> events;
-  MyDrawer({this.userId, this.userToken, this.msg, this.events});
+  MyDrawer({this.userId, this.userToken, this.events});
 
   @override
-  _MyDrawerState createState() => _MyDrawerState(userId: userId, userToken: userToken, msg: msg, events: events);
+  _MyDrawerState createState() => _MyDrawerState(userId: userId, userToken: userToken, events: events);
 }
 
 class _MyDrawerState extends State<MyDrawer> {
   final String userId;
   final String userToken;
-  final String msg;
   final Map<String, String> events;
-  _MyDrawerState({this.userId, this.userToken, this.msg, this.events});
+  _MyDrawerState({this.userId, this.userToken, this.events});
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +42,8 @@ class _MyDrawerState extends State<MyDrawer> {
                 },
               ),
               ListTile(
-                title: Text('Notifications'),
-                onTap: () {
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationsPage(msg: msg)));
-                },
-              ),
-              ListTile(
                 title: Text('Friends'),
                 onTap: () {
-                  //TODO remove userid, usertoken
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new FriendsPage(userToken: userToken, events: events)));
                 },
               ),
