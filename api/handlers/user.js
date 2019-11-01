@@ -45,16 +45,17 @@ let getFollowers = async function(req, res) {
             res.status(404).send("User not found");
         }
 
+        let followers = User.find({
+            _id: { $in: user.followers }
+        });
+
         let response = [];
-        for (let follower of user.followers) {
-            let followerUser = await User.findById(follower);
-            if (followerUser) {
-                let followerObject = {
-                    id: followerUser._id,
-                    name: followerUser.name
-                };
-                response.push(followerObject);
-            }
+        for (let follower of followers) {
+            let followerObject = {
+                id: follower._id,
+                name: follower.name
+            };
+            response.push(followerObject);
         }
 
         res.json(response);
@@ -74,16 +75,17 @@ let getFollowing = async function(req, res) {
             res.status(404).send("User not found");
         }
 
+        let following = User.find({
+            _id: { $in: user.following }
+        });
+
         let response = [];
-        for (let followee of user.following) {
-            let followeeUser = await User.findById(followee);
-            if (followeeUser) {
-                let followeeObject = {
-                    id: followeeUser._id,
-                    name: followeeUser.name
-                };
-                response.push(followeeObject);
-            }
+        for (let followee of following) {
+            let followeeObject = {
+                id: followee._id,
+                name: followee.name
+            };
+            response.push(followeeObject);
         }
 
         res.json(response);
