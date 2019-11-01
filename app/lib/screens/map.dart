@@ -251,6 +251,7 @@ class _MapPageState extends State<MapPage> {
                               longitude: latlang.longitude,
                               latitude: latlang.latitude,
                               date: eventDate,
+                              duration: eventDurationCont.text,
                               public: true,
                               invited: usersToInvite);
 

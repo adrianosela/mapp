@@ -42,6 +42,9 @@ class ReusableFunctions{
   static TextFormField formInput(String text, [TextEditingController controller]) {
     return new TextFormField(
       validator: (value) {
+        if(text == "enter event duration (hours)" && !RegExp("^([0-9]|[1-3][0-9][0-9]|400)").hasMatch(value)) {
+          return 'Event duration must be a number smaller than 400';
+        }
         if (value.isEmpty) {
           return 'Please enter some text';
         }

@@ -5,11 +5,12 @@ class Event {
   final double latitude;
   final String description;
   final DateTime date;
+  final String duration;
   final bool public;
   final List<String> invited;
   String eventId;
 
-  Event({this.name, this.description, this.longitude, this.latitude, this.date, this.public, this.invited});
+  Event({this.name, this.description, this.longitude, this.latitude, this.date, this.duration, this.public, this.invited});
 
   factory Event.fromJson(Map<String, dynamic> json) {
     Event event = new Event(
@@ -18,6 +19,7 @@ class Event {
       latitude: json['location']['coordinates'][1],
       description: json['description'],
       date: new DateTime.fromMicrosecondsSinceEpoch(json['startTime']*1000),
+      duration: json['duration'],
       public: json['public'],
     );
     event.eventId = json['_id'];
@@ -31,7 +33,7 @@ class Event {
     'latitude' : latitude,
     'description' : description,
     'startTime' : (date.toUtc().millisecondsSinceEpoch/1000).round(),
-    'endTime' : (date.toUtc().millisecondsSinceEpoch/1000 +1).round(),
+    'endTime' : (date.toUtc().millisecondsSinceEpoch/1000).round() + int.parse(duration),
     'public' :  public,
     'invited' : invited
   };
