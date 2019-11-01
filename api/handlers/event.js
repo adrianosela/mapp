@@ -19,7 +19,7 @@ let getEvent = async function(req, resp) {
             return resp.status(404).send("Event not found");
         }
         resp.json(event);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Could not retrieve event");
@@ -119,7 +119,7 @@ let createEvent = async function(req, resp) {
             }
         };
         resp.json(response);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Failed to create event");
@@ -136,7 +136,7 @@ let updateEvent = async function(req, resp) {
 
         let event = await Event.findByIdAndUpdate(newEvent._id, newEvent);
         resp.send(event);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Error updating event");
@@ -180,7 +180,7 @@ let invitePeople = async function(req, resp) {
             }
         };
         resp.json(response);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Can't Invite Users to Event");
@@ -229,10 +229,57 @@ let searchEvent = async function(req, resp) {
     });
 };
 
+// subscribe to an event
+let subscribeToEvent = async function(req, resp) {
+    const subscriber = req.authorization.id;
+    const eventId = req.body.eventId;
+
+    // validate event id
+    if (!eventId) {
+        return resp.status(400).send("No eventId was provided");
+    }
+
+    // add subscriber id to event's subscribers
+    try {
+        const filter = { _id: eventId };
+        const update = { $push: { followers: subscriber } };
+        const rules = { new: true, useFindAndModify: false };
+
+        let updatedEvent = await Event.findOneAndUpdate(filter, update, rules);
+        if (!updatedEvent) {
+            return resp.status(404).send("Event does not exist");
+        }
+    }
+    catch (err) {
+        console.log(`[error] ${err}`);
+        return resp.status(500).send("Error subscribing user to event");
+    }
+
+    // add eventId to user's subscribedEvents
+    try {
+        const filter = { _id: subscriber };
+        const update = { $push: { subscribedEvents: eventId } };
+        const rules = { new: true, useFindAndModify: false };
+
+        let updatedUser = await User.findOneAndUpdate(filter, update, rules);
+        if (!updatedUser) {
+            return resp.status(404).send("User does not exist");
+        }
+    }
+    catch (err) {
+        console.log(`[error] ${err}`);
+        return resp.status(500).send("Error subscribing user to event");
+    }
+
+    return resp.status(200).send("Subscribed to event!");
+};
+
+
 module.exports = {
     get: getEvent,
     create: createEvent,
     update: updateEvent,
     invite: invitePeople,
+    subscribe: subscribeToEvent,
     search: searchEvent
 };

@@ -14,6 +14,9 @@ router.put("/event", middleware.verifyToken, eventHandlers.update);
 // invite people to an event
 router.post("/event/invite", middleware.verifyToken, eventHandlers.invite);
 
+// subscribe (going) to an event
+router.post("/event/subscribe", middleware.verifyToken, eventHandlers.subscribe);
+
 // get all public events within a given radius of user coordinates
 // which satisfy conditions in the request
 router.get("/event/search", middleware.verifyToken, eventHandlers.search);
