@@ -74,7 +74,7 @@ let createEvent = async function(req, resp) {
         if (!isValidCoordinates(lon, lat)) {
             return resp.status(400).send("Invalid coordinates");
         }
-        if (end < Date.now()) {
+        if (end < Math.floor(Date.now()/1000)) {
             return resp.status(400).send("Event end time cannot be before now");
         }
 
