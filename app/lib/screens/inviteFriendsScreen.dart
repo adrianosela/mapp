@@ -23,12 +23,9 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   final String userToken;
   _InviteFriendsPageState({this.userId, this.userToken});
 
-  Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Invite Friends");
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
   List<String> usersToInvite = new List<String>();
-  var searchText;
 
 
   @override
@@ -45,7 +42,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: cusWidget,
+        title: Text("Invite Friends"),
         actions: <Widget>[
           MyPopupMenu.createPopup(context),
         ],

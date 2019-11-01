@@ -24,12 +24,9 @@ class _InviteToEventsPageState extends State<InviteToEventsPage> {
   final  Map<String, String> events;
   _InviteToEventsPageState({this.userId, this.events});
 
-  Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Invite To Evens(s)");
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
   List<String> inviteToEvents = new List<String>();
-  var searchText;
 
 
   @override
@@ -43,7 +40,7 @@ class _InviteToEventsPageState extends State<InviteToEventsPage> {
     return Scaffold(
         drawer: MyDrawer(),
         appBar: AppBar(
-          title: cusWidget,
+          title: Text("Invite To Evens(s)"),
           actions: <Widget>[
             MyPopupMenu.createPopup(context),
           ],

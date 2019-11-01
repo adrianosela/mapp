@@ -15,11 +15,9 @@ class CreatedEventsPage extends StatefulWidget {
 
 class _CreatedEventsPageState extends State<CreatedEventsPage> {
 
-  Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Created Events");
-  //TODO get actual events list
-  List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
-  var searchText;
+  List<String> rows = new List<String>();
+
+  ///vars for edit event alert dialog
   bool isSwitched = true;
   var eventDate;
   final _formKey = GlobalKey<FormState>();
@@ -32,7 +30,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: cusWidget,
+        title: Text("Created Events"),
         actions: <Widget>[
           MyPopupMenu.createPopup(context),
         ],
@@ -58,7 +56,6 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                   onPressed: () {
                     setState(() {
                       _Update();
-                      //Navigator.pushNamed(context, Router.editEventRoute);
                     });
                   }
               ),

@@ -12,17 +12,15 @@ class PendingInvitesPage extends StatefulWidget {
 
 class _PendingInvitesPageState extends State<PendingInvitesPage> {
 
-  Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Pending Invites");
-  List<String> rows = ["1", "2", "3", "4", "5", "6", "7"];
-  var searchText;
+  List<String> rows = new List<String>();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: cusWidget,
+        title: Text("Pending Invites"),
         actions: <Widget>[
           MyPopupMenu.createPopup(context),
         ],
@@ -39,7 +37,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
       final item = rows[index];
       return ListTile(
         //TODO make title clickable
-        title: ReusableFunctions.listItemText("Item " + item),
+        title: ReusableFunctions.listItemText(item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
