@@ -135,7 +135,7 @@ let subscribeToEvents = async function(req, res) {
     const userId = req.authorization.id;
 
     const eventIds = req.body.eventIds;
-    if (eventIds.length == 0) {
+    if (!eventIds || eventIds.length == 0) {
         return res.status(400).send("No events to subscribe to");
     }
 
