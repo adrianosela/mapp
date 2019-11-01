@@ -330,7 +330,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(userId: userId, userToken: userToken, msg: msg, events: eventsInRadius),
+      drawer: MyDrawer(userId: userId, userToken: userToken, events: eventsInRadius),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[
