@@ -45,16 +45,17 @@ let getFollowers = async function(req, res) {
             res.status(404).send("User not found");
         }
 
+        let followers = User.find({
+            _id: { $in: user.followers }
+        });
+
         let response = [];
-        for (let follower of user.followers) {
-            let followerUser = await User.findById(follower);
-            if (followerUser) {
-                let followerObject = {
-                    id: followerUser._id,
-                    name: followerUser.name
-                };
-                response.push(followerObject);
-            }
+        for (let follower of followers) {
+            let followerObject = {
+                id: follower._id,
+                name: follower.name
+            };
+            response.push(followerObject);
         }
 
         res.json(response);
@@ -74,16 +75,17 @@ let getFollowing = async function(req, res) {
             res.status(404).send("User not found");
         }
 
+        let following = User.find({
+            _id: { $in: user.following }
+        });
+
         let response = [];
-        for (let followee of user.following) {
-            let followeeUser = await User.findById(followee);
-            if (followeeUser) {
-                let followeeObject = {
-                    id: followeeUser._id,
-                    name: followeeUser.name
-                };
-                response.push(followeeObject);
-            }
+        for (let followee of following) {
+            let followeeObject = {
+                id: followee._id,
+                name: followee.name
+            };
+            response.push(followeeObject);
         }
 
         res.json(response);
@@ -91,6 +93,25 @@ let getFollowing = async function(req, res) {
     catch (e) {
         console.log(`[error] ${e}`);
         res.status(500).send("Could not retrieve user's following");
+    }
+};
+
+let getPendingInvites = async function(req, res) {
+    try {
+        const userId = req.authorization.id;
+        let user = await User.findById(userId);
+        if (!user) {
+            res.status(404).send("Requesting user not found");
+        }
+
+        let pendingEvents = await Event.find({
+            _id: { $in: user.pendingInvites }
+        });
+        res.json(pendingEvents);
+    }
+    catch (e) {
+        console.log(`[error] ${e}`);
+        res.status(500).send("Could not retrieve user's pending invites");
     }
 };
 
@@ -150,7 +171,12 @@ let subscribeToEvents = async function(req, res) {
         });
 
         for (let event of events) {
+            let eventIndex = user.pendingInvites.indexOf(event._id);
+            user.pendingInvites.splice(eventIndex, eventIndex + 1);
             user.subscribedEvents.push(event._id);
+
+            let userIndex = event.invited.indexOf(user._id);
+            event.invited.splice(userIndex, userIndex + 1);
             event.followers.push(userId);
             await event.save();
         }
@@ -189,6 +215,7 @@ module.exports = {
     me: getSelf,
     followers: getFollowers,
     following: getFollowing,
+    pending: getPendingInvites,
     follow: followUser,
     subscribe: subscribeToEvents,
     search: searchUsers

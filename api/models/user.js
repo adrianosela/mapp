@@ -19,6 +19,9 @@ let userSchema = new mongoose.Schema({
     ],
     createdEvents: [
         { type: mongoose.Schema.Types.ObjectId, ref: "Event", required: false }
+    ],
+    pendingInvites: [
+        { type: mongoose.Schema.Types.ObjectId, ref: "Event", required: false }
     ]
 });
 
