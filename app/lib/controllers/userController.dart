@@ -55,6 +55,8 @@ class UserController {
 
     final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $id"});
 
+    var userContainer = json.decode(response.body);
+    print(userContainer);
     if (response.statusCode == 200) {
       var userContainer = json.decode(response.body);
       print(userContainer);

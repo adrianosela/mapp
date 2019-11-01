@@ -1,3 +1,4 @@
+import 'package:app/screens/createdEvents.dart';
 import 'package:flutter/material.dart';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -61,13 +62,13 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 title: Text('Friends'),
                 onTap: () {
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FriendsPage(userToken: userToken, events: events)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FriendsPage(userToken: userToken, events: events)));
                 },
               ),
               ListTile(
                 title: Text('Created Events'),
                 onTap: () {
-                  Navigator.pushNamed(context, Router.createdEventsRoute);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CreatedEventsPage(userToken: userToken)));
                 },
               ),
               ListTile(
