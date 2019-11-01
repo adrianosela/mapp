@@ -4,7 +4,7 @@ const config = require("config");
 let verifyToken = (req, res, next) => {
     let token = req.headers["x-access-token"] || req.headers["authorization"];
     if (!token) {
-        return res.status(401).send("No bearer token in hedaer");
+        return res.status(401).send("No bearer token in header");
     }
 
     if (token.startsWith("Bearer ")) {

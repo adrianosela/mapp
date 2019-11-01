@@ -17,6 +17,9 @@ router.get("/user/following", middleware.verifyToken, userHandlers.following);
 // follow a user (by user id)
 router.post("/user/follow", middleware.verifyToken, userHandlers.follow);
 
+// Subscribe user (by user id) to events
+router.post("/user/subscribe", middleware.verifyToken, userHandlers.subscribe);
+
 // get users by username regex
 router.get("/user/search", userHandlers.search);
 
