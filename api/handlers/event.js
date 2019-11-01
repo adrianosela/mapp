@@ -96,6 +96,15 @@ let createEvent = async function(req, resp) {
         await creatorUser.save();
 
         if (invited != null && invited.length !== 0) {
+            let users = await User.find({
+                _id: { $in: invited }
+            });
+            for (let user of users) {
+                user.pendingInvites.push(event._id);
+                await user.save();
+            }
+
+            // Notify Invited Users
             let userSettings = await UserSettings.find({
                 _id: { $in: invited }
             });
@@ -145,38 +154,52 @@ let updateEvent = async function(req, resp) {
 
 // invite people to an event
 let invitePeople = async function(req, resp) {
-    let invited = req.body.invited;
-    if (!invited) {
-        invited = [];
-    }
-
-    let userSettings = await UserSettings.find({
-        _id: { $in: invited }
-    });
-
-    let invitedUsersTokens = [];
-    for (let user of userSettings) {
-        invitedUsersTokens.push(user.fcmToken);
-    }
-
     try {
-        const filter = { _id: req.body.eventId };
-        const update = { invited: invited };
-        let updatedEvent = await Event.findOneAndUpdate(filter, update, {
-            new: true, // Flag for returning updated event
-            useFindAndModify: false
+        const eventId = req.body.eventId;
+        if (!eventId) {
+            return resp.status(400).send("No event id provided");
+        }
+
+        let invited = req.body.invited;
+        if (!invited) {
+            invited = [];
+        }
+
+        let event = await Event.findById(eventId);
+        if (!event) {
+            return resp.status(404).send("Event not found");
+        }
+
+        let users = await User.find({
+            _id: { $in: invited }
         });
+        for (let user of users) {
+            event.invited.push(user._id);
+            user.pendingInvites.push(event._id);
+            await user.save();
+        }
+
+        await event.save();
+
+        let userSettings = await UserSettings.find({
+            _id: { $in: invited }
+        });
+
+        let invitedUsersTokens = [];
+        for (let user of userSettings) {
+            invitedUsersTokens.push(user.fcmToken);
+        }
 
         let notification = {
             title: "New Event Invitation",
-            body: `You have been invited to ${updatedEvent.name} by ${updatedEvent.creator}`
+            body: `You have been invited to ${event.name} by ${event.creator}`
         };
         notifications.notify(notification, invitedUsersTokens);
 
         let response = {
             message: "Event updated with invited users",
             data: {
-                eventId: updatedEvent._id
+                eventId: event._id
             }
         };
         resp.json(response);

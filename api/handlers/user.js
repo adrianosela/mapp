@@ -96,6 +96,25 @@ let getFollowing = async function(req, res) {
     }
 };
 
+let getPendingInvites = async function(req, res) {
+    try {
+        const userId = req.authorization.id;
+        let user = await User.findById(userId);
+        if (!user) {
+            res.status(404).send("Requesting user not found");
+        }
+
+        let pendingEvents = await Event.find({
+            _id: { $in: user.pendingInvites }
+        });
+        res.json(pendingEvents);
+    }
+    catch (e) {
+        console.log(`[error] ${e}`);
+        res.status(500).send("Could not retrieve user's pending invites");
+    }
+};
+
 let followUser = async function(req, res) {
     try {
         const userId = req.authorization.id;
@@ -152,7 +171,12 @@ let subscribeToEvents = async function(req, res) {
         });
 
         for (let event of events) {
+            let eventIndex = user.pendingInvites.indexOf(event._id);
+            user.pendingInvites.splice(eventIndex, eventIndex + 1);
             user.subscribedEvents.push(event._id);
+
+            let userIndex = event.invited.indexOf(user._id);
+            event.invited.splice(userIndex, userIndex + 1);
             event.followers.push(userId);
             await event.save();
         }
@@ -191,6 +215,7 @@ module.exports = {
     me: getSelf,
     followers: getFollowers,
     following: getFollowing,
+    pending: getPendingInvites,
     follow: followUser,
     subscribe: subscribeToEvents,
     search: searchUsers

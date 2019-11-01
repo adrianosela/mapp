@@ -14,6 +14,9 @@ router.get("/user/followers", middleware.verifyToken, userHandlers.followers);
 // get user following (by user id)
 router.get("/user/following", middleware.verifyToken, userHandlers.following);
 
+// Get user pending event invitations
+router.get("/user/pending", middleware.verifyToken, userHandlers.pending);
+
 // follow a user (by user id)
 router.post("/user/follow", middleware.verifyToken, userHandlers.follow);
 
