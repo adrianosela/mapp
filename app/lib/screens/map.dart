@@ -119,14 +119,9 @@ class _MapPageState extends State<MapPage> {
         setState(() {
           msg = "$message";
         });
+        _showNotification();
         print('on message $message');
-      },
-      onResume: (Map<String, dynamic> message) {
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        print('on launch $message');
-      },
+      }
     );
   }
 
@@ -143,6 +138,7 @@ class _MapPageState extends State<MapPage> {
       markers: Set<Marker>.of(markers.values),
     );
   }
+
 
   _onLongTapMap(LatLng latlang) {
     showDialog(
@@ -370,5 +366,22 @@ class _MapPageState extends State<MapPage> {
       ),
       body: _initializeMap(),
     );
+  }
+
+
+  Future _showNotification() async {
+    await showDialog(context: context, builder: (BuildContext context) {
+      return new SimpleDialog(
+        title: new Text(msg),
+        children: <Widget>[
+          new SimpleDialogOption(
+            child: new Text("Ok"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      );
+    });
   }
 }
