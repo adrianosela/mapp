@@ -107,7 +107,17 @@ let getPendingInvites = async function(req, res) {
         let pendingEvents = await Event.find({
             _id: { $in: user.pendingInvites }
         });
-        res.json(pendingEvents);
+
+        let response = [];
+        for (let event of pendingEvents) {
+            let eventObject = {
+                id: event._id,
+                name: event.name
+            };
+            response.push(eventObject);
+        }
+
+        res.json(response);
     }
     catch (e) {
         console.log(`[error] ${e}`);
