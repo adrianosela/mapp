@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:app/components/router.dart';
 import 'package:app/components/reusableStlyes.dart';
-import 'package:app/models/userModel.dart';
+
 import 'package:app/controllers/loginController.dart';
+import 'package:app/controllers/eventController.dart';
+
+import 'package:app/models/userModel.dart';
+
 import 'package:app/screens/map.dart';
 
 class ReusableFunctions{
@@ -27,6 +30,20 @@ class ReusableFunctions{
     return new Text(
       text,
       style: ReusableStyles.listItem(),
+    );
+  }
+
+  //TODO
+  static GestureDetector listItemTextButton(String text, String id) {
+    return new GestureDetector(
+      child: Text(
+        text,
+        style: ReusableStyles.listItem(),
+      ),
+      onTap: () async {
+        var response = await EventController.getEvent(userToken, id);
+        //TODO
+      },
     );
   }
 

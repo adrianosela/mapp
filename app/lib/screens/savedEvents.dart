@@ -22,6 +22,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
   _SavedEventsPageState({this.userToken});
 
   List<String> rows = new List<String>();
+  List<String> ids = new List<String>();
 
   @override
   void initState() {
@@ -50,11 +51,11 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
   }
 
   _buildRow(BuildContext context, int index) {
-    while (index < rows.length) {
+    while (rows != null && index < rows.length) {
       final item = rows[index];
+      final id = ids[index];
       return ListTile(
-        //TODO make title clickable
-        title: ReusableFunctions.listItemText(item),
+        title: ReusableFunctions.listItemTextButton(item, id),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -78,7 +79,11 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
   //TODO finish this call
   _getSubscribedEvents() async {
     var response = await UserController.getSubscribedEvents(userToken);
-    print("-NNNNNNNNNNNNNNNNNNNNNNNNNNN-----------");
-    print(response);
+    if(response != null) {
+      response.forEach((id, name){
+        ids.add(id);
+        rows.add(name);
+      });
+    }
   }
 }
