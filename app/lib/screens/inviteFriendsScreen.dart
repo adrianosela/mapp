@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
-import 'package:app/controllers/userController.dart';
 
+import 'package:app/controllers/userController.dart';
 
 
 class InviteFriendsPage extends StatefulWidget {
@@ -66,7 +66,6 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
       final item = rows[index];
       final id = ids[index];
       return ListTile(
-        //TODO make title clickable
         title: ReusableFunctions.listItemText(item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -86,7 +85,6 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     }
   }
 
-  ///TODO
   _getUsers() async {
     var response = await UserController.getUserFollowing(userToken);
     if(response != null) {

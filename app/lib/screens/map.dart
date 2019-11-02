@@ -53,7 +53,7 @@ class _MapPageState extends State<MapPage> {
 
   Map<String, String> eventsInRadius = new Map<String, String>();
 
-  //Text Controllers
+  ///Text Controllers
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
   TextEditingController eventDurationCont = TextEditingController();
@@ -63,10 +63,10 @@ class _MapPageState extends State<MapPage> {
   static const LatLng _center = const LatLng(49.2827, -123.1207);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
-  //Set map Screen only once
+  ///Set map Screen only once
   bool mapSet = false;
 
-  //Fetch events every N location updates
+  ///Fetch events every N location updates
   int locationCount = 0;
   int updateEvents = 10;
 
@@ -291,9 +291,11 @@ class _MapPageState extends State<MapPage> {
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
       );
 
-      //Clear Text Controllers
+      ///clear text controllers
       eventNameCont.clear();
-      eventNameCont.clear();
+      eventDescriptionCont.clear();
+      eventDurationCont.clear();
+
       markers[markerId] = marker;
     });
 
@@ -370,7 +372,7 @@ class _MapPageState extends State<MapPage> {
       body: _initializeMap(),
     );
   }
-  
+
   Future _showNotification() async {
     await showDialog(context: context, builder: (BuildContext context) {
       return new SimpleDialog(

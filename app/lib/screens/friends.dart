@@ -87,7 +87,6 @@ class _FriendsPageState extends State<FriendsPage> {
       final item = rows[index];
       final id = ids[index];
       return ListTile(
-        //TODO make title clickable
         title: ReusableFunctions.listItemText(item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -112,7 +111,6 @@ class _FriendsPageState extends State<FriendsPage> {
     }
   }
 
-  ///TODO
   _getUsers() async {
     var response = await UserController.getUserFollowing(userToken);
     if(response != null) {

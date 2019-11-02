@@ -162,6 +162,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
 
                           // TODO backend event update call
                           // TODO snackbar saying event updated
+
+                          ///clear text controllers
+                          eventNameCont.clear();
+                          eventDescriptionCont.clear();
+                          eventDurationCont.clear();
+                          
                           Navigator.of(context).pop();
                         }
                       },
