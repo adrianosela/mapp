@@ -75,7 +75,6 @@ class UserController {
 
 
   ///Get a map of users the current user is following => map(userid, username)
-  ///TODO edit this call
   static Future<Map<String, String>> getUserFollowing(token) async {
 
     var uri = Uri.https(
@@ -118,8 +117,8 @@ class UserController {
   }
 
 
-  ///Get events used clicked "going to"
-  static Future<List<String>> getSubscribedEvents(String id) async {
+  ///Get events user clicked "going to"
+  static Future<Map<String, String>> getSubscribedEvents(String id) async {
 
     Map<String, String> query = {
       'id' : id
@@ -131,24 +130,55 @@ class UserController {
       query,
     );
 
-    //List<String> following = new List<String>();
+    Map<String, String> result = new Map<String, String>();
 
     final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $id"});
 
-    var userContainer = json.decode(response.body);
-    print(userContainer);
+
     if (response.statusCode == 200) {
       var userContainer = json.decode(response.body);
-      print(userContainer);
-      /*if(userContainer[1] != null) {
-        for (var instance in userContainer[1]) {
-          following.add(userContainer[1].fromJson(instance).toString());
+
+      if(userContainer != null) {
+        for(var instance in userContainer) {
+          result[instance["id"].toString()] = instance["name"].toString();
         }
-      }*/
+      }
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
-    return null;//following;
+    return result;
+  }
+
+
+  ///Get events user is invited to
+  static Future<Map<String, String>> getPendingEvents(String id) async {
+
+    Map<String, String> query = {
+      'id' : id
+    };
+
+    var uri = Uri.https(
+      "mapp-254321.appspot.com",
+      "/user/pending",
+      query,
+    );
+
+    Map<String, String> result = new Map<String, String>();
+
+    final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $id"});
+
+    if (response.statusCode == 200) {
+      var userContainer = json.decode(response.body);
+      if(userContainer != null) {
+        for(var instance in userContainer) {
+          result[instance["id"].toString()] = instance["name"].toString();
+        }
+      }
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post');
+    }
+    return result;
   }
 }

@@ -4,6 +4,9 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 
+import 'package:app/controllers/userController.dart';
+
+
 class PendingInvitesPage extends StatefulWidget {
   final String userToken;
   PendingInvitesPage({this.userToken});
@@ -18,6 +21,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
   _PendingInvitesPageState({this.userToken});
 
   List<String> rows = new List<String>();
+  List<String> ids = new List<String>();
 
   @override
   void initState() {
@@ -46,11 +50,11 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
   }
 
   _buildRow(BuildContext context, int index) {
-    while (index < rows.length) {
+    while (rows != null && index < rows.length) {
       final item = rows[index];
+      final id = ids[index];
       return ListTile(
-        //TODO make title clickable
-        title: ReusableFunctions.listItemText(item),
+        title: ReusableFunctions.listItemTextButton(item, id),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -84,5 +88,12 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
 
   //TODO finish this call
   _getPendingInvites() async {
+    var response = await UserController.getPendingEvents(userToken);
+    if(response != null) {
+      response.forEach((id, name){
+        ids.add(id);
+        rows.add(name);
+      });
+    }
   }
 }
