@@ -150,7 +150,7 @@ let getSubscribedEvents = async function(req, res) {
     }
     catch (e) {
         console.log(`[error] ${e}`);
-        res.status(500).send("Could not retrieve user's subscribed events");
+        res.status(500).send("Could not retrieve user's created events");
     }
 };
 
