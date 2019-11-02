@@ -144,6 +144,35 @@ let getSubscribedEvents = async function(req, res) {
     }
 };
 
+let getCreatedEvents = async function(req, res) {
+    try {
+        const userId = req.authorization.id;
+        let user = await User.findById(userId);
+        if (!user) {
+            res.status(404).send("Requesting user not found");
+        }
+
+        let createdEvents = await Event.find({
+            _id: { $in: user.createdEvents }
+        });
+
+        let response = [];
+        for (let event of createdEvents) {
+            let eventObject = {
+                id: event._id,
+                name: event.name
+            };
+            response.push(eventObject);
+        }
+
+        res.json(response);
+    }
+    catch (e) {
+        console.log(`[error] ${e}`);
+        res.status(500).send("Could not retrieve user's subscribed events");
+    }
+};
+
 let followUser = async function(req, res) {
     try {
         const userId = req.authorization.id;
@@ -246,6 +275,7 @@ module.exports = {
     following: getFollowing,
     pending: getPendingInvites,
     subscribed: getSubscribedEvents,
+    created: getCreatedEvents,
     follow: followUser,
     subscribe: subscribeToEvents,
     search: searchUsers
