@@ -42,7 +42,7 @@ let getFollowers = async function(req, res) {
 
         let user = await User.findById(userId);
         if (!user) {
-            res.status(404).send("User not found");
+            return res.status(404).send("User not found");
         }
 
         let followers = User.find({
@@ -72,7 +72,7 @@ let getFollowing = async function(req, res) {
 
         let user = await User.findById(userId);
         if (!user) {
-            res.status(404).send("User not found");
+            return res.status(404).send("User not found");
         }
 
         let following = User.find({
@@ -101,7 +101,7 @@ let getPendingInvites = async function(req, res) {
         const userId = req.authorization.id;
         let user = await User.findById(userId);
         if (!user) {
-            res.status(404).send("Requesting user not found");
+            return res.status(404).send("Requesting user not found");
         }
 
         let pendingEvents = await Event.find({
@@ -130,7 +130,7 @@ let getSubscribedEvents = async function(req, res) {
         const userId = req.authorization.id;
         let user = await User.findById(userId);
         if (!user) {
-            res.status(404).send("Requesting user not found");
+            return res.status(404).send("Requesting user not found");
         }
 
         let subscribedEvents = await Event.find({
@@ -194,12 +194,12 @@ let followUser = async function(req, res) {
 
         let userToFollow = await User.findById(userToFollowId);
         if (!userToFollow) {
-            res.status(404).send("User to follow not found");
+            return res.status(404).send("User to follow not found");
         }
 
         let user = await User.findById(userId);
         if (!user) {
-            res.status(404).send("Requesting user not found");
+            return res.status(404).send("Requesting user not found");
         }
 
         user.following.push(userToFollowId);
@@ -272,7 +272,7 @@ let searchUsers = async function(req, res) {
     User.find(query, function(err, users) {
         if (err) {
             console.log(err);
-            res.status(500).send("Could not retrieve users");
+            return res.status(500).send("Could not retrieve users");
         }
         res.send(users);
     });
