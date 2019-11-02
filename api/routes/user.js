@@ -20,9 +20,6 @@ router.get("/user/pending", middleware.verifyToken, userHandlers.pending);
 // Get user subscribed events
 router.get("/user/subscribed", middleware.verifyToken, userHandlers.subscribed);
 
-// Get user created events
-router.get("/user/created", middleware.verifyToken, userHandlers.created);
-
 // follow a user (by user id)
 router.post("/user/follow", middleware.verifyToken, userHandlers.follow);
 
