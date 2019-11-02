@@ -138,12 +138,23 @@ let createEvent = async function(req, resp) {
 // update an event if user is creator
 let updateEvent = async function(req, resp) {
     try {
-        let newEvent = req.body.event;
+        const userId = req.authorization.id;
+
+        const newEvent = req.body.event;
         if (!newEvent) {
-            return resp.status(400).send("No event id specified");
+            return resp.status(400).send("No updated event specified");
         }
 
-        let event = await Event.findByIdAndUpdate(newEvent._id, newEvent);
+        let event = await Event.findById(newEvent._id);
+        if (userId !== event.creator) {
+            return resp.status(403).send("Requesting user is not the event creator");
+        }
+
+        let location = event.location;
+        event = newEvent;
+        event.location = location;
+        await event.save();
+
         resp.send(event);
     } 
     catch (e) {
