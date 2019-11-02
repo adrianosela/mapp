@@ -24,6 +24,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   _CreatedEventsPageState({this.userToken});
 
   List<String> rows = new List<String>();
+  List<String> ids = new List<String>();
 
   ///vars for edit event alert dialog
   bool isSwitched = true;
@@ -61,11 +62,11 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   }
 
   _buildRow(BuildContext context, int index) {
-    while (index < rows.length) {
+    while (rows != null && index < rows.length) {
       final item = rows[index];
+      final id = ids[index];
       return ListTile(
-        //TODO make title clickable??
-        title: ReusableFunctions.listItemText("Item " + item),
+        title: ReusableFunctions.listItemTextButton(item, id),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -110,7 +111,6 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                               showTitleActions: true,
                               minTime: DateTime(2019, 3, 5),
                               maxTime: DateTime(2023, 6, 7), onChanged: (date) {
-                                //print('change $date');
                               }, onConfirm: (date) {
                                 eventDate = date;
                               }, currentTime: DateTime.now(), locale: LocaleType.en);
@@ -123,7 +123,6 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(2.0),
-                    //TODO calculate and send to backend properly
                     child: ReusableFunctions.formInput("enter event duration (hours)", eventDurationCont),
                   ),
                   Row(
@@ -175,11 +174,13 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         });
   }
 
-  //TODO need to fix this
   _getCreatedEvents() async {
-    var response = await UserController.getUserObject(userToken);
-    print("-NNNNNNNNNNNNNNNNNNNNNNNNNNN-----------");
-    print(response);
+    var response = await UserController.getCreatedEvents(userToken);
+    if(response != null) {
+      response.forEach((id, name){
+        ids.add(id);
+        rows.add(name);
+      });
+    }
   }
-
 }

@@ -76,7 +76,6 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
     }
   }
 
-  //TODO finish this call
   _getSubscribedEvents() async {
     var response = await UserController.getSubscribedEvents(userToken);
     if(response != null) {

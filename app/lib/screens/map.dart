@@ -171,7 +171,6 @@ class _MapPageState extends State<MapPage> {
                               showTitleActions: true,
                               minTime: DateTime(2019, 3, 5),
                               maxTime: DateTime(2023, 6, 7), onChanged: (date) {
-                                //print('change $date');
                               }, onConfirm: (date) {
                                 eventDate = date;
                               }, currentTime: DateTime.now(), locale: LocaleType.en);
@@ -185,7 +184,6 @@ class _MapPageState extends State<MapPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(2.0),
-                    //TODO calculate and send to backend properly
                     child: ReusableFunctions.formInput("enter event duration (hours)", eventDurationCont),
                   ),
                   Row(
@@ -372,8 +370,7 @@ class _MapPageState extends State<MapPage> {
       body: _initializeMap(),
     );
   }
-
-
+  
   Future _showNotification() async {
     await showDialog(context: context, builder: (BuildContext context) {
       return new SimpleDialog(

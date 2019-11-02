@@ -86,7 +86,6 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
     }
   }
 
-  //TODO finish this call
   _getPendingInvites() async {
     var response = await UserController.getPendingEvents(userToken);
     if(response != null) {
