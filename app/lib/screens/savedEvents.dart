@@ -4,16 +4,32 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 
+import 'package:app/controllers/userController.dart';
+
 
 class SavedEventsPage extends StatefulWidget {
+  final String userToken;
+  SavedEventsPage({this.userToken});
+
   @override
-  _SavedEventsPageState createState() => _SavedEventsPageState();
+  _SavedEventsPageState createState() => _SavedEventsPageState(userToken: userToken);
 }
 
 
 class _SavedEventsPageState extends State<SavedEventsPage> {
 
+  final String userToken;
+  _SavedEventsPageState({this.userToken});
+
   List<String> rows = new List<String>();
+
+  @override
+  void initState() {
+    super.initState();
+    _getSubscribedEvents().then((result) {
+      setState(() {});
+    });
+  }
 
 
   @override
@@ -57,5 +73,12 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
         ),
       );
     }
+  }
+
+  //TODO finish this call
+  _getSubscribedEvents() async {
+    var response = await UserController.getSubscribedEvents(userToken);
+    print("-NNNNNNNNNNNNNNNNNNNNNNNNNNN-----------");
+    print(response);
   }
 }

@@ -11,6 +11,8 @@ class EditSettingsPage extends StatefulWidget {
   _EditSettingsPageState createState() => _EditSettingsPageState();
 }
 
+
+///TODO delete this page??
 class _EditSettingsPageState extends State<EditSettingsPage> {
 
   Icon cusIcon = Icon(Icons.search);

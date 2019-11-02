@@ -1,11 +1,13 @@
-import 'package:app/screens/createdEvents.dart';
 import 'package:flutter/material.dart';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 import 'package:app/components/router.dart';
 
+import 'package:app/screens/savedEvents.dart';
+import 'package:app/screens/createdEvents.dart';
 import 'package:app/screens/friends.dart';
+import 'package:app/screens/pendingInvites.dart';
 
 class MyDrawer extends StatefulWidget {
   final String userId;
@@ -74,13 +76,13 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 title: Text('Saved Events'),
                 onTap: () {
-                  Navigator.pushNamed(context, Router.savedEventsRoute);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SavedEventsPage(userToken: userToken)));
                 },
               ),
               ListTile(
                 title: Text('Pending Invites'),
                 onTap: () {
-                  Navigator.pushNamed(context, Router.pendingInvitesRoute);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PendingInvitesPage(userToken: userToken)));
                 },
               ),
             ],
