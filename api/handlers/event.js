@@ -146,13 +146,13 @@ let updateEvent = async function(req, resp) {
         }
 
         let event = await Event.findById(newEvent._id);
-        if (userId !== event.creator) {
+        if (userId != event.creator) {
             return resp.status(403).send("Requesting user is not the event creator");
         }
 
-        let location = event.location;
-        event = newEvent;
-        event.location = location;
+        for (let property in newEvent) {
+            event[property] = newEvent[property];
+        }
         await event.save();
 
         resp.send(event);
