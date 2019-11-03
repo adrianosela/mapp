@@ -64,7 +64,6 @@ class _MapPageState extends State<MapPage> {
     'other': true,
   };
 
-
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
@@ -185,8 +184,7 @@ class _MapPageState extends State<MapPage> {
                                   showTitleActions: true,
                                   minTime: DateTime(2019, 3, 5),
                                   maxTime: DateTime(2023, 6, 7),
-                                  onChanged: (date) {
-                              }, onConfirm: (date) {
+                                  onChanged: (date) {}, onConfirm: (date) {
                                 eventDate = date;
                               },
                                   currentTime: DateTime.now(),
@@ -348,12 +346,10 @@ class _MapPageState extends State<MapPage> {
           infoWindow: InfoWindow(
             title: event.name,
             snippet: event.description,
-
           ),
           //TODO Change color of marker depending on event type
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
         );
-
         markers[markerId] = marker;
       }
     });
@@ -439,8 +435,8 @@ class _MapPageState extends State<MapPage> {
                             ),
                           ),
                           SimpleDialogOption(
-                              child: ReusableFunctions.formInput(
-                                  "Search event... ", eventSearchCont),
+                            child: ReusableFunctions.formInput(
+                                "Search event... ", eventSearchCont),
                           ),
                           SimpleDialogOption(
                               child: Padding(
@@ -448,16 +444,25 @@ class _MapPageState extends State<MapPage> {
                             child: RaisedButton(
                               child: Text("Search"),
                               onPressed: () async {
-
                                 List<String> categories = new List<String>();
 
-                                for(String category in categoriesMap.keys){
-                                  if (categoriesMap[category]){
+                                for (String category in categoriesMap.keys) {
+                                  if (categoriesMap[category]) {
                                     categories.add(category);
                                   }
                                 }
-                                List<Event> events = await eventController.searchEvents(eventSearchCont.text, categories, userToken);
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => new SearchedEventsPage(userToken: userToken, events: events)));
+                                List<Event> events =
+                                    await eventController.searchEvents(
+                                        eventSearchCont.text,
+                                        categories,
+                                        userToken);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            new SearchedEventsPage(
+                                                userToken: userToken,
+                                                events: events)));
                                 eventSearchCont.clear();
                               },
                             ),

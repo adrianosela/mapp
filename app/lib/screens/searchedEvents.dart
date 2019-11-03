@@ -5,27 +5,25 @@ import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/controllers/userController.dart';
 
-
 class SearchedEventsPage extends StatefulWidget {
   final String userToken;
   final List<Event> events;
+
   SearchedEventsPage({this.userToken, this.events});
 
   @override
-  _SearchedEventsPageState createState() => _SearchedEventsPageState(userToken: userToken, events: this.events);
+  _SearchedEventsPageState createState() =>
+      _SearchedEventsPageState(userToken: userToken, events: this.events);
 }
 
-
 class _SearchedEventsPageState extends State<SearchedEventsPage> {
-
   final String userToken;
   final List<Event> events;
+
   _SearchedEventsPageState({this.userToken, this.events});
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
-
-
 
   @override
   void initState() {
@@ -34,7 +32,6 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
       setState(() {});
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +44,8 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
         ],
       ),
       body: ListView.builder(
-        // itemCount: this.count,
-          itemBuilder: (context, index) => this._buildRow(context, index)
-      ),
+          // itemCount: this.count,
+          itemBuilder: (context, index) => this._buildRow(context, index)),
     );
   }
 
@@ -59,31 +55,26 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
       final id = ids[index];
       return ListTile(
         title: ReusableFunctions.listItemTextButton(item, id, context),
-        trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    setState(() {
-                      _goToEventPage();
-                    });
-                  }
-              ),
-            ]
-        ),
+        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  _goToEventPage();
+                });
+              }),
+        ]),
       );
     }
   }
 
   _goToEventPage() {
     //TODO
-
   }
 
   _createSearchedEvents() async {
-    if(events != null) {
-      for(Event event in events) {
+    if (events != null) {
+      for (Event event in events) {
         ids.add(event.eventId);
         rows.add(event.name);
       }
