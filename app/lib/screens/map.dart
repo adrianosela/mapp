@@ -21,22 +21,23 @@ import 'package:app/models/fcmToken.dart';
 
 import 'package:app/screens/inviteFriendsScreen.dart';
 
-
 class MapPage extends StatefulWidget {
-
   final String userId;
   final String userToken;
+
   MapPage({this.userId, this.userToken});
 
   @override
-  _MapPageState createState() => _MapPageState(userId: userId, userToken: userToken);
+  _MapPageState createState() =>
+      _MapPageState(userId: userId, userToken: userToken);
 }
 
 class _MapPageState extends State<MapPage> {
-
   final String userId;
   final String userToken;
+
   _MapPageState({this.userId, this.userToken});
+
   List<String> usersToInvite;
 
   GoogleMapController mapController;
@@ -52,6 +53,15 @@ class _MapPageState extends State<MapPage> {
   var msg;
 
   Map<String, String> eventsInRadius = new Map<String, String>();
+
+  //Map Filter
+  Map<String, bool> categoriesMap = {
+    'social': true,
+    'community': true,
+    'corporate': true,
+    'sports': true,
+    'other': true,
+  };
 
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
@@ -76,12 +86,11 @@ class _MapPageState extends State<MapPage> {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-
   @override
   void initState() {
     super.initState();
     location.onLocationChanged().listen((location) async {
-      if (!mapSet){
+      if (!mapSet) {
         mapSet = true;
         mapController?.moveCamera(
           CameraUpdate.newCameraPosition(
@@ -95,7 +104,7 @@ class _MapPageState extends State<MapPage> {
           ),
         );
       }
-      if (locationCount%updateEvents == 0){
+      if (locationCount % updateEvents == 0) {
         _addMarkers(location);
       }
       locationCount++;
@@ -119,17 +128,16 @@ class _MapPageState extends State<MapPage> {
 
       _firebaseMessaging.configure(
           onMessage: (Map<String, dynamic> message) async {
-            setState(() {
-              msg = "$message";
-            });
-            _showNotification();
-            print('on message $message');
-          }
-      );
+        setState(() {
+          msg = "$message";
+        });
+        _showNotification();
+        print('on message $message');
+      });
     }
   }
 
-  GoogleMap _initializeMap(){
+  GoogleMap _initializeMap() {
     return GoogleMap(
       myLocationEnabled: true,
       myLocationButtonEnabled: true,
@@ -143,134 +151,149 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-
   _onLongTapMap(LatLng latlang) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            content: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ReusableFunctions.titleText("Create New Event"),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput("enter event name", eventNameCont),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput("enter event description", eventDescriptionCont),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: FlatButton(
-                        onPressed: () {
-                          DatePicker.showDatePicker(context,
-                              showTitleActions: true,
-                              minTime: DateTime(2019, 3, 5),
-                              maxTime: DateTime(2023, 6, 7), onChanged: (date) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                content: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ReusableFunctions.titleText("Create New Event"),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: ReusableFunctions.formInput(
+                            "enter event name", eventNameCont),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: ReusableFunctions.formInput(
+                            "enter event description", eventDescriptionCont),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: FlatButton(
+                            onPressed: () {
+                              DatePicker.showDatePicker(context,
+                                  showTitleActions: true,
+                                  minTime: DateTime(2019, 3, 5),
+                                  maxTime: DateTime(2023, 6, 7),
+                                  onChanged: (date) {
                                 //print('change $date');
                               }, onConfirm: (date) {
                                 eventDate = date;
-                              }, currentTime: DateTime.now(), locale: LocaleType.en);
-                        },
-                        child: Text(
-                          //TODO
-                          'pick event date',
-                          style: TextStyle(color: Colors.blue),
-                        )
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    //TODO calculate and send to backend properly
-                    child: ReusableFunctions.formInput("enter event duration (hours)", eventDurationCont),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          "Private Event?",
-                          style: TextStyle(
-                            //TODO
+                              },
+                                  currentTime: DateTime.now(),
+                                  locale: LocaleType.en);
+                            },
+                            child: Text(
+                              //TODO
+                              'pick event date',
+                              style: TextStyle(color: Colors.blue),
+                            )),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        //TODO calculate and send to backend properly
+                        child: ReusableFunctions.formInput(
+                            "enter event duration (hours)", eventDurationCont),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              "Private Event?",
+                              style: TextStyle(
+                                  //TODO
+                                  ),
+                            ),
                           ),
-                        ),
+                          Container(
+                            width: 100,
+                          ),
+                          Container(
+                            child: Switch(
+                              value: isSwitched,
+                              onChanged: (value) {
+                                setState(() {
+                                  isSwitched = value;
+                                });
+                              },
+                              activeTrackColor: Colors.lightBlueAccent,
+                              activeColor: Colors.blue,
+                            ),
+                          ),
+                        ],
                       ),
-                      Container(
-                        width: 100,
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              "Invite Friends",
+                              style: TextStyle(
+                                  //TODO
+                                  ),
+                            ),
+                          ),
+                          Container(
+                            width: 110,
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) =>
+                                          new InviteFriendsPage(
+                                              userId: userId,
+                                              userToken: userToken)));
+                              usersToInvite = result;
+                            },
+                            icon: Icon(Icons.add),
+                          ),
+                        ],
                       ),
-                      Container(
-                        child: Switch(
-                          value: isSwitched,
-                          onChanged: (value) {
-                            setState(() {
-                              isSwitched = value;
-                            });
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: RaisedButton(
+                          child: Text("Save"),
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              Event event = new Event(
+                                  name: eventNameCont.text,
+                                  description: eventDescriptionCont.text,
+                                  longitude: latlang.longitude,
+                                  latitude: latlang.latitude,
+                                  date: eventDate,
+                                  duration: eventDurationCont.text,
+                                  public: true,
+                                  invited: usersToInvite);
+
+                              eventId = await eventController.createEvent(
+                                  "https://mapp-254321.appspot.com/event",
+                                  userToken,
+                                  event.toJson());
+
+                              //TODO Need to pass Title to add to marker
+                              _addMarkerLongPressed(latlang);
+
+                              //TODO append event to list of created events, show new pin on map?
+                              Navigator.of(context).pop();
+                            }
                           },
-                          activeTrackColor: Colors.lightBlueAccent,
-                          activeColor: Colors.blue,
                         ),
-                      ),
+                      )
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          "Invite Friends",
-                          style: TextStyle(
-                            //TODO
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 110,
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          final result = await Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteFriendsPage(userId: userId, userToken: userToken)));
-                          usersToInvite = result;
-                        },
-                        icon: Icon(Icons.add),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: RaisedButton(
-                      child: Text("Save"),
-                      onPressed: () async {
-                        if(_formKey.currentState.validate()) {
-
-                          Event event = new Event(name: eventNameCont.text,
-                              description: eventDescriptionCont.text,
-                              longitude: latlang.longitude,
-                              latitude: latlang.latitude,
-                              date: eventDate,
-                              duration: eventDurationCont.text,
-                              public: true,
-                              invited: usersToInvite);
-
-                          eventId = await eventController.createEvent(
-                              "https://mapp-254321.appspot.com/event", userToken, event
-                              .toJson());
-
-                          //TODO Need to pass Title to add to marker
-                          _addMarkerLongPressed(latlang);
-
-                          //TODO append event to list of created events, show new pin on map?
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
         });
   }
@@ -283,11 +306,11 @@ class _MapPageState extends State<MapPage> {
       Marker marker = Marker(
         markerId: markerId,
         draggable: false,
-        position: latlang, //With this parameter you automatically obtain latitude and longitude
+        position: latlang,
+        //With this parameter you automatically obtain latitude and longitude
         infoWindow: InfoWindow(
           title: eventNameCont.text,
           snippet: eventDescriptionCont.text,
-
         ),
         //TODO Change color of marker depending on event type
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
@@ -298,22 +321,22 @@ class _MapPageState extends State<MapPage> {
       eventNameCont.clear();
       markers[markerId] = marker;
     });
-
   }
 
   Future _addMarkers(location) async {
-
-    List<Event> events = await eventController.getEvents(5000, location.longitude, location.latitude, userToken);
+    List<Event> events = await eventController.getEvents(
+        5000, location.longitude, location.latitude, userToken);
     setState(() {
       for (Event event in events) {
         print(event.name);
         print(event.eventId);
 
-        eventsInRadius[event.eventId] =  event.name;
+        eventsInRadius[event.eventId] = event.name;
 
         final MarkerId markerId = MarkerId(event.eventId);
 
-        final LatLng position = new prefix0.LatLng(event.latitude, event.longitude);
+        final LatLng position =
+            new prefix0.LatLng(event.latitude, event.longitude);
         Marker marker = Marker(
           markerId: markerId,
           draggable: false,
@@ -322,7 +345,6 @@ class _MapPageState extends State<MapPage> {
           infoWindow: InfoWindow(
             title: event.name,
             snippet: event.description,
-
           ),
           //TODO Change color of marker depending on event type
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
@@ -335,36 +357,93 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(userId: userId, userToken: userToken, events: eventsInRadius),
+      drawer: MyDrawer(
+          userId: userId, userToken: userToken, events: eventsInRadius),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[
-          IconButton(
-            onPressed: (){
-                setState(() {
-                          if(this.cusIcon.icon == Icons.search) {
-                              this.cusIcon = Icon(Icons.cancel);
-                              this.cusWidget = TextField(
-                                textInputAction: TextInputAction.go,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "search for ...",
-                                ),
-                                style: ReusableStyles.cusWidget(),
-                                onSubmitted: (String str) {
-                                  //TODO send to backend
-                                  setState(() {
-                                    searchText = str;
-                                  });
-                                },
-                              );
-                          } else {
-                              this.cusIcon = Icon(Icons.search);
-                              this.cusWidget = Text("Map View");
-                          }
-                });
+          FlatButton(
+            textColor: Colors.white,
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return StatefulBuilder(builder: (context, setState) {
+                      return SimpleDialog(
+                        title: ReusableFunctions.titleText("Categories"),
+                        children: <Widget>[
+                          SimpleDialogOption(
+                            child: CheckboxListTile(
+                              title: Text("Social"),
+                              value: categoriesMap['social'],
+                              onChanged: (val) {
+                                setState(() {
+                                  categoriesMap['social'] =
+                                      !categoriesMap['social'];
+                                });
+                              },
+                            ),
+                          ),
+                          SimpleDialogOption(
+                            child: CheckboxListTile(
+                              title: Text("Community"),
+                              value: categoriesMap['community'],
+                              selected: categoriesMap['community'],
+                              onChanged: (bool val) {
+                                setState(() {
+                                  categoriesMap['community'] = val;
+                                });
+                              },
+                            ),
+                          ),
+                          SimpleDialogOption(
+                            child: CheckboxListTile(
+                              title: Text("Sports"),
+                              value: categoriesMap['sports'],
+                              onChanged: (val) {
+                                setState(() {
+                                  categoriesMap['sports'] = val;
+                                });
+                              },
+                            ),
+                          ),
+                          SimpleDialogOption(
+                            child: CheckboxListTile(
+                              title: Text("Corporate"),
+                              value: categoriesMap['corporate'],
+                              onChanged: (val) {
+                                setState(() {
+                                  categoriesMap['corporate'] = val;
+                                });
+                              },
+                            ),
+                          ),
+                          SimpleDialogOption(
+                            child: CheckboxListTile(
+                              title: Text("Other"),
+                              value: categoriesMap['other'],
+                              onChanged: (val) {
+                                setState(() {
+                                  categoriesMap['other'] = val;
+                                });
+                              },
+                            ),
+                          ),
+                          SimpleDialogOption(
+                              child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: RaisedButton(
+                              child: Text("Save"),
+                              onPressed: () async {},
+                            ),
+                          )),
+                        ],
+                      );
+                    });
+                  });
             },
-            icon: cusIcon,
+            child: Text("Filter Events"),
+            shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
           ),
           MyPopupMenu.createPopup(context),
         ],
@@ -373,20 +452,21 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-
   Future _showNotification() async {
-    await showDialog(context: context, builder: (BuildContext context) {
-      return new SimpleDialog(
-        title: new Text(msg),
-        children: <Widget>[
-          new SimpleDialogOption(
-            child: new Text("Ok"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      );
-    });
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return new SimpleDialog(
+            title: new Text(msg),
+            children: <Widget>[
+              new SimpleDialogOption(
+                child: new Text("Ok"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
   }
 }
