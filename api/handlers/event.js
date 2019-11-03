@@ -223,28 +223,31 @@ let invitePeople = async function(req, resp) {
 
 // get all events within a given radius of given latitude
 // and longitude, if event is marked as public
-let findEvents = async function(req, resp) {
+let findEvents = async function(req, res) {
+    const userId = req.authorization.id;
+
     const longitude = req.query.longitude;
     const latitude = req.query.latitude;
     const radius = req.query.radius;
+    const categories = req.query.categories;
 
     const lat = Number(latitude);
     const lon = Number(longitude);
 
     if (!lat || !lon) {
-        return resp.status(400).send("No coordinates provided");
+        return res.status(400).send("No coordinates provided");
     }
     if (!isValidCoordinates(lon, lat)) {
-        return resp.status(400).send("Invalid coordinates");
+        return res.status(400).send("Invalid coordinates");
     }
     if (!radius) {
-        return resp.status(400).send("No radius specified");
+        return res.status(400).send("No radius specified");
     }
     if (radius > 100000) {
-        return resp.status(400).send("Radius cannot exceed 100,000m (100km)");
+        return res.status(400).send("Radius cannot exceed 100,000m (100km)");
     }
 
-    const query = {
+    let nearEventsQuery = {
         location: {
             $near: {
                 $maxDistance: radius,
@@ -254,13 +257,36 @@ let findEvents = async function(req, resp) {
         public: true
     };
 
-    Event.find(query, function(err, events) {
-        if (err) {
-            console.log(`[error] ${err}`);
-            return resp.status(500).send("Could not retrieve events");
+    if (categories && categories.length != 0) {
+        nearEventsQuery.categories = { $all: categories };
+    }
+
+    const userEventsQuery = {
+        $or: [
+            { creator: userId },
+            { followers: userId },
+            { invited: userId }
+        ] 
+    };
+
+    try {
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send("Requesting user not found");
         }
-        resp.send(events);
-    });
+
+        let nearEvents = await Event.find(nearEventsQuery);
+        let relevantEvents = getRelevantEventsForUser(nearEvents, user);
+
+        let userEvents = await Event.find(userEventsQuery);
+
+        let events = userEvents.concat(relevantEvents);
+        res.json(events);
+    }
+    catch (e) {
+        console.log(`[error] ${e}`);
+        res.status(500).send("Could not retrieve events");
+    }
 };
 
 let searchEvents = async function(req, res) {
@@ -297,6 +323,55 @@ let searchEvents = async function(req, res) {
         console.log(`[error] ${e}`);
         res.status(500).send("Could not search for events");
     }
+};
+
+// TODO: Define a default limit of returned events
+let getRelevantEventsForUser = function(events, user, limit = 10) {
+    if (limit > events.length) {
+        limit = events.length;
+    }
+
+    let relevant = [];
+    for (let i = 0; i < limit; i++) {
+        let bestEvent = null;
+        for (let event of events) {
+            if (friendsGoingToEvent(user, event) > 0) {
+                bestEvent = event;
+                break;
+            }
+            if ((bestEvent == null) || (event.followers.length > bestEvent.followers.length)) {
+                bestEvent = event;
+            }
+        }
+
+        // Remove best event so far from events list
+        let index = events.map(function(event) { 
+            return event._id 
+        }).indexOf(bestEvent._id);
+        events.splice(index, index + 1);
+
+        relevant.push(bestEvent);
+    }
+
+    return relevant;
+};
+
+let friendsGoingToEvent = function(user, event) {
+    if (event == null) {
+        return 0;
+    }
+
+    let userFriends = user.following;
+    let assistingToEvent = event.followers;
+
+    let assistingFriends = 0;
+    for (let friend of userFriends) {
+        if (assistingToEvent.includes(friend)) {
+            assistingFriends++;
+        }
+    }
+
+    return assistingFriends;
 };
 
 module.exports = {
