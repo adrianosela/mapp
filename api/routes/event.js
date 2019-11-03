@@ -16,6 +16,9 @@ router.post("/event/invite", middleware.verifyToken, eventHandlers.invite);
 
 // get all public events within a given radius of user coordinates
 // which satisfy conditions in the request
+router.get("/event/find", middleware.verifyToken, eventHandlers.find);
+
+// Get events for requesting user based on name
 router.get("/event/search", middleware.verifyToken, eventHandlers.search);
 
 module.exports = router;

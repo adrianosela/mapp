@@ -223,7 +223,7 @@ let invitePeople = async function(req, resp) {
 
 // get all events within a given radius of given latitude
 // and longitude, if event is marked as public
-let searchEvent = async function(req, resp) {
+let findEvents = async function(req, resp) {
     const longitude = req.query.longitude;
     const latitude = req.query.latitude;
     const radius = req.query.radius;
@@ -263,10 +263,47 @@ let searchEvent = async function(req, resp) {
     });
 };
 
+let searchEvents = async function(req, res) {
+    const userId = req.authorization.id;
+
+    const eventName = req.query.eventName;
+    const categories = req.query.categories;
+    
+    let query = {
+        $and: [
+            { name: { $regex: `${eventName}`, $options: "$i" } },
+            { 
+                $or: [
+                    { public: true },
+                    { creator: userId },
+                    { followers: userId },
+                    { invited: userId }
+                ] 
+            }
+        ]
+    };
+
+    if (categories && categories.length != 0) {
+        query.$and.push({
+            categories: { $all: categories }
+        });
+    }
+
+    try {
+        let events = await Event.find(query);
+        res.json(events);
+    }
+    catch (e) {
+        console.log(`[error] ${e}`);
+        res.status(500).send("Could not search for events");
+    }
+};
+
 module.exports = {
     get: getEvent,
     create: createEvent,
     update: updateEvent,
     invite: invitePeople,
-    search: searchEvent
+    find: findEvents,
+    search: searchEvents
 };
