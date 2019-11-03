@@ -54,7 +54,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
       final item = rows[index];
       final id = ids[index];
       return ListTile(
-        title: ReusableFunctions.listItemTextButton(item, id),
+        title: ReusableFunctions.listItemTextButton(item, id, context),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -86,7 +86,6 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
     }
   }
 
-  //TODO finish this call
   _getPendingInvites() async {
     var response = await UserController.getPendingEvents(userToken);
     if(response != null) {

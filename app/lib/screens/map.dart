@@ -73,10 +73,10 @@ class _MapPageState extends State<MapPage> {
   static const LatLng _center = const LatLng(49.2827, -123.1207);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
-  //Set map Screen only once
+  ///Set map Screen only once
   bool mapSet = false;
 
-  //Fetch events every N location updates
+  ///Fetch events every N location updates
   int locationCount = 0;
   int updateEvents = 10;
 
@@ -183,7 +183,6 @@ class _MapPageState extends State<MapPage> {
                                   minTime: DateTime(2019, 3, 5),
                                   maxTime: DateTime(2023, 6, 7),
                                   onChanged: (date) {
-                                //print('change $date');
                               }, onConfirm: (date) {
                                 eventDate = date;
                               },
@@ -198,7 +197,6 @@ class _MapPageState extends State<MapPage> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(2.0),
-                        //TODO calculate and send to backend properly
                         child: ReusableFunctions.formInput(
                             "enter event duration (hours)", eventDurationCont),
                       ),
@@ -316,9 +314,11 @@ class _MapPageState extends State<MapPage> {
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
       );
 
-      //Clear Text Controllers
+      ///clear text controllers
       eventNameCont.clear();
-      eventNameCont.clear();
+      eventDescriptionCont.clear();
+      eventDurationCont.clear();
+
       markers[markerId] = marker;
     });
   }
