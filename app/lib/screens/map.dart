@@ -20,6 +20,7 @@ import 'package:app/models/eventModel.dart';
 import 'package:app/models/fcmToken.dart';
 
 import 'package:app/screens/inviteFriendsScreen.dart';
+import 'package:app/screens/searchedEvents.dart';
 
 class MapPage extends StatefulWidget {
   final String userId;
@@ -67,6 +68,7 @@ class _MapPageState extends State<MapPage> {
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
   TextEditingController eventDurationCont = TextEditingController();
+  TextEditingController eventSearchCont = TextEditingController();
   EventController eventController = EventController();
 
   //TODO sets the initial view of the map needs to be changed to user location
@@ -182,8 +184,7 @@ class _MapPageState extends State<MapPage> {
                                   showTitleActions: true,
                                   minTime: DateTime(2019, 3, 5),
                                   maxTime: DateTime(2023, 6, 7),
-                                  onChanged: (date) {
-                              }, onConfirm: (date) {
+                                  onChanged: (date) {}, onConfirm: (date) {
                                 eventDate = date;
                               },
                                   currentTime: DateTime.now(),
@@ -376,6 +377,7 @@ class _MapPageState extends State<MapPage> {
                             child: CheckboxListTile(
                               title: Text("Social"),
                               value: categoriesMap['social'],
+                              selected: categoriesMap['social'],
                               onChanged: (val) {
                                 setState(() {
                                   categoriesMap['social'] =
@@ -400,6 +402,7 @@ class _MapPageState extends State<MapPage> {
                             child: CheckboxListTile(
                               title: Text("Sports"),
                               value: categoriesMap['sports'],
+                              selected: categoriesMap['sports'],
                               onChanged: (val) {
                                 setState(() {
                                   categoriesMap['sports'] = val;
@@ -410,6 +413,7 @@ class _MapPageState extends State<MapPage> {
                           SimpleDialogOption(
                             child: CheckboxListTile(
                               title: Text("Corporate"),
+                              selected: categoriesMap['corporate'],
                               value: categoriesMap['corporate'],
                               onChanged: (val) {
                                 setState(() {
@@ -421,6 +425,7 @@ class _MapPageState extends State<MapPage> {
                           SimpleDialogOption(
                             child: CheckboxListTile(
                               title: Text("Other"),
+                              selected: categoriesMap['other'],
                               value: categoriesMap['other'],
                               onChanged: (val) {
                                 setState(() {
@@ -430,11 +435,36 @@ class _MapPageState extends State<MapPage> {
                             ),
                           ),
                           SimpleDialogOption(
+                            child: ReusableFunctions.formInput(
+                                "Search event... ", eventSearchCont),
+                          ),
+                          SimpleDialogOption(
                               child: Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: RaisedButton(
-                              child: Text("Save"),
-                              onPressed: () async {},
+                              child: Text("Search"),
+                              onPressed: () async {
+                                List<String> categories = new List<String>();
+
+                                for (String category in categoriesMap.keys) {
+                                  if (categoriesMap[category]) {
+                                    categories.add(category);
+                                  }
+                                }
+                                List<Event> events =
+                                    await eventController.searchEvents(
+                                        eventSearchCont.text,
+                                        categories,
+                                        userToken);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            new SearchedEventsPage(
+                                                userToken: userToken,
+                                                events: events)));
+                                eventSearchCont.clear();
+                              },
                             ),
                           )),
                         ],
@@ -442,7 +472,7 @@ class _MapPageState extends State<MapPage> {
                     });
                   });
             },
-            child: Text("Filter Events"),
+            child: Text("Search"),
             shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
           ),
           MyPopupMenu.createPopup(context),

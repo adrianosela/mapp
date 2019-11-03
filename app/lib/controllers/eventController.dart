@@ -18,9 +18,43 @@ class EventController {
 
     var uri = Uri.https(
         "mapp-254321.appspot.com",
-        "/event/search",
+        "/event/find",
         query,
     );
+
+    final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
+
+    List<Event> allEvents = new List<Event>();
+    print(response.body);
+    if (response.statusCode == 200) {
+      var events = json.decode(response.body);
+      print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      print(events);
+      for (var event in events) {
+        allEvents.add(Event.fromJson(event));
+      }
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post');
+    }
+    return allEvents;
+  }
+
+  Future<List<Event>> searchEvents(String search, List<String> categories, token) async {
+
+    Map<String, String> query = {
+      'eventName' : search,
+      'categories': categories.join(','),
+    };
+
+    var uri = Uri.https(
+      "mapp-254321.appspot.com",
+      "/event/search",
+      query,
+    );
+    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    print("here");
+    print(uri);
 
     final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
 

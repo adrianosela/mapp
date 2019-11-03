@@ -10,9 +10,9 @@ import 'package:app/screens/map.dart';
 import 'package:app/screens/pendingInvites.dart';
 import 'package:app/screens/registerScreen.dart';
 import 'package:app/screens/savedEvents.dart';
+import 'package:app/screens/searchedEvents.dart';
 
 class Router {
-
   static const String homeRoute = '/';
   static const String createdEventsRoute = '/createdEvents';
   static const String editSettingsRoute = '/editSettings';
@@ -23,6 +23,7 @@ class Router {
   static const String pendingInvitesRoute = '/pendingInvites';
   static const String registerRoute = '/registerRoute';
   static const String savedEventsRoute = '/savedEvents';
+  static const String searchedEventsRoute = '/searchedEvents';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -46,14 +47,14 @@ class Router {
         return MaterialPageRoute(builder: (_) => RegisterPage());
       case savedEventsRoute:
         return MaterialPageRoute(builder: (_) => SavedEventsPage());
+      case searchedEventsRoute:
+        return MaterialPageRoute(builder: (_) => SearchedEventsPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
-              body: Center(
-                  child: Text('No route defined for ${settings.name}')
-              ),
-            )
-        );
+                  body: Center(
+                      child: Text('No route defined for ${settings.name}')),
+                ));
     }
   }
 }
