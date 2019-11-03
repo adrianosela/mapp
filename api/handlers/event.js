@@ -271,7 +271,7 @@ let searchEvents = async function(req, res) {
     
     let query = {
         $and: [
-            { name: { $regex: `^${eventName}`} },
+            { name: { $regex: `${eventName}`, $options: "$i" } },
             { 
                 $or: [
                     { public: true },
