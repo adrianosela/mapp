@@ -21,5 +21,11 @@ decrypt-conf-dev:
 down:
 	(docker stop $(NAME)_service || true) && (docker rm $(NAME)_service || true)
 
+lint:
+	npm run lint
+
+tests:
+	npm run test
+
 clean:
 	rm config/production.json config/default.json
