@@ -10,6 +10,7 @@ import 'package:app/screens/map.dart';
 import 'package:app/screens/pendingInvites.dart';
 import 'package:app/screens/registerScreen.dart';
 import 'package:app/screens/savedEvents.dart';
+import 'package:app/screens/searchedEvents.dart';
 
 class Router {
 
@@ -23,6 +24,7 @@ class Router {
   static const String pendingInvitesRoute = '/pendingInvites';
   static const String registerRoute = '/registerRoute';
   static const String savedEventsRoute = '/savedEvents';
+  static const String searchedEventsRoute = '/searchedEvents';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -46,6 +48,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => RegisterPage());
       case savedEventsRoute:
         return MaterialPageRoute(builder: (_) => SavedEventsPage());
+      case searchedEventsRoute:
+        return MaterialPageRoute(builder: (_) => SearchedEventsPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
