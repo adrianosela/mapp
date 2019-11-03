@@ -55,7 +55,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
       final item = rows[index];
       final id = ids[index];
       return ListTile(
-        title: ReusableFunctions.listItemTextButton(item, id),
+        title: ReusableFunctions.listItemTextButton(item, id, context),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -76,7 +76,6 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
     }
   }
 
-  //TODO finish this call
   _getSubscribedEvents() async {
     var response = await UserController.getSubscribedEvents(userToken);
     if(response != null) {
