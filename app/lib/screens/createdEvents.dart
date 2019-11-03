@@ -66,7 +66,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
       final item = rows[index];
       final id = ids[index];
       return ListTile(
-        title: ReusableFunctions.listItemTextButton(item, id),
+        title: ReusableFunctions.listItemTextButton(item, id, context),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

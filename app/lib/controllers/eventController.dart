@@ -73,8 +73,7 @@ class EventController {
 
 
   ///get specific event object by event id
-  ///TODO getting 404 event not found response??
-  static Future<String> getEvent(String token, String eventId) async {
+  static Future<Map<String, String>> getEvent(String token, String eventId) async {
 
     Map<String, String> query = {
       'id' : eventId
@@ -82,28 +81,29 @@ class EventController {
 
     var uri = Uri.https(
       "mapp-254321.appspot.com",
-      "/get/event",
+      "/event",
       query,
     );
 
-    //Map<String, String> result = new Map<String, String>();
+    Map<String, String> result = new Map<String, String>();
 
     final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
 
-    print("::::::::::::::::::::::::::");
-    print(eventId);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       var userContainer = json.decode(response.body);
       if(userContainer != null) {
-        for(var instance in userContainer) {
-          //result[instance["id"].toString()] = instance["name"].toString();
-        }
+        result["name"] = userContainer["name"].toString();
+        result["description"] = userContainer["description"].toString();
+        result["startTime"] = userContainer["startTime"].toString();
+        result["endTime"] = userContainer["endTime"].toString();
+        result["location"] = userContainer["location"].toString();
+        result["public"] = userContainer["public"].toString();
+        result["creator"] = userContainer["creator"].toString();
       }
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
-    return null;//result;
+    return result;
   }
 }
