@@ -36,11 +36,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   @override
   void initState() {
     super.initState();
-
-    if(userToken == null) {
-      this.userToken = FCM.getToken();
-    }
-
+    this.userToken = FCM.getToken();
     _getCreatedEvents().then((result) {
       setState(() {});
     });

@@ -23,9 +23,8 @@ class _MyDrawerState extends State<MyDrawer> {
   final Map<String, String> events;
   _MyDrawerState({this.userId, this.userToken, this.events});
 
-  //TODO works but getting a bunch of errors when reloading map page??
-  // TODO test on an actual device and see if events pop up
-  /*@override
+
+  @override
   void initState() {
     super.initState();
     BackButtonInterceptor.add(myInterceptor);
@@ -33,9 +32,9 @@ class _MyDrawerState extends State<MyDrawer> {
 
   ///forces back navigation to map screen
   bool myInterceptor(bool stopDefaultButtonEvent) {
-    Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+    Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => true);
     return true;
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {

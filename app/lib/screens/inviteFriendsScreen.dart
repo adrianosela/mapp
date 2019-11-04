@@ -26,11 +26,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   @override
   void initState() {
     super.initState();
-
-    if(userToken == null) {
-      this.userToken = FCM.getToken();
-    }
-
+    this.userToken = FCM.getToken();
     //fetch user's friends
     _getUsers().then((result) {
       setState(() {});
