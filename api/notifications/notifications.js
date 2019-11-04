@@ -1,4 +1,4 @@
-const fcm = require("fcm-notification");
+const Fcm = require("fcm-notification");
 
 class Notifications {
     constructor() {
@@ -6,7 +6,7 @@ class Notifications {
     }
 
     initialize(fcmSettings) {
-        this.fcm = new fcm(fcmSettings);
+        this.fcm = new Fcm(fcmSettings);
     }
 
     notify(data, usersTokens) {
