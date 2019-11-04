@@ -1,5 +1,5 @@
-const isValidCoordinates = require("is-valid-coordinates");
 const notifications = require("../notifications/notifications");
+const validator = require("../validator/validator");
 
 // import Event and User schemas
 let Event = require("../models/event");
@@ -56,26 +56,9 @@ let createEvent = async function(req, resp) {
         }
 
         // validate inputs
-        if (!name) {
-            return resp.status(400).send("No event name provided");
-        }
-        if (!description) {
-            return resp.status(400).send("No event description provided");
-        }
-        if (!lat || !lon) {
-            return resp.status(400).send("No coordinates provided");
-        }
-        if (!start) {
-            return resp.status(400).send("No start time provided");
-        }
-        if (!end) {
-            return resp.status(400).send("No end time provided");
-        }
-        if (!isValidCoordinates(lon, lat)) {
-            return resp.status(400).send("Invalid coordinates");
-        }
-        if (end < Math.floor(Date.now()/1000)) {
-            return resp.status(400).send("Event end time cannot be before now");
+        let val = validator.newEvent(name, description, lat, lon, start, end);
+        if (val.ok === false) {
+            return resp.status(400).send(val.error);
         }
 
         let newEvent = new Event({
@@ -234,17 +217,10 @@ let findEvents = async function(req, res) {
     const lat = Number(latitude);
     const lon = Number(longitude);
 
-    if (!lat || !lon) {
-        return res.status(400).send("No coordinates provided");
-    }
-    if (!isValidCoordinates(lon, lat)) {
-        return res.status(400).send("Invalid coordinates");
-    }
-    if (!radius) {
-        return res.status(400).send("No radius specified");
-    }
-    if (radius > 100000) {
-        return res.status(400).send("Radius cannot exceed 100,000m (100km)");
+    // validate inputs
+    let val = validator.eventSearch(lat, lon, radius);
+    if (val.ok === false) {
+        return res.status(400).send(val.error);
     }
 
     let nearEventsQuery = {

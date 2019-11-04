@@ -15,16 +15,15 @@ let verifyToken = (req, res, next) => {
         jwt.verify(token, config.auth.signing_secret, (err, decoded) => {
             if (err) {
                 return res.status(401).send(`Invalid token: ${err}`);
-            } 
+            }
             else {
                 req.authorization = decoded;
                 next();
             }
         });
-    } 
-    else {
-        return res.status(401).send("No auth token in header");
     }
+
+    return res.status(401).send("No auth token in header");
 };
 
 module.exports = { verifyToken };
