@@ -14,7 +14,7 @@ let getUser = async function(req, res) {
         }
 
         res.json(user);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         res.status(500).send("Could not retrieve user");
@@ -29,7 +29,7 @@ let getSelf = async function(req, res) {
         }
 
         res.json(user);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         res.status(500).send("Could not retrieve user");
@@ -59,7 +59,7 @@ let getFollowers = async function(req, res) {
         }
 
         res.json(response);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         res.status(500).send("Could not retrieve user's followers");
@@ -89,7 +89,7 @@ let getFollowing = async function(req, res) {
         }
 
         res.json(response);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         res.status(500).send("Could not retrieve user's following");
@@ -213,7 +213,7 @@ let followUser = async function(req, res) {
         });
 
         res.send("Successfully followed requested user");
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         res.status(500).send("Could not follow user");
@@ -249,7 +249,7 @@ let subscribeToEvents = async function(req, res) {
             await event.save();
         }
 
-        await user.save(); 
+        await user.save();
 
         res.send(user.subscribedEvents);
     }

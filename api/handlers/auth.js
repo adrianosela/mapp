@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const config = require("config");
 const jwt = require("jsonwebtoken");
-const emailValidator = require("email-validator");
+const validator = require("../validator/validator");
 
 // import User & UserSettings schemas
 let User = require("../models/user");
@@ -12,17 +12,9 @@ let register = async function(req, resp) {
     const { email, password, name } = req.body;
 
     // validate inputs
-    if (!email) {
-        return resp.status(400).send("No email provided");
-    }
-    if (!password) {
-        return resp.status(400).send("No password provided");
-    }
-    if (!name) {
-        return resp.status(400).send("No preferred name provided");
-    }
-    if (!emailValidator.validate(email)) {
-        return resp.status(400).send("Email provided is invalid");
+    let validation = validator.newUser(email, password, name);
+    if (validation.ok === false) {
+        return resp.status(400).send(validation.error);
     }
 
     // check email is not used
@@ -42,7 +34,7 @@ let register = async function(req, resp) {
     let savedUserSettings;
     try {
         savedUserSettings = await newUserSettings.save();
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Could not save new user settings");
@@ -56,7 +48,7 @@ let register = async function(req, resp) {
     let savedUser;
     try {
         savedUser = await newUser.save();
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Could not save new user");
@@ -70,12 +62,10 @@ let login = async function(req, resp) {
     // read request body
     const { email, password } = req.body;
 
-    // check fields are set
-    if (!email) {
-        return resp.status(400).send("No email provided");
-    }
-    if (!password) {
-        return resp.status(400).send("No password provided");
+    // validate inputs
+    let validation = validator.existingUser(email, password);
+    if (validation.ok === false) {
+        return resp.status(400).send(validation.error);
     }
 
     // fetch user from db
@@ -87,7 +77,7 @@ let login = async function(req, resp) {
         if (!user) {
             return resp.status(401).send("Unauthorized");
         }
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send();
@@ -100,7 +90,7 @@ let login = async function(req, resp) {
             resp.status(401).send("Unauthorized");
             return;
         }
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send();
@@ -114,7 +104,7 @@ let login = async function(req, resp) {
             config.auth.signing_secret,
             { expiresIn: "24h" }
         );
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(401).send("Unauthorized");

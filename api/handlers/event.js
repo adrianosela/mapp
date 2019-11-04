@@ -19,7 +19,7 @@ let getEvent = async function(req, resp) {
             return resp.status(404).send("Event not found");
         }
         resp.json(event);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Could not retrieve event");
@@ -128,7 +128,7 @@ let createEvent = async function(req, resp) {
             }
         };
         resp.json(response);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Failed to create event");
@@ -156,7 +156,7 @@ let updateEvent = async function(req, resp) {
         await event.save();
 
         resp.send(event);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Error updating event");
@@ -214,7 +214,7 @@ let invitePeople = async function(req, resp) {
             }
         };
         resp.json(response);
-    } 
+    }
     catch (e) {
         console.log(`[error] ${e}`);
         return resp.status(500).send("Can't Invite Users to Event");
@@ -266,7 +266,7 @@ let findEvents = async function(req, res) {
             { creator: userId },
             { followers: userId },
             { invited: userId }
-        ] 
+        ]
     };
 
     try {
@@ -294,17 +294,17 @@ let searchEvents = async function(req, res) {
 
     const eventName = req.query.eventName;
     const categories = req.query.categories;
-    
+
     let query = {
         $and: [
             { name: { $regex: `${eventName}`, $options: "$i" } },
-            { 
+            {
                 $or: [
                     { public: true },
                     { creator: userId },
                     { followers: userId },
                     { invited: userId }
-                ] 
+                ]
             }
         ]
     };
@@ -345,8 +345,8 @@ let getRelevantEventsForUser = function(events, user, limit = 10) {
         }
 
         // Remove best event so far from events list
-        let index = events.map(function(event) { 
-            return event._id 
+        let index = events.map(function(event) {
+            return event._id;
         }).indexOf(bestEvent._id);
         events.splice(index, index + 1);
 
