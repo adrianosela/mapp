@@ -11,7 +11,6 @@ import 'package:location/location.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
-import 'package:app/components/reusableStlyes.dart';
 
 import 'package:app/controllers/eventController.dart';
 import 'package:app/controllers/loginController.dart';
@@ -35,7 +34,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   final String userId;
-  final String userToken;
+  String userToken;
 
   _MapPageState({this.userId, this.userToken});
 
@@ -91,6 +90,9 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+
+    this.userToken = FCM.getToken();
+
     location.onLocationChanged().listen((location) async {
       if (!mapSet) {
         mapSet = true;
@@ -249,9 +251,7 @@ class _MapPageState extends State<MapPage> {
                                   context,
                                   new MaterialPageRoute(
                                       builder: (context) =>
-                                          new InviteFriendsPage(
-                                              userId: userId,
-                                              userToken: userToken)));
+                                          new InviteFriendsPage()));
                               usersToInvite = result;
                             },
                             icon: Icon(Icons.add),
@@ -271,7 +271,7 @@ class _MapPageState extends State<MapPage> {
                                   latitude: latlang.latitude,
                                   date: eventDate,
                                   duration: eventDurationCont.text,
-                                  public: true,
+                                  public: isSwitched,
                                   invited: usersToInvite);
 
                               eventId = await eventController.createEvent(
@@ -358,8 +358,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(
-          userId: userId, userToken: userToken, events: eventsInRadius),
+      drawer: MyDrawer(events: eventsInRadius),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[
@@ -440,33 +439,32 @@ class _MapPageState extends State<MapPage> {
                           ),
                           SimpleDialogOption(
                               child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: RaisedButton(
-                              child: Text("Search"),
-                              onPressed: () async {
-                                List<String> categories = new List<String>();
+                                padding: const EdgeInsets.all(2.0),
+                                child: RaisedButton(
+                                  child: Text("Search"),
+                                  onPressed: () async {
+                                    List<String> categories = new List<String>();
 
-                                for (String category in categoriesMap.keys) {
-                                  if (categoriesMap[category]) {
-                                    categories.add(category);
-                                  }
-                                }
-                                List<Event> events =
+                                    for (String category in categoriesMap.keys) {
+                                      if (categoriesMap[category]) {
+                                        categories.add(category);
+                                      }
+                                    }
+                                    List<Event> events =
                                     await eventController.searchEvents(
                                         eventSearchCont.text,
                                         categories,
                                         userToken);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            new SearchedEventsPage(
-                                                userToken: userToken,
-                                                events: events)));
-                                eventSearchCont.clear();
-                              },
-                            ),
-                          )),
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            new SearchedEventsPage(events: events)));
+                                    eventSearchCont.clear();
+                                  },
+                                ),
+                              )
+                          ),
                         ],
                       );
                     });

@@ -4,24 +4,27 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/reusableStlyes.dart';
-import 'package:app/screens/inviteToEventsScreen.dart';
 
 import 'package:app/controllers/userController.dart';
 
+import 'package:app/models/fcmToken.dart';
+
+import 'package:app/screens/inviteToEventsScreen.dart';
+
 
 class FriendsPage extends StatefulWidget {
-  final String userToken;
+
   final  Map<String, String> events;
-  FriendsPage({this.userToken, this.events});
+  FriendsPage({this.events});
 
   @override
-  _FriendsPageState createState() => _FriendsPageState(userToken: userToken, events: events);
+  _FriendsPageState createState() => _FriendsPageState(events: events);
 }
 
 class _FriendsPageState extends State<FriendsPage> {
-  final String userToken;
+  String userToken;
   final  Map<String, String> events;
-  _FriendsPageState({this.userToken, this.events});
+  _FriendsPageState({this.events});
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("Friends");
@@ -32,6 +35,7 @@ class _FriendsPageState extends State<FriendsPage> {
   @override
   void initState() {
     super.initState();
+    this.userToken = FCM.getToken();
     //fetch user's friends
     _getUsers().then((result) {
       setState(() {});

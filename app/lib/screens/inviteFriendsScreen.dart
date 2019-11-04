@@ -6,22 +6,17 @@ import 'package:app/components/reusableFunctions.dart';
 
 import 'package:app/controllers/userController.dart';
 
+import 'package:app/models/fcmToken.dart';
+
 
 class InviteFriendsPage extends StatefulWidget {
 
-  final String userId;
-  final String userToken;
-  InviteFriendsPage({this.userId, this.userToken});
-
   @override
-  _InviteFriendsPageState createState() => _InviteFriendsPageState(userId: userId, userToken: userToken);
+  _InviteFriendsPageState createState() => _InviteFriendsPageState();
 }
 
 class _InviteFriendsPageState extends State<InviteFriendsPage> {
-
-  final String userId;
-  final String userToken;
-  _InviteFriendsPageState({this.userId, this.userToken});
+  String userToken;
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
@@ -31,6 +26,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   @override
   void initState() {
     super.initState();
+    this.userToken = FCM.getToken();
     //fetch user's friends
     _getUsers().then((result) {
       setState(() {});

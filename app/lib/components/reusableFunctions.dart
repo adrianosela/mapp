@@ -7,6 +7,7 @@ import 'package:app/controllers/loginController.dart';
 import 'package:app/controllers/eventController.dart';
 
 import 'package:app/models/userModel.dart';
+import 'package:app/models/fcmToken.dart';
 
 import 'package:app/screens/map.dart';
 
@@ -153,6 +154,7 @@ class ReusableFunctions{
             } else {
               //save user token
               userToken = response;
+              FCM.setToken(userToken);
               Navigator.push(context, new MaterialPageRoute(
                   builder: (context) => new MapPage(
                       userToken: userToken.toString())));

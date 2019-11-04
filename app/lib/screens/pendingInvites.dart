@@ -6,19 +6,18 @@ import 'package:app/components/reusableFunctions.dart';
 
 import 'package:app/controllers/userController.dart';
 
+import 'package:app/models/fcmToken.dart';
+
 
 class PendingInvitesPage extends StatefulWidget {
-  final String userToken;
-  PendingInvitesPage({this.userToken});
 
   @override
-  _PendingInvitesPageState createState() => _PendingInvitesPageState(userToken: userToken);
+  _PendingInvitesPageState createState() => _PendingInvitesPageState();
 }
 
 class _PendingInvitesPageState extends State<PendingInvitesPage> {
 
-  final String userToken;
-  _PendingInvitesPageState({this.userToken});
+  String userToken;
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
@@ -26,6 +25,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
   @override
   void initState() {
     super.initState();
+    this.userToken = FCM.getToken();
     _getPendingInvites().then((result) {
       setState(() {});
     });
