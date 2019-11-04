@@ -1,26 +1,28 @@
-import 'package:app/models/eventModel.dart';
 import 'package:flutter/material.dart';
+
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
-import 'package:app/controllers/userController.dart';
+
+import 'package:app/models/eventModel.dart';
+import 'package:app/models/fcmToken.dart';
+
 
 class SearchedEventsPage extends StatefulWidget {
-  final String userToken;
   final List<Event> events;
 
-  SearchedEventsPage({this.userToken, this.events});
+  SearchedEventsPage({this.events});
 
   @override
   _SearchedEventsPageState createState() =>
-      _SearchedEventsPageState(userToken: userToken, events: this.events);
+      _SearchedEventsPageState(events: this.events);
 }
 
 class _SearchedEventsPageState extends State<SearchedEventsPage> {
-  final String userToken;
-  final List<Event> events;
+  String userToken;
 
-  _SearchedEventsPageState({this.userToken, this.events});
+  final List<Event> events;
+  _SearchedEventsPageState({this.events});
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
@@ -28,6 +30,7 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
   @override
   void initState() {
     super.initState();
+    this.userToken = FCM.getToken();
     _createSearchedEvents().then((result) {
       setState(() {});
     });

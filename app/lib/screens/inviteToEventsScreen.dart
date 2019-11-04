@@ -4,6 +4,8 @@ import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 
+import 'package:app/models/fcmToken.dart';
+
 
 class InviteToEventsPage extends StatefulWidget {
 
@@ -21,6 +23,7 @@ class InviteToEventsPage extends StatefulWidget {
 class _InviteToEventsPageState extends State<InviteToEventsPage> {
 
   final String userId;
+  String userToken;
   final  Map<String, String> events;
   _InviteToEventsPageState({this.userId, this.events});
 
@@ -32,6 +35,7 @@ class _InviteToEventsPageState extends State<InviteToEventsPage> {
   @override
   void initState() {
     super.initState();
+    this.userToken = FCM.getToken();
     _getEvents();
   }
 

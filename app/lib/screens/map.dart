@@ -11,7 +11,6 @@ import 'package:location/location.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
-import 'package:app/components/reusableStlyes.dart';
 
 import 'package:app/controllers/eventController.dart';
 import 'package:app/controllers/loginController.dart';
@@ -35,7 +34,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   final String userId;
-  final String userToken;
+  String userToken;
 
   _MapPageState({this.userId, this.userToken});
 
@@ -91,6 +90,9 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+
+    this.userToken = FCM.getToken();
+
     location.onLocationChanged().listen((location) async {
       if (!mapSet) {
         mapSet = true;
@@ -249,9 +251,7 @@ class _MapPageState extends State<MapPage> {
                                   context,
                                   new MaterialPageRoute(
                                       builder: (context) =>
-                                          new InviteFriendsPage(
-                                              userId: userId,
-                                              userToken: userToken)));
+                                          new InviteFriendsPage()));
                               usersToInvite = result;
                             },
                             icon: Icon(Icons.add),
@@ -460,9 +460,7 @@ class _MapPageState extends State<MapPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            new SearchedEventsPage(
-                                                userToken: userToken,
-                                                events: events)));
+                                            new SearchedEventsPage(events: events)));
                                 eventSearchCont.clear();
                               },
                             ),

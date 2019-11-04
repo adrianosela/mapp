@@ -4,10 +4,8 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 import 'package:app/components/router.dart';
 
-import 'package:app/screens/savedEvents.dart';
-import 'package:app/screens/createdEvents.dart';
 import 'package:app/screens/friends.dart';
-import 'package:app/screens/pendingInvites.dart';
+
 
 class MyDrawer extends StatefulWidget {
   final String userId;
@@ -64,25 +62,25 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 title: Text('Friends'),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FriendsPage(userToken: userToken, events: events)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FriendsPage(events: events)));
                 },
               ),
               ListTile(
                 title: Text('Created Events'),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CreatedEventsPage(userToken: userToken)));
+                  Navigator.pushNamed(context, Router.createdEventsRoute);
                 },
               ),
               ListTile(
                 title: Text('Saved Events'),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SavedEventsPage(userToken: userToken)));
+                  Navigator.pushNamed(context, Router.savedEventsRoute);
                 },
               ),
               ListTile(
                 title: Text('Pending Invites'),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PendingInvitesPage(userToken: userToken)));
+                  Navigator.pushNamed(context, Router.pendingInvitesRoute);
                 },
               ),
             ],

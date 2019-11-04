@@ -6,20 +6,19 @@ import 'package:app/components/reusableFunctions.dart';
 
 import 'package:app/controllers/userController.dart';
 
+import 'package:app/models/fcmToken.dart';
+
 
 class SavedEventsPage extends StatefulWidget {
-  final String userToken;
-  SavedEventsPage({this.userToken});
 
   @override
-  _SavedEventsPageState createState() => _SavedEventsPageState(userToken: userToken);
+  _SavedEventsPageState createState() => _SavedEventsPageState();
 }
 
 
 class _SavedEventsPageState extends State<SavedEventsPage> {
 
-  final String userToken;
-  _SavedEventsPageState({this.userToken});
+  String userToken;
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
@@ -27,6 +26,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
   @override
   void initState() {
     super.initState();
+    this.userToken = FCM.getToken();
     _getSubscribedEvents().then((result) {
       setState(() {});
     });
