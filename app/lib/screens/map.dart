@@ -358,8 +358,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(
-          userId: userId, userToken: userToken, events: eventsInRadius),
+      drawer: MyDrawer(events: eventsInRadius),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[
@@ -440,31 +439,32 @@ class _MapPageState extends State<MapPage> {
                           ),
                           SimpleDialogOption(
                               child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: RaisedButton(
-                              child: Text("Search"),
-                              onPressed: () async {
-                                List<String> categories = new List<String>();
+                                padding: const EdgeInsets.all(2.0),
+                                child: RaisedButton(
+                                  child: Text("Search"),
+                                  onPressed: () async {
+                                    List<String> categories = new List<String>();
 
-                                for (String category in categoriesMap.keys) {
-                                  if (categoriesMap[category]) {
-                                    categories.add(category);
-                                  }
-                                }
-                                List<Event> events =
+                                    for (String category in categoriesMap.keys) {
+                                      if (categoriesMap[category]) {
+                                        categories.add(category);
+                                      }
+                                    }
+                                    List<Event> events =
                                     await eventController.searchEvents(
                                         eventSearchCont.text,
                                         categories,
                                         userToken);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
                                             new SearchedEventsPage(events: events)));
-                                eventSearchCont.clear();
-                              },
-                            ),
-                          )),
+                                    eventSearchCont.clear();
+                                  },
+                                ),
+                              )
+                          ),
                         ],
                       );
                     });

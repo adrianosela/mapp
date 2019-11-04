@@ -5,28 +5,28 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:app/components/router.dart';
 
 import 'package:app/screens/friends.dart';
+import 'package:app/models/fcmToken.dart';
 
 
 class MyDrawer extends StatefulWidget {
-  final String userId;
-  final String userToken;
   final Map<String, String> events;
-  MyDrawer({this.userId, this.userToken, this.events});
+  MyDrawer({this.events});
 
   @override
-  _MyDrawerState createState() => _MyDrawerState(userId: userId, userToken: userToken, events: events);
+  _MyDrawerState createState() => _MyDrawerState(events: events);
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  final String userId;
-  final String userToken;
+
+  String userToken;
   final Map<String, String> events;
-  _MyDrawerState({this.userId, this.userToken, this.events});
+  _MyDrawerState({this.events});
 
 
   @override
   void initState() {
     super.initState();
+    userToken = FCM.getToken();
     BackButtonInterceptor.add(myInterceptor);
   }
 
