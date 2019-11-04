@@ -271,7 +271,7 @@ class _MapPageState extends State<MapPage> {
                                   latitude: latlang.latitude,
                                   date: eventDate,
                                   duration: eventDurationCont.text,
-                                  public: true,
+                                  public: isSwitched,
                                   invited: usersToInvite);
 
                               eventId = await eventController.createEvent(
