@@ -325,10 +325,10 @@ let getRelevantEventsForUser = function(events, user, limit = 50) {
 
     events.sort(function(eventA, eventB) {
         if ((eventA.attendingFriends > 0) || (eventB.attendingFriends > 0)) {
-            return eventA.attendingFriends - eventB.attendingFriends;
+            return eventB.attendingFriends - eventA.attendingFriends;
         }
 
-        return eventA.followers.length - eventB.followers.length;
+        return eventB.followers.length - eventA.followers.length;
     });
 
     if (limit > events.length) {
