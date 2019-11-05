@@ -172,7 +172,7 @@ mocha.describe("Test Validate Event", function() {
             assert.equal(valid.error, "No event description provided");
         });
     });
-    mocha.describe("Negative: No latitude", function() {
+    mocha.describe("Negative: No Latitude", function() {
         mocha.it("should return an error when no latitude is provided", function() {
             const input = {
                 name: "John's Birthday Celebration",
@@ -342,6 +342,134 @@ mocha.describe("Test Validate Event", function() {
             );
             assert.equal(valid.ok, false);
             assert.equal(valid.error, "Event end time cannot be before now");
+        });
+    });
+});
+
+// Test Validate Event Search - event search parameters validation
+mocha.describe("Test Validate Event Search", function() {
+    mocha.describe("Positive: Successful Validation", function() {
+        mocha.it("should return ok = true with valid parameters", function() {
+            const input = {
+                latitude: 49.267941,
+                longitude: -123.247360,
+                radius: 25000, // 25km
+            };
+            let valid = validator.eventSearch(
+                Number(input.latitude),
+                Number(input.longitude),
+                Number(input.radius)
+            );
+            assert.equal(valid.ok, true);
+        });
+    });
+    mocha.describe("Negative: No Latitude", function() {
+        mocha.it("should return an error when no latitude is provided", function() {
+            const input = {
+                longitude: -123.247360,
+                radius: 25000, // 25km
+            };
+            let valid = validator.eventSearch(
+                Number(input.latitude),
+                Number(input.longitude),
+                Number(input.radius)
+            );
+            assert.equal(valid.ok, false);
+            assert.equal(valid.error, "No latitude provided");
+        });
+    });
+    mocha.describe("Negative: No Longitude", function() {
+        mocha.it("should return an error when no longitude is provided", function() {
+            const input = {
+                latitude: 49.267941,
+                radius: 25000, // 25km
+            };
+            let valid = validator.eventSearch(
+                Number(input.latitude),
+                Number(input.longitude),
+                Number(input.radius)
+            );
+            assert.equal(valid.ok, false);
+            assert.equal(valid.error, "No longitude provided");
+        });
+    });
+    mocha.describe("Negative: No Radius", function() {
+        mocha.it("should return an error when no radius is provided", function() {
+            const input = {
+                latitude: 49.267941,
+                longitude: -123.247360,
+            };
+            let valid = validator.eventSearch(
+                Number(input.latitude),
+                Number(input.longitude),
+                Number(input.radius)
+            );
+            assert.equal(valid.ok, false);
+            assert.equal(valid.error, "No radius provided");
+        });
+    });
+    mocha.describe("Negative: Invalid Latitude", function() {
+        mocha.it("should return an error when an invalid latitude is provided", function() {
+            const input = {
+                latitude: 300.267941,
+                longitude: -123.247360,
+                radius: 25000, // 25km
+            };
+            let valid = validator.eventSearch(
+                Number(input.latitude),
+                Number(input.longitude),
+                Number(input.radius)
+            );
+            assert.equal(valid.ok, false);
+            assert.equal(valid.error, "Invalid coordinates");
+        });
+    });
+    mocha.describe("Negative: Invalid Longitude", function() {
+        mocha.it("should return an error when an invalid longitude is provided", function() {
+            const input = {
+                latitude: 49.267941,
+                longitude: -323.247360,
+                radius: 25000, // 25km
+            };
+            let valid = validator.eventSearch(
+                Number(input.latitude),
+                Number(input.longitude),
+                Number(input.radius)
+            );
+            assert.equal(valid.ok, false);
+            assert.equal(valid.error, "Invalid coordinates");
+        });
+    });
+    mocha.describe("Negative: Invalid Radius (negative)", function() {
+        mocha.it("should return an error when an invalid radius is provided", function() {
+            const input = {
+                latitude: 49.267941,
+                longitude: -123.247360,
+                radius: -10000
+            };
+            let valid = validator.eventSearch(
+                Number(input.latitude),
+                Number(input.longitude),
+                Number(input.radius)
+            );
+            assert.equal(valid.ok, false);
+            assert.equal(valid.error, "Radius must be a non-negative integer");
+        });
+    });
+    mocha.describe("Negative: Invalid Radius (too large)", function() {
+        mocha.it("should return an error when an invalid radius is provided", function() {
+            const input = {
+                latitude: 49.267941,
+                longitude: -123.247360,
+                radius: 1000000
+            };
+            let valid = validator.eventSearch(
+                Number(input.latitude),
+                Number(input.longitude),
+                Number(input.radius)
+            );
+            assert.equal(valid.ok, false);
+            assert.equal(valid.error, "Radius cannot exceed 100,000m (100km)");
         });
     });
 });
