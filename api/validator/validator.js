@@ -95,6 +95,9 @@ let validateEventSearch = function(lat, lon, rad) {
     if (!rad) {
         return {ok: false, error: "No radius provided"};
     }
+    if (rad < 0) {
+        return {ok: false, error: "Radius must be a non-negative integer"};
+    }
     if (rad > 100000) {
         return {ok: false, error: "Radius cannot exceed 100,000m (100km)"};
     }
