@@ -1,6 +1,6 @@
 const express = require("express");
 const config = require("config");
-const logger = require('tracer').console();
+const logger = require("tracer").console();
 const routes = require("./routes/mux");
 const db = require("./store/datastore");
 const notifications = require("./notifications/notifications");

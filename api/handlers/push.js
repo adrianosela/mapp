@@ -1,4 +1,4 @@
-const logger = require('tracer').console();
+const logger = require("tracer").console();
 const notifications = require("../notifications/notifications");
 
 let UserSettings = require("../models/userSettings");

@@ -1,5 +1,5 @@
 const Fcm = require("fcm-notification");
-const logger = require('tracer').console();
+const logger = require("tracer").console();
 
 class Notifications {
     constructor() {

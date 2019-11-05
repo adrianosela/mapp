@@ -1,4 +1,4 @@
-const logger = require('tracer').console();
+const logger = require("tracer").console();
 let User = require("../models/user");
 let Event = require("../models/event");
 
