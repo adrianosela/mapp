@@ -20,16 +20,14 @@ class Datastore {
         mongoose
             .connect(url + "/" + dbName, options)
             .then(() => {
-                console.log("[info] Successfully connected to " + dbName);
-
+                console.log(`[info] Successfully connected to ${dbName}`);
                 mongoose.connection.on("error", function(err) {
                     console.log("[error] " + err);
                 });
-
                 this.connection = mongoose.connection;
             })
-            .catch((err) => {
-                console.log(`[error] Could not establish connection with DB: ${err}`);
+            .catch((e) => {
+                console.log(`[error] Could not establish connection with DB: ${e}`);
             });
     }
 
