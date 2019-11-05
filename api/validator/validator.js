@@ -60,6 +60,9 @@ let validateTime = function(start, end) {
     if (!end) {
         return {ok: false, error: "No end time provided"};
     }
+    if (end < start) {
+        return {ok: false, error: "Event end time cannot be before start time"};
+    }
     if (end < Math.floor(Date.now()/1000)) {
         return {ok: false, error: "Event end time cannot be before now"};
     }
