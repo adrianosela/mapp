@@ -321,12 +321,12 @@ let searchEvents = async function(req, res) {
 // TODO: Define a default limit of returned events
 let getRelevantEventsForUser = function(events, user, limit = 10) {
     for (let event of events) {
-        event.assistingFriends = friendsGoingToEvent(user, event);
+        event.attendingFriends = friendsGoingToEvent(user, event);
     }
 
     events.sort(function(eventA, eventB) {
-        if ((eventA.assistingFriends > 0) || (eventB.assistingFriends > 0)) {
-            return eventA.assistingFriends - eventB.assistingFriends;
+        if ((eventA.attendingFriends > 0) || (eventB.attendingFriends > 0)) {
+            return eventA.attendingFriends - eventB.attendingFriends;
         }
 
         return eventA.followers.length - eventB.followers.length;
@@ -346,16 +346,16 @@ let friendsGoingToEvent = function(user, event) {
     }
 
     let userFriends = user.following;
-    let assistingToEvent = event.followers;
+    let attendingEvent = event.followers;
 
-    let assistingFriends = 0;
+    let attendingFriends = 0;
     for (let friend of userFriends) {
-        if (assistingToEvent.includes(friend)) {
-            assistingFriends++;
+        if (attendingEvent.includes(friend)) {
+            attendingFriends++;
         }
     }
 
-    return assistingFriends;
+    return attendingFriends;
 };
 
 module.exports = {
