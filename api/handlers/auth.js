@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const config = require("config");
 const jwt = require("jsonwebtoken");
-const logger = require('tracer').console();
+const logger = require("tracer").console();
 const validator = require("../validator/validator");
 
 // import User & UserSettings schemas

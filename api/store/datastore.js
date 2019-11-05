@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const logger = require('tracer').console();
+const logger = require("tracer").console();
 
 const options = {
     useCreateIndex: true,
