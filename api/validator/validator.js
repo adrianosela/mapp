@@ -66,8 +66,8 @@ let validateTime = function(start, end) {
     return  {ok: true};
 };
 
-// validateNewEventData validates the data regarding an event
-let validateNewEventData = function(name, description, lat, lon, start, end) {
+// validateEventData validates the data regarding an event
+let validateEventData = function(name, description, lat, lon, start, end) {
     let meta = validateEventMetadata(name, description);
     if (meta.ok === false) {
         return meta;
@@ -101,6 +101,6 @@ let validateEventSearch = function(lat, lon, rad) {
 module.exports = {
     existingUser: validateExistingUserData,
     newUser: validateNewUserData,
-    newEvent: validateNewEventData,
+    event: validateEventData,
     eventSearch: validateEventSearch
 };
