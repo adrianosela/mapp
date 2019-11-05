@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const config = require("config");
 const jwt = require("jsonwebtoken");
+const logger = require('tracer').console();
 const validator = require("../validator/validator");
 
 // import User & UserSettings schemas
@@ -36,7 +37,7 @@ let register = async function(req, resp) {
         savedUserSettings = await newUserSettings.save();
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         return resp.status(500).send("Could not save new user settings");
     }
 
@@ -50,7 +51,7 @@ let register = async function(req, resp) {
         savedUser = await newUser.save();
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         return resp.status(500).send("Could not save new user");
     }
 
@@ -79,7 +80,7 @@ let login = async function(req, resp) {
         }
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         return resp.status(500).send();
     }
 
@@ -92,7 +93,7 @@ let login = async function(req, resp) {
         }
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         return resp.status(500).send();
     }
 
@@ -106,7 +107,7 @@ let login = async function(req, resp) {
         );
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         return resp.status(401).send("Unauthorized");
     }
 

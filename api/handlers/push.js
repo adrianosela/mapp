@@ -1,3 +1,4 @@
+const logger = require('tracer').console();
 const notifications = require("../notifications/notifications");
 
 let UserSettings = require("../models/userSettings");
@@ -20,7 +21,7 @@ let postToken = async function(req, res) {
         res.json({ token: userFcmToken });
     } 
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Error storing FCM Token");
     }
 };
@@ -41,7 +42,7 @@ let testPush = async function(req, res) {
 
         if (!userToNotify.fcmToken) {
             // should never happen
-            console.log(
+            logger.error(
                 `tried to send notification to ${userToNotify.name} but they had no valid FCM token`
             );
             return res.status(400).send("User does not have valid fcm token");
@@ -56,7 +57,7 @@ let testPush = async function(req, res) {
         res.json({ success: true, message: "User notified" });
     } 
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Error sending push notification");
     }
 };

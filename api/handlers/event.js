@@ -1,3 +1,4 @@
+const logger = require('tracer').console();
 const notifications = require("../notifications/notifications");
 const validator = require("../validator/validator");
 
@@ -21,7 +22,7 @@ let getEvent = async function(req, resp) {
         resp.json(event);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         return resp.status(500).send("Could not retrieve event");
     }
 };
@@ -113,7 +114,7 @@ let createEvent = async function(req, resp) {
         resp.json(response);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         return resp.status(500).send("Failed to create event");
     }
 };
@@ -154,7 +155,7 @@ let updateEvent = async function(req, resp) {
         resp.send(event);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         return resp.status(500).send("Error updating event");
     }
 };
@@ -212,7 +213,7 @@ let invitePeople = async function(req, resp) {
         resp.json(response);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         return resp.status(500).send("Can't Invite Users to Event");
     }
 };
@@ -273,7 +274,7 @@ let findEvents = async function(req, res) {
         res.json(events);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not retrieve events");
     }
 };
@@ -309,7 +310,7 @@ let searchEvents = async function(req, res) {
         res.json(events);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not search for events");
     }
 };

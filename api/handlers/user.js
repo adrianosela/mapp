@@ -1,3 +1,4 @@
+const logger = require('tracer').console();
 let User = require("../models/user");
 let Event = require("../models/event");
 
@@ -16,7 +17,7 @@ let getUser = async function(req, res) {
         res.json(user);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not retrieve user");
     }
 };
@@ -31,7 +32,7 @@ let getSelf = async function(req, res) {
         res.json(user);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not retrieve user");
     }
 };
@@ -61,7 +62,7 @@ let getFollowers = async function(req, res) {
         res.json(response);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not retrieve user's followers");
     }
 };
@@ -91,7 +92,7 @@ let getFollowing = async function(req, res) {
         res.json(response);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not retrieve user's following");
     }
 };
@@ -120,7 +121,7 @@ let getPendingInvites = async function(req, res) {
         res.json(response);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not retrieve user's pending invites");
     }
 };
@@ -149,7 +150,7 @@ let getSubscribedEvents = async function(req, res) {
         res.json(response);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not retrieve user's subscribed events");
     }
 };
@@ -178,7 +179,7 @@ let getCreatedEvents = async function(req, res) {
         res.json(response);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not retrieve user's created events");
     }
 };
@@ -215,7 +216,7 @@ let followUser = async function(req, res) {
         res.send("Successfully followed requested user");
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not follow user");
     }
 };
@@ -254,7 +255,7 @@ let subscribeToEvents = async function(req, res) {
         res.send(user.subscribedEvents);
     }
     catch (e) {
-        console.log(`[error] ${e}`);
+        logger.error(e);
         res.status(500).send("Could not subscribe to events");
     }
 };
@@ -271,7 +272,7 @@ let searchUsers = async function(req, res) {
 
     User.find(query, function(err, users) {
         if (err) {
-            console.log(err);
+            logger.error(err);
             return res.status(500).send("Could not retrieve users");
         }
         res.send(users);

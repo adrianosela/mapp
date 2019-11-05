@@ -1,4 +1,5 @@
 const Fcm = require("fcm-notification");
+const logger = require('tracer').console();
 
 class Notifications {
     constructor() {
@@ -19,7 +20,7 @@ class Notifications {
 
         this.fcm.sendToMultipleToken(message, usersTokens, function(err) {
             if (err) {
-                console.log(err);
+                logger.error(err);
             }
         });
     }
