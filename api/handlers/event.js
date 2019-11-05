@@ -266,11 +266,11 @@ let findEvents = async function(req, res) {
         }
 
         let nearEvents = await Event.find(nearEventsQuery)
-                                    .gte("endTime", (Date.now() / 1000));
+            .gte("endTime", (Date.now() / 1000));
         let relevantEvents = getRelevantEventsForUser(nearEvents, user);
 
         let userEvents = await Event.find(userEventsQuery)
-                                    .gte("endTime", (Date.now() / 1000));
+            .gte("endTime", (Date.now() / 1000));
 
         let events = userEvents.concat(relevantEvents);
         res.json(events);
@@ -309,7 +309,7 @@ let searchEvents = async function(req, res) {
 
     try {
         let events = await Event.find(query)
-                                .gte("endTime", (Date.now() / 1000));
+            .gte("endTime", (Date.now() / 1000));
         res.json(events);
     }
     catch (e) {
