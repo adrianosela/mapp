@@ -56,7 +56,7 @@ let createEvent = async function(req, resp) {
         }
 
         // validate inputs
-        let val = validator.newEvent(name, description, lat, lon, start, end);
+        let val = validator.event(name, description, lat, lon, start, end);
         if (val.ok === false) {
             return resp.status(400).send(val.error);
         }
@@ -126,6 +126,19 @@ let updateEvent = async function(req, resp) {
         const newEvent = req.body.event;
         if (!newEvent) {
             return resp.status(400).send("No updated event specified");
+        }
+
+        // validate input event
+        let val = validator.event(
+            newEvent.name,
+            newEvent.description,
+            Number(newEvent.latitude),
+            Number(newEvent.longitude),
+            Number(newEvent.startTime),
+            Number(newEvent.endTime)
+        );
+        if (val.ok === false) {
+            return resp.status(400).send(val.error);
         }
 
         let event = await Event.findById(newEvent._id);
