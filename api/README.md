@@ -20,7 +20,7 @@ The back end is written in Node (JavaScript) using the [Express](https://express
 
 ### Run on Your Machine
 
-```
+```bash
 node index.js
 ```
 
@@ -28,25 +28,25 @@ node index.js
 
 #### build docker image
 
-```
+```bash
 docker build -t mapp
 ```
 
 or using the makefile target:
 
-```
+```bash
 make build
 ```
 
 #### run docker image
 
-```
+```bash
 docker run -d --name mapp_service -p 8080:80 mapp
 ```
 
 or using the makefile target:
 
-```
+```bash
 make up
 ```
 
@@ -63,13 +63,13 @@ make up
 
 ### Deploy To Google App Engine
 
-```
+```bash
 gcloud app deploy
 ```
 
 or using the makefile target:
 
-```
+```bash
 make deploy
 ```
 
@@ -81,8 +81,10 @@ We use [SOPS](https://github.com/mozilla/sops) for encrypting and decrypting sec
 
 To be able to encrypt and decrypt secrets, you are required to have google application credentials in the environment with privilege to fetch the shared KMS key. This can be achieved by having your `gcloud` user being granted the following roles:
 
-`Cloud KMS CryptoKey Decrypter`
-`Cloud KMS CryptoKey Encrypter`
+```bash
+Cloud KMS CryptoKey Decrypter
+Cloud KMS CryptoKey Encrypter
+```
 
 <b>OR</b>
 
