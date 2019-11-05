@@ -320,33 +320,24 @@ let searchEvents = async function(req, res) {
 
 // TODO: Define a default limit of returned events
 let getRelevantEventsForUser = function(events, user, limit = 10) {
+    for (let event of events) {
+        event.attendingFriends = friendsGoingToEvent(user, event);
+    }
+
+    events.sort(function(eventA, eventB) {
+        if ((eventA.attendingFriends > 0) || (eventB.attendingFriends > 0)) {
+            return eventA.attendingFriends - eventB.attendingFriends;
+        }
+
+        return eventA.followers.length - eventB.followers.length;
+    });
+
     if (limit > events.length) {
         limit = events.length;
     }
 
-    let relevant = [];
-    for (let i = 0; i < limit; i++) {
-        let bestEvent = null;
-        for (let event of events) {
-            if (friendsGoingToEvent(user, event) > 0) {
-                bestEvent = event;
-                break;
-            }
-            if ((bestEvent == null) || (event.followers.length > bestEvent.followers.length)) {
-                bestEvent = event;
-            }
-        }
-
-        // Remove best event so far from events list
-        let index = events.map(function(event) {
-            return event._id;
-        }).indexOf(bestEvent._id);
-        events.splice(index, index + 1);
-
-        relevant.push(bestEvent);
-    }
-
-    return relevant;
+    events.splice(limit);
+    return events;
 };
 
 let friendsGoingToEvent = function(user, event) {
@@ -355,16 +346,16 @@ let friendsGoingToEvent = function(user, event) {
     }
 
     let userFriends = user.following;
-    let assistingToEvent = event.followers;
+    let attendingEvent = event.followers;
 
-    let assistingFriends = 0;
+    let attendingFriends = 0;
     for (let friend of userFriends) {
-        if (assistingToEvent.includes(friend)) {
-            assistingFriends++;
+        if (attendingEvent.includes(friend)) {
+            attendingFriends++;
         }
     }
 
-    return assistingFriends;
+    return attendingFriends;
 };
 
 module.exports = {
