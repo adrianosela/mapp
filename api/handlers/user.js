@@ -75,6 +75,10 @@ let getFollowing = async function(req, res) {
             return res.status(404).send("User not found");
         }
 
+        if (!user.following || user.following.length === 0) {
+            return res.json([]);
+        }
+
         let following = User.find({
             _id: { $in: user.following }
         });
