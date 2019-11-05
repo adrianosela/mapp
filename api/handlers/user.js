@@ -111,7 +111,7 @@ let getPendingInvites = async function(req, res) {
 
         let pendingEvents = await Event.find({
             _id: { $in: user.pendingInvites }
-        });
+        }).gte("endTime", (Date.now() / 1000));
 
         let response = [];
         for (let event of pendingEvents) {
@@ -140,7 +140,7 @@ let getSubscribedEvents = async function(req, res) {
 
         let subscribedEvents = await Event.find({
             _id: { $in: user.subscribedEvents }
-        });
+        }).gte("endTime", (Date.now() / 1000));
 
         let response = [];
         for (let event of subscribedEvents) {
@@ -169,7 +169,7 @@ let getCreatedEvents = async function(req, res) {
 
         let createdEvents = await Event.find({
             _id: { $in: user.createdEvents }
-        });
+        }).gte("endTime", (Date.now() / 1000));
 
         let response = [];
         for (let event of createdEvents) {
