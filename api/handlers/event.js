@@ -318,8 +318,7 @@ let searchEvents = async function(req, res) {
     }
 };
 
-// TODO: Define a default limit of returned events
-let getRelevantEventsForUser = function(events, user, limit = 10) {
+let getRelevantEventsForUser = function(events, user, limit = 50) {
     for (let event of events) {
         event.attendingFriends = friendsGoingToEvent(user, event);
     }
