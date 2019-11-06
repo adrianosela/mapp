@@ -225,6 +225,43 @@ let followUser = async function(req, res) {
     }
 };
 
+let unfollowUser = async function(req, res) {
+    try {
+        const userId = req.authorization.id;
+
+        const userToUnfollowId = req.body.userToUnfollowId;
+        if (!userToFollowId) {
+            return res.status(400).send("No user to unfollow specified");
+        }
+
+        let userToUnfollow = await User.findById(userToUnfollowId);
+        if (!userToUnfollow) {
+            return res.status(404).send("User to unfollow not found");
+        }
+
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send("Requesting user not found");
+        }
+
+        user.following.pull(userToUnfollowId);
+        await User.findByIdAndUpdate(user._id, user, {
+            useFindAndModify: false
+        });
+
+        userToUnfollow.followers.pull(user._id);
+        await User.findByIdAndUpdate(userToUnfollow._id, userToUnfollow, {
+            useFindAndModify: false
+        });
+
+        res.send("Successfully unfollowed requested user");
+    }
+    catch (e) {
+        logger.error(e);
+        res.status(500).send("Could not unfollow user");
+    }
+};
+
 let subscribeToEvents = async function(req, res) {
     const userId = req.authorization.id;
 
@@ -292,6 +329,7 @@ module.exports = {
     subscribed: getSubscribedEvents,
     created: getCreatedEvents,
     follow: followUser,
+    unfollow: unfollowUser,
     subscribe: subscribeToEvents,
     search: searchUsers
 };
