@@ -230,7 +230,7 @@ let unfollowUser = async function(req, res) {
         const userId = req.authorization.id;
 
         const userToUnfollowId = req.body.userToUnfollowId;
-        if (!userToFollowId) {
+        if (!userToUnfollowId) {
             return res.status(400).send("No user to unfollow specified");
         }
 
