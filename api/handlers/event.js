@@ -192,7 +192,7 @@ let deleteEvent = async function(req, res) {
         logger.error(e);
         return res.status(500).send("Can't Delete Event");
     }
-}
+};
 
 // invite people to an event
 let invitePeople = async function(req, resp) {
