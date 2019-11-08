@@ -32,6 +32,9 @@ router.post("/user/unfollow", middleware.verifyToken, userHandlers.unfollow);
 // Subscribe user (by user id) to events
 router.post("/user/subscribe", middleware.verifyToken, userHandlers.subscribe);
 
+// Unsubscribe user (by user id) to events
+router.post("/user/unsubscribe", middleware.verifyToken, userHandlers.unsubscribe);
+
 // get users by username regex
 router.get("/user/search", userHandlers.search);
 

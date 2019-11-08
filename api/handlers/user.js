@@ -301,6 +301,39 @@ let subscribeToEvents = async function(req, res) {
     }
 };
 
+let unsubscribeToEvents = async function(req, res) {
+    const userId = req.authorization.id;
+
+    const eventIds = req.body.eventIds;
+    if (!eventIds || eventIds.length == 0) {
+        return res.status(400).send("No events to unsubscribe from");
+    }
+
+    try {
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send("Requesting user not found");
+        }
+
+        let events = await Event.find({
+            _id: { $in: eventIds }
+        });
+
+        for (let event of events) {
+            user.subscribedEvents.pull(event._id);
+            event.followers.pull(userId);
+            await event.save();
+        }
+        await user.save();
+
+        res.send(user.subscribedEvents);
+    }
+    catch (e) {
+        logger.error(e);
+        res.status(500).send("Could not unsubscribe from events");
+    }
+};
+
 // get users by username regex
 let searchUsers = async function(req, res) {
     const userInfo = req.query.username;
@@ -331,5 +364,6 @@ module.exports = {
     follow: followUser,
     unfollow: unfollowUser,
     subscribe: subscribeToEvents,
+    unsubscribe: unsubscribeToEvents,
     search: searchUsers
 };
