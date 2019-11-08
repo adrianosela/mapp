@@ -26,6 +26,9 @@ router.get("/user/created", middleware.verifyToken, userHandlers.created);
 // follow a user (by user id)
 router.post("/user/follow", middleware.verifyToken, userHandlers.follow);
 
+// unfollow a user (by user id)
+router.post("/user/unfollow", middleware.verifyToken, userHandlers.unfollow);
+
 // Subscribe user (by user id) to events
 router.post("/user/subscribe", middleware.verifyToken, userHandlers.subscribe);
 
