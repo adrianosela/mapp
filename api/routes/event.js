@@ -11,6 +11,9 @@ router.post("/event", middleware.verifyToken, eventHandlers.create);
 // update an event
 router.put("/event", middleware.verifyToken, eventHandlers.update);
 
+// Delete event
+router.delete("/event", middleware.verifyToken, eventHandlers.delete);
+
 // invite people to an event
 router.post("/event/invite", middleware.verifyToken, eventHandlers.invite);
 

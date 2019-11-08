@@ -160,6 +160,40 @@ let updateEvent = async function(req, resp) {
     }
 };
 
+let deleteEvent = async function(req, res) {
+    const userId = req.authorization.id;
+
+    const eventId = req.body.eventId;
+    if (!eventId) {
+        return res.status(400).send("No event id provided");
+    }
+
+    try {
+        let event = await Event.findById(eventId);
+        if (!event) {
+            return res.status(404).send("Event not found");
+        }
+
+        if (event.creator != userId) {
+            return res.status(401).send("Requesting user can't delete event");
+        }
+
+        await Event.findByIdAndDelete(eventId);
+        
+        let response = {
+            message: "Event deleted successfully!",
+            data: {
+                eventId: eventId
+            }
+        };
+        res.json(response);
+    }
+    catch (e) {
+        logger.error(e);
+        return res.status(500).send("Can't Delete Event");
+    }
+}
+
 // invite people to an event
 let invitePeople = async function(req, resp) {
     try {
@@ -361,6 +395,7 @@ module.exports = {
     get: getEvent,
     create: createEvent,
     update: updateEvent,
+    delete: deleteEvent,
     invite: invitePeople,
     find: findEvents,
     search: searchEvents
