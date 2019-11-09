@@ -17,7 +17,7 @@ router.get("/user/following", middleware.verifyToken, userHandlers.following);
 // Get user pending event invitations
 router.get("/user/pending", middleware.verifyToken, userHandlers.pending);
 
-// Delete user pending event invitation
+// Remove user pending event invitation
 router.put("/user/pending", middleware.verifyToken, userHandlers.removePending);
 
 // Get user subscribed events
