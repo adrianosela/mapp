@@ -130,6 +130,38 @@ let getPendingInvites = async function(req, res) {
     }
 };
 
+let declineInvite = async function(req, res) {
+    const userId = req.authorization.id;
+    const eventId = req.body.eventId;
+    if (!eventId) {
+        return res.status(400).send("No event Id from pending invite");
+    }
+
+    try {
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send("Requesting user not found");
+        }
+
+        let event = await Event.findById(eventId);
+        if (!event) {
+            return res.status(404).send("Event not found");
+        }
+
+        user.pendingInvites.pull(event._id);
+        await user.save();
+
+        event.invited.pull(user._id);
+        await event.save();
+
+        res.send("Successfully removed event invite");
+    }
+    catch (e) {
+        logger.error(e);
+        res.status(500).send("Could not remove pending invitation");
+    }
+};
+
 let getSubscribedEvents = async function(req, res) {
     try {
         const userId = req.authorization.id;
@@ -359,6 +391,7 @@ module.exports = {
     followers: getFollowers,
     following: getFollowing,
     pending: getPendingInvites,
+    decline: declineInvite,
     subscribed: getSubscribedEvents,
     created: getCreatedEvents,
     follow: followUser,
