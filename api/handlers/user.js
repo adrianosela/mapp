@@ -145,6 +145,7 @@ let removePendingInvite = async function(req, res) {
 
         let event = await Event.findById(eventId);
         if (!event) {
+            return res.status(404).send("Event not found");
         }
 
         user.pendingInvites.pull(event._id);
