@@ -130,7 +130,7 @@ let getPendingInvites = async function(req, res) {
     }
 };
 
-let removePendingInvite = async function(req, res) {
+let declineInvite = async function(req, res) {
     const userId = req.authorization.id;
     const eventId = req.body.eventId;
     if (!eventId) {
@@ -391,7 +391,7 @@ module.exports = {
     followers: getFollowers,
     following: getFollowing,
     pending: getPendingInvites,
-    removePending: removePendingInvite,
+    decline: declineInvite,
     subscribed: getSubscribedEvents,
     created: getCreatedEvents,
     follow: followUser,
