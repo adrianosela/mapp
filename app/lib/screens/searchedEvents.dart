@@ -7,6 +7,8 @@ import 'package:app/components/reusableFunctions.dart';
 import 'package:app/models/eventModel.dart';
 import 'package:app/models/fcmToken.dart';
 
+import 'package:app/screens/eventScreen.dart';
+
 
 class SearchedEventsPage extends StatefulWidget {
   final List<Event> events;
@@ -63,7 +65,7 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
               icon: Icon(Icons.add),
               onPressed: () {
                 setState(() {
-                  _goToEventPage();
+                  _goToEventPage(id);
                 });
               }),
         ]),
@@ -71,8 +73,12 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
     }
   }
 
-  _goToEventPage() {
-    //TODO
+  _goToEventPage(id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+            new EventPage(eventId: id)));
   }
 
   _createSearchedEvents() async {

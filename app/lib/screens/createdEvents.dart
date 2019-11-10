@@ -9,14 +9,12 @@ import 'package:app/components/reusableFunctions.dart';
 import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
-
+import 'package:app/screens/eventScreen.dart';
 
 class CreatedEventsPage extends StatefulWidget {
-
   @override
   _CreatedEventsPageState createState() => _CreatedEventsPageState();
 }
-
 
 class _CreatedEventsPageState extends State<CreatedEventsPage> {
   String userToken;
@@ -32,7 +30,6 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   TextEditingController eventDescriptionCont = TextEditingController();
   TextEditingController eventDurationCont = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
@@ -41,7 +38,6 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
       setState(() {});
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +50,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         ],
       ),
       body: ListView.builder(
-        // itemCount: this.count,
-          itemBuilder: (context, index) => this._buildRow(context, index)
-      ),
+          // itemCount: this.count,
+          itemBuilder: (context, index) => this._buildRow(context, index)),
     );
   }
 
@@ -66,19 +61,27 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
       final id = ids[index];
       return ListTile(
         title: ReusableFunctions.listItemTextButton(item, id, context),
-        trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    setState(() {
-                      _update();
-                    });
-                  }
-              ),
-            ]
-        ),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => new EventPage(eventId: id)));
+        },
+        onLongPress: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => new EventPage(eventId: id)));
+        },
+        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                setState(() {
+                  _update();
+                });
+              }),
+        ]),
       );
     }
   }
@@ -96,11 +99,13 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                   ReusableFunctions.titleText("Update Event"),
                   Padding(
                     padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput("enter event name", eventNameCont),
+                    child: ReusableFunctions.formInput(
+                        "enter event name", eventNameCont),
                   ),
                   Padding(
                     padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput("enter event description", eventDescriptionCont),
+                    child: ReusableFunctions.formInput(
+                        "enter event description", eventDescriptionCont),
                   ),
                   Padding(
                     padding: EdgeInsets.all(2.0),
@@ -109,20 +114,22 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           DatePicker.showDatePicker(context,
                               showTitleActions: true,
                               minTime: DateTime(2019, 3, 5),
-                              maxTime: DateTime(2023, 6, 7), onChanged: (date) {
-                              }, onConfirm: (date) {
-                                eventDate = date;
-                              }, currentTime: DateTime.now(), locale: LocaleType.en);
+                              maxTime: DateTime(2023, 6, 7),
+                              onChanged: (date) {}, onConfirm: (date) {
+                            eventDate = date;
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
                         },
                         child: Text(
                           'pick event date',
                           style: TextStyle(color: Colors.blue),
-                        )
-                    ),
+                        )),
                   ),
                   Padding(
                     padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput("enter event duration (hours)", eventDurationCont),
+                    child: ReusableFunctions.formInput(
+                        "enter event duration (hours)", eventDurationCont),
                   ),
                   Row(
                     children: <Widget>[
@@ -131,8 +138,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                         child: Text(
                           "Private Event?",
                           style: TextStyle(
-                            //TODO
-                          ),
+                              //TODO
+                              ),
                         ),
                       ),
                       Container(
@@ -157,8 +164,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                     child: RaisedButton(
                       child: Text("Save"),
                       onPressed: () async {
-                        if(_formKey.currentState.validate()) {
-
+                        if (_formKey.currentState.validate()) {
                           // TODO backend event update call
                           // TODO snackbar saying event updated
 
@@ -166,7 +172,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           eventNameCont.clear();
                           eventDescriptionCont.clear();
                           eventDurationCont.clear();
-                          
+
                           Navigator.of(context).pop();
                         }
                       },
@@ -181,8 +187,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
 
   _getCreatedEvents() async {
     var response = await UserController.getCreatedEvents(userToken);
-    if(response != null) {
-      response.forEach((id, name){
+    if (response != null) {
+      response.forEach((id, name) {
         ids.add(id);
         rows.add(name);
       });
