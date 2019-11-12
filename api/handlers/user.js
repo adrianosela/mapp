@@ -46,7 +46,7 @@ let getFollowers = async function(req, res) {
             return res.status(404).send("User not found");
         }
 
-        let followers = User.find({
+        let followers = await User.find({
             _id: { $in: user.followers }
         });
 
@@ -76,11 +76,7 @@ let getFollowing = async function(req, res) {
             return res.status(404).send("User not found");
         }
 
-        if (!user.following || user.following.length === 0) {
-            return res.json([]);
-        }
-
-        let following = User.find({
+        let following = await User.find({
             _id: { $in: user.following }
         });
 
@@ -240,14 +236,10 @@ let followUser = async function(req, res) {
         }
 
         user.following.push(userToFollowId);
-        await User.findByIdAndUpdate(user._id, user, {
-            useFindAndModify: false
-        });
+        await user.save();
 
         userToFollow.followers.push(user._id);
-        await User.findByIdAndUpdate(userToFollow._id, userToFollow, {
-            useFindAndModify: false
-        });
+        await userToFollow.save();
 
         res.send("Successfully followed requested user");
     }
@@ -277,14 +269,10 @@ let unfollowUser = async function(req, res) {
         }
 
         user.following.pull(userToUnfollowId);
-        await User.findByIdAndUpdate(user._id, user, {
-            useFindAndModify: false
-        });
+        await user.save()
 
         userToUnfollow.followers.pull(user._id);
-        await User.findByIdAndUpdate(userToUnfollow._id, userToUnfollow, {
-            useFindAndModify: false
-        });
+        await userToUnfollow.save();
 
         res.send("Successfully unfollowed requested user");
     }
@@ -313,12 +301,10 @@ let subscribeToEvents = async function(req, res) {
         });
 
         for (let event of events) {
-            let eventIndex = user.pendingInvites.indexOf(event._id);
-            user.pendingInvites.splice(eventIndex, eventIndex + 1);
+            user.pendingInvites.pull(event._id);
             user.subscribedEvents.push(event._id);
 
-            let userIndex = event.invited.indexOf(user._id);
-            event.invited.splice(userIndex, userIndex + 1);
+            event.invited.pull(user._id);
             event.followers.push(userId);
             await event.save();
         }
