@@ -77,6 +77,16 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                     });
                   }
               ),
+              IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      ReusableFunctions.showInSnackBar(
+                          "Event Deleted", context);
+                      // TODO
+                    });
+                  }
+              ),
             ]
         ),
       );
@@ -159,8 +169,10 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       onPressed: () async {
                         if(_formKey.currentState.validate()) {
 
+                          ReusableFunctions.showInSnackBar(
+                              "Event Updated", context);
+
                           // TODO backend event update call
-                          // TODO snackbar saying event updated
 
                           ///clear text controllers
                           eventNameCont.clear();
