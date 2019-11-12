@@ -269,7 +269,7 @@ let unfollowUser = async function(req, res) {
         }
 
         user.following.pull(userToUnfollowId);
-        await user.save()
+        await user.save();
 
         userToUnfollow.followers.pull(user._id);
         await userToUnfollow.save();
