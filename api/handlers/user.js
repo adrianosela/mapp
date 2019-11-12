@@ -319,7 +319,7 @@ let subscribeToEvents = async function(req, res) {
     }
 };
 
-let unsubscribeToEvents = async function(req, res) {
+let unsubscribeFromEvents = async function(req, res) {
     const userId = req.authorization.id;
 
     const eventIds = req.body.eventIds;
@@ -383,6 +383,6 @@ module.exports = {
     follow: followUser,
     unfollow: unfollowUser,
     subscribe: subscribeToEvents,
-    unsubscribe: unsubscribeToEvents,
+    unsubscribe: unsubscribeFromEvents,
     search: searchUsers
 };
