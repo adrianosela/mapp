@@ -1,3 +1,4 @@
+import 'package:app/controllers/eventController.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -83,7 +84,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                     setState(() {
                       ReusableFunctions.showInSnackBar(
                           "Event Deleted", context);
-                      // TODO
+                      EventController.deleteEvent(userToken);
                     });
                   }
               ),

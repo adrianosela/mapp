@@ -140,4 +140,18 @@ class EventController {
     }
     return result;
   }
+
+
+  ///Delete an event
+  static Future<String> deleteEvent(String token) async {
+
+    final response = await http.get("mapp-254321.appspot.com/event", headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
+    if (response.statusCode < 200 || response.statusCode > 400 || json == null) {
+      print(response.statusCode);
+      print(json);
+      throw new Exception("Error while fetching data");
+    }
+
+    return null;
+  }
 }
