@@ -76,7 +76,7 @@ let createEvent = async function(req, resp) {
         let event = await newEvent.save();
 
         let creatorUser = await User.findById(creator);
-        creatorUser.createdEvents.push(event._id);
+        creatorUser.createdEvents.addToSet(event._id);
         await creatorUser.save();
 
         if (invited != null && invited.length !== 0) {
@@ -84,7 +84,7 @@ let createEvent = async function(req, resp) {
                 _id: { $in: invited }
             });
             for (let user of users) {
-                user.pendingInvites.push(event._id);
+                user.pendingInvites.addToSet(event._id);
                 await user.save();
             }
 
@@ -216,8 +216,8 @@ let invitePeople = async function(req, resp) {
             _id: { $in: invited }
         });
         for (let user of users) {
-            event.invited.push(user._id);
-            user.pendingInvites.push(event._id);
+            event.invited.addToSet(user._id);
+            user.pendingInvites.addToSet(event._id);
             await user.save();
         }
 

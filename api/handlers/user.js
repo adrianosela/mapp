@@ -235,10 +235,10 @@ let followUser = async function(req, res) {
             return res.status(404).send("Requesting user not found");
         }
 
-        user.following.push(userToFollowId);
+        user.following.addToSet(userToFollowId);
         await user.save();
 
-        userToFollow.followers.push(user._id);
+        userToFollow.followers.addToSet(user._id);
         await userToFollow.save();
 
         res.send("Successfully followed requested user");
@@ -302,10 +302,10 @@ let subscribeToEvents = async function(req, res) {
 
         for (let event of events) {
             user.pendingInvites.pull(event._id);
-            user.subscribedEvents.push(event._id);
+            user.subscribedEvents.addToSet(event._id);
 
             event.invited.pull(user._id);
-            event.followers.push(userId);
+            event.followers.addToSet(userId);
             await event.save();
         }
 
