@@ -1,3 +1,4 @@
+import 'package:app/controllers/eventController.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -74,6 +75,16 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                   onPressed: () {
                     setState(() {
                       _update();
+                    });
+                  }
+              ),
+              IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      ReusableFunctions.showInSnackBar(
+                          "Event Deleted", context);
+                      EventController.deleteEvent(userToken);
                     });
                   }
               ),
@@ -159,8 +170,10 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       onPressed: () async {
                         if(_formKey.currentState.validate()) {
 
+                          ReusableFunctions.showInSnackBar(
+                              "Event Updated", context);
+
                           // TODO backend event update call
-                          // TODO snackbar saying event updated
 
                           ///clear text controllers
                           eventNameCont.clear();

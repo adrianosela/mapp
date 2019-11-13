@@ -66,7 +66,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
                       rows.removeAt(index);
                       ReusableFunctions.showInSnackBar(
                           "Unsibscribed", context);
-                      //TODO send call to backend - user no longer going to event
+                      UserController.postUnsubscribe(userToken, _toJson(id));
                     });
                   }
               ),
@@ -85,4 +85,9 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
       });
     }
   }
+
+
+  Map<String, dynamic> _toJson(id) => {
+    'eventIds' : id
+  };
 }
