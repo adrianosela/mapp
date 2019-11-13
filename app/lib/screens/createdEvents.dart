@@ -82,6 +82,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                   icon: Icon(Icons.delete),
                   onPressed: () {
                     setState(() {
+                      rows.removeAt(index);
                       ReusableFunctions.showInSnackBar(
                           "Event Deleted", context);
                       EventController.deleteEvent(userToken);
