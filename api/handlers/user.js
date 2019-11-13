@@ -46,7 +46,7 @@ let getFollowers = async function(req, res) {
             return res.status(404).send("User not found");
         }
 
-        let followers = User.find({
+        let followers = await User.find({
             _id: { $in: user.followers }
         });
 
@@ -76,11 +76,7 @@ let getFollowing = async function(req, res) {
             return res.status(404).send("User not found");
         }
 
-        if (!user.following || user.following.length === 0) {
-            return res.json([]);
-        }
-
-        let following = User.find({
+        let following = await User.find({
             _id: { $in: user.following }
         });
 
@@ -127,6 +123,38 @@ let getPendingInvites = async function(req, res) {
     catch (e) {
         logger.error(e);
         res.status(500).send("Could not retrieve user's pending invites");
+    }
+};
+
+let declineInvite = async function(req, res) {
+    const userId = req.authorization.id;
+    const eventId = req.body.eventId;
+    if (!eventId) {
+        return res.status(400).send("No event Id from pending invite");
+    }
+
+    try {
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send("Requesting user not found");
+        }
+
+        let event = await Event.findById(eventId);
+        if (!event) {
+            return res.status(404).send("Event not found");
+        }
+
+        user.pendingInvites.pull(event._id);
+        await user.save();
+
+        event.invited.pull(user._id);
+        await event.save();
+
+        res.send("Successfully removed event invite");
+    }
+    catch (e) {
+        logger.error(e);
+        res.status(500).send("Could not remove pending invitation");
     }
 };
 
@@ -207,15 +235,11 @@ let followUser = async function(req, res) {
             return res.status(404).send("Requesting user not found");
         }
 
-        user.following.push(userToFollowId);
-        await User.findByIdAndUpdate(user._id, user, {
-            useFindAndModify: false
-        });
+        user.following.addToSet(userToFollowId);
+        await user.save();
 
-        userToFollow.followers.push(user._id);
-        await User.findByIdAndUpdate(userToFollow._id, userToFollow, {
-            useFindAndModify: false
-        });
+        userToFollow.followers.addToSet(user._id);
+        await userToFollow.save();
 
         res.send("Successfully followed requested user");
     }
@@ -245,14 +269,10 @@ let unfollowUser = async function(req, res) {
         }
 
         user.following.pull(userToUnfollowId);
-        await User.findByIdAndUpdate(user._id, user, {
-            useFindAndModify: false
-        });
+        await user.save();
 
         userToUnfollow.followers.pull(user._id);
-        await User.findByIdAndUpdate(userToUnfollow._id, userToUnfollow, {
-            useFindAndModify: false
-        });
+        await userToUnfollow.save();
 
         res.send("Successfully unfollowed requested user");
     }
@@ -281,14 +301,26 @@ let subscribeToEvents = async function(req, res) {
         });
 
         for (let event of events) {
-            let eventIndex = user.pendingInvites.indexOf(event._id);
-            user.pendingInvites.splice(eventIndex, eventIndex + 1);
-            user.subscribedEvents.push(event._id);
+            if (event.public) {
+                if (user.pendingInvites.includes(event._id)) {
+                    user.pendingInvites.pull(event._id);
+                }
+                user.subscribedEvents.addToSet(event._id);
+                
+                if (event.invited.includes(userId)) {
+                    event.invited.pull(userId);
+                }
+                event.followers.addToSet(userId);
+                await event.save();
+            }
+            else if (event.invited.includes(userId)) {
+                user.pendingInvites.pull(event._id);
+                user.subscribedEvents.addToSet(event._id);
 
-            let userIndex = event.invited.indexOf(user._id);
-            event.invited.splice(userIndex, userIndex + 1);
-            event.followers.push(userId);
-            await event.save();
+                event.invited.pull(user._id);
+                event.followers.addToSet(userId);
+                await event.save();
+            }
         }
 
         await user.save();
@@ -301,7 +333,7 @@ let subscribeToEvents = async function(req, res) {
     }
 };
 
-let unsubscribeToEvents = async function(req, res) {
+let unsubscribeFromEvents = async function(req, res) {
     const userId = req.authorization.id;
 
     const eventIds = req.body.eventIds;
@@ -359,11 +391,12 @@ module.exports = {
     followers: getFollowers,
     following: getFollowing,
     pending: getPendingInvites,
+    decline: declineInvite,
     subscribed: getSubscribedEvents,
     created: getCreatedEvents,
     follow: followUser,
     unfollow: unfollowUser,
     subscribe: subscribeToEvents,
-    unsubscribe: unsubscribeToEvents,
+    unsubscribe: unsubscribeFromEvents,
     search: searchUsers
 };

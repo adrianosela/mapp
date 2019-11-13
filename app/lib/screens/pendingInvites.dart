@@ -65,7 +65,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
                       rows.removeAt(index);
                       ReusableFunctions.showInSnackBar(
                           "Invite accepted", context);
-                      //TODO send call to backend to accept
+                      UserController.postSubscribe(userToken, _toJson(id));
                     });
                   }
               ),
@@ -76,7 +76,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
                       rows.removeAt(index);
                       ReusableFunctions.showInSnackBar(
                           "Invite rejected", context);
-                      //TODO send call to backend to delete
+                      UserController.postNotGoing(userToken, _toJson(id));
                     });
                   }
               ),
@@ -95,4 +95,8 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
       });
     }
   }
+
+  Map<String, dynamic> _toJson(id) => {
+    'eventId' : id
+  };
 }

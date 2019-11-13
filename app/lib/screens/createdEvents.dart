@@ -1,3 +1,4 @@
+import 'package:app/controllers/eventController.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -73,15 +74,29 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
               MaterialPageRoute(
                   builder: (context) => new EventPage(eventId: id)));
         },
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                setState(() {
-                  _update();
-                });
-              }),
-        ]),
+        trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    setState(() {
+                      _update();
+                    });
+                  }
+              ),
+              IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() {
+                      ReusableFunctions.showInSnackBar(
+                          "Event Deleted", context);
+                      EventController.deleteEvent(userToken);
+                    });
+                  }
+              ),
+            ]
+        ),
       );
     }
   }
@@ -164,9 +179,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                     child: RaisedButton(
                       child: Text("Save"),
                       onPressed: () async {
-                        if (_formKey.currentState.validate()) {
+                        if(_formKey.currentState.validate()) {
+
+                          ReusableFunctions.showInSnackBar(
+                              "Event Updated", context);
+
                           // TODO backend event update call
-                          // TODO snackbar saying event updated
 
                           ///clear text controllers
                           eventNameCont.clear();

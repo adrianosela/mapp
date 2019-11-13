@@ -63,17 +63,22 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
               MaterialPageRoute(
                   builder: (context) => new EventPage(eventId: id)));
         },
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          IconButton(
-              icon: Icon(Icons.cancel),
-              onPressed: () {
-                setState(() {
-                  rows.removeAt(index);
-                  ReusableFunctions.showInSnackBar("Unsibscribed", context);
-                  //TODO send call to backend - user no longer going to event
-                });
-              }),
-        ]),
+        trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    setState(() {
+                      rows.removeAt(index);
+                      ReusableFunctions.showInSnackBar(
+                          "Unsibscribed", context);
+                      UserController.postUnsubscribe(userToken, _toJson(id));
+                    });
+                  }
+              ),
+            ]
+        ),
       );
     }
   }
@@ -87,4 +92,8 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
       });
     }
   }
+
+  Map<String, dynamic> _toJson(id) => {
+    'eventIds' : id
+  };
 }

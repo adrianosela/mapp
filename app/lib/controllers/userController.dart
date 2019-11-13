@@ -147,4 +147,52 @@ class UserController {
     }
     return result;
   }
+
+
+  ///Respond "going" to event invite
+  static Future<String> postSubscribe(String token, body) async {
+    return http.post("mapp-254321.appspot.com/user/subscribe", headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"}, body: jsonEncode(body)).then((http.Response response) {
+      final int statusCode = response.statusCode;
+      print(jsonEncode(body));
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        print(statusCode);
+        print(json);
+        throw new Exception("Error while fetching data");
+      }
+
+      return null;
+    });
+  }
+
+
+  ///Respond "not going" to event invite
+  static Future<String> postNotGoing(String token, body) async {
+    return http.post("mapp-254321.appspot.com/user/declineInvite", headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"}, body: jsonEncode(body)).then((http.Response response) {
+      final int statusCode = response.statusCode;
+      print(jsonEncode(body));
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        print(statusCode);
+        print(json);
+        throw new Exception("Error while fetching data");
+      }
+
+      return null;
+    });
+  }
+
+
+  ///Unsubscribe from an event
+  static Future<String> postUnsubscribe(String token, body) async {
+    return http.post("mapp-254321.appspot.com/user/unsubscribe", headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"}, body: jsonEncode(body)).then((http.Response response) {
+      final int statusCode = response.statusCode;
+      print(jsonEncode(body));
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        print(statusCode);
+        print(json);
+        throw new Exception("Error while fetching data");
+      }
+
+      return null;
+    });
+  }
 }

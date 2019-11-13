@@ -1,116 +1,114 @@
-var mocha = require("mocha");
-var assert = require("assert");
-var validator = require("../validator/validator");
+let validator = require("../validator/validator");
 
 // Test Validate Existing User - user login validation
-mocha.describe("Test Validate Existing User", function() {
-    mocha.describe("Positive: Successful Validation", function() {
-        mocha.it("should return ok = true with valid parameters", function() {
+describe("Test Validate Existing User", function() {
+    describe("Positive: Successful Validation", function() {
+        it("should return ok = true with valid parameters", function() {
             const input = {
                 email: "valid@gmail.com",
                 password: "someverysecurepassword"
             };
             let valid = validator.existingUser(input.email, input.password);
-            assert.equal(valid.ok, true);
+            expect(valid.ok).toBe(true);
         });
     });
-    mocha.describe("Negative: No Email", function() {
-        mocha.it("should return an error when no email is provided", function() {
+    describe("Negative: No Email", function() {
+        it("should return an error when no email is provided", function() {
             const input = {
                 password: "someverysecurepassword"
             };
             let valid = validator.existingUser(input.email, input.password);
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No email provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No email provided");
         });
     });
-    mocha.describe("Negative: No Password", function() {
-        mocha.it("should return an error when no password is provided", function() {
+    describe("Negative: No Password", function() {
+        it("should return an error when no password is provided", function() {
             const input = {
                 email: "valid@gmail.com",
             };
             let valid = validator.existingUser(input.email, input.password);
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No password provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No password provided");
         });
     });
-    mocha.describe("Negative: Invalid Email", function() {
-        mocha.it("should return an error when the provided email is not valid", function() {
+    describe("Negative: Invalid Email", function() {
+        it("should return an error when the provided email is not valid", function() {
             const input = {
                 email: "this is not a valid email",
                 password: "someverysecurepassword"
             };
             let valid = validator.existingUser(input.email, input.password);
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Email provided is not a valid email");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Email provided is not a valid email");
         });
     });
 });
 
 // Test Validate New User - new user validation
-mocha.describe("Test Validate New User", function() {
-    mocha.describe("Positive: Successful Validation", function() {
-        mocha.it("should return ok = true with valid parameters", function() {
+describe("Test Validate New User", function() {
+    describe("Positive: Successful Validation", function() {
+        it("should return ok = true with valid parameters", function() {
             const input = {
                 email: "valid@gmail.com",
                 password: "someverysecurepassword",
                 name: "johnappleseed"
             };
             let valid = validator.newUser(input.email, input.password, input.name);
-            assert.equal(valid.ok, true);
+            expect(valid.ok).toBe(true);
         });
     });
-    mocha.describe("Negative: No Email", function() {
-        mocha.it("should return an error when no email is provided", function() {
+    describe("Negative: No Email", function() {
+        it("should return an error when no email is provided", function() {
             const input = {
                 password: "someverysecurepassword",
                 name: "johnappleseed"
             };
             let valid = validator.newUser(input.email, input.password, input.name);
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No email provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No email provided");
         });
     });
-    mocha.describe("Negative: No Password", function() {
-        mocha.it("should return an error when no password is provided", function() {
+    describe("Negative: No Password", function() {
+        it("should return an error when no password is provided", function() {
             const input = {
                 email: "valid@gmail.com",
                 name: "johnappleseed"
             };
             let valid = validator.newUser(input.email, input.password, input.name);
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No password provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No password provided");
         });
     });
-    mocha.describe("Negative: No Name", function() {
-        mocha.it("should return an error when no name is provided", function() {
+    describe("Negative: No Name", function() {
+        it("should return an error when no name is provided", function() {
             const input = {
                 email: "valid@gmail.com",
                 password: "someverysecurepassword"
             };
             let valid = validator.newUser(input.email, input.password, input.name);
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No preferred name provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No preferred name provided");
         });
     });
-    mocha.describe("Negative: Invalid Email", function() {
-        mocha.it("should return an error when the provided email is not valid", function() {
+    describe("Negative: Invalid Email", function() {
+        it("should return an error when the provided email is not valid", function() {
             const input = {
                 email: "this is not a valid email",
                 password: "someverysecurepassword",
                 name: "johnappleseed"
             };
             let valid = validator.newUser(input.email, input.password, input.name);
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Email provided is not a valid email");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Email provided is not a valid email");
         });
     });
 });
 
 // Test Validate Event - event validation
-mocha.describe("Test Validate Event", function() {
-    mocha.describe("Positive: Successful Validation", function() {
-        mocha.it("should return ok = true with valid parameters", function() {
+describe("Test Validate Event", function() {
+    describe("Positive: Successful Validation", function() {
+        it("should return ok = true with valid parameters", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 description: "Open to all! BYOB",
@@ -127,11 +125,11 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, true);
+            expect(valid.ok).toBe(true);
         });
     });
-    mocha.describe("Negative: No Name", function() {
-        mocha.it("should return an error when no name is provided", function() {
+    describe("Negative: No Name", function() {
+        it("should return an error when no name is provided", function() {
             const input = {
                 description: "Open to all! BYOB",
                 latitude: 49.267941,
@@ -147,12 +145,12 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No event name provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No event name provided");
         });
     });
-    mocha.describe("Negative: No Description", function() {
-        mocha.it("should return an error when no description is provided", function() {
+    describe("Negative: No Description", function() {
+        it("should return an error when no description is provided", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 latitude: 49.267941,
@@ -168,12 +166,12 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No event description provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No event description provided");
         });
     });
-    mocha.describe("Negative: No Latitude", function() {
-        mocha.it("should return an error when no latitude is provided", function() {
+    describe("Negative: No Latitude", function() {
+        it("should return an error when no latitude is provided", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 description: "Open to all! BYOB",
@@ -189,12 +187,12 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No latitude provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No latitude provided");
         });
     });
-    mocha.describe("Negative: No Longitude", function() {
-        mocha.it("should return an error when no longitude is provided", function() {
+    describe("Negative: No Longitude", function() {
+        it("should return an error when no longitude is provided", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 description: "Open to all! BYOB",
@@ -210,12 +208,12 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No longitude provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No longitude provided");
         });
     });
-    mocha.describe("Negative: Invalid Latitude", function() {
-        mocha.it("should return an error when an invalid latitude is provided", function() {
+    describe("Negative: Invalid Latitude", function() {
+        it("should return an error when an invalid latitude is provided", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 description: "Open to all! BYOB",
@@ -232,12 +230,12 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Invalid coordinates");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Invalid coordinates");
         });
     });
-    mocha.describe("Negative: Invalid Longitude", function() {
-        mocha.it("should return an error when an invalid longitude is provided", function() {
+    describe("Negative: Invalid Longitude", function() {
+        it("should return an error when an invalid longitude is provided", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 description: "Open to all! BYOB",
@@ -254,12 +252,12 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Invalid coordinates");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Invalid coordinates");
         });
     });
-    mocha.describe("Negative: No Start Time", function() {
-        mocha.it("should return an error when no start time is provided", function() {
+    describe("Negative: No Start Time", function() {
+        it("should return an error when no start time is provided", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 description: "Open to all! BYOB",
@@ -275,12 +273,12 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No start time provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No start time provided");
         });
     });
-    mocha.describe("Negative: No End Time", function() {
-        mocha.it("should return an error when no end time is provided", function() {
+    describe("Negative: No End Time", function() {
+        it("should return an error when no end time is provided", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 description: "Open to all! BYOB",
@@ -296,12 +294,12 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No end time provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No end time provided");
         });
     });
-    mocha.describe("Negative: End Time Before Start Time", function() {
-        mocha.it("should return an error when the end date is before the start date", function() {
+    describe("Negative: End Time Before Start Time", function() {
+        it("should return an error when the end date is before the start date", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 description: "Open to all! BYOB",
@@ -318,12 +316,12 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Event end time cannot be before start time");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Event end time cannot be before start time");
         });
     });
-    mocha.describe("Negative: End Time Before Now", function() {
-        mocha.it("should return an error when the end date is before the current date", function() {
+    describe("Negative: End Time Before Now", function() {
+        it("should return an error when the end date is before the current date", function() {
             const input = {
                 name: "John's Birthday Celebration",
                 description: "Open to all! BYOB",
@@ -340,16 +338,16 @@ mocha.describe("Test Validate Event", function() {
                 Number(input.startTime),
                 Number(input.endTime)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Event end time cannot be before now");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Event end time cannot be before now");
         });
     });
 });
 
 // Test Validate Event Search - event search parameters validation
-mocha.describe("Test Validate Event Search", function() {
-    mocha.describe("Positive: Successful Validation", function() {
-        mocha.it("should return ok = true with valid parameters", function() {
+describe("Test Validate Event Search", function() {
+    describe("Positive: Successful Validation", function() {
+        it("should return ok = true with valid parameters", function() {
             const input = {
                 latitude: 49.267941,
                 longitude: -123.247360,
@@ -360,11 +358,11 @@ mocha.describe("Test Validate Event Search", function() {
                 Number(input.longitude),
                 Number(input.radius)
             );
-            assert.equal(valid.ok, true);
+            expect(valid.ok).toBe(true);
         });
     });
-    mocha.describe("Negative: No Latitude", function() {
-        mocha.it("should return an error when no latitude is provided", function() {
+    describe("Negative: No Latitude", function() {
+        it("should return an error when no latitude is provided", function() {
             const input = {
                 longitude: -123.247360,
                 radius: 25000, // 25km
@@ -374,12 +372,12 @@ mocha.describe("Test Validate Event Search", function() {
                 Number(input.longitude),
                 Number(input.radius)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No latitude provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No latitude provided");
         });
     });
-    mocha.describe("Negative: No Longitude", function() {
-        mocha.it("should return an error when no longitude is provided", function() {
+    describe("Negative: No Longitude", function() {
+        it("should return an error when no longitude is provided", function() {
             const input = {
                 latitude: 49.267941,
                 radius: 25000, // 25km
@@ -389,12 +387,12 @@ mocha.describe("Test Validate Event Search", function() {
                 Number(input.longitude),
                 Number(input.radius)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No longitude provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No longitude provided");
         });
     });
-    mocha.describe("Negative: No Radius", function() {
-        mocha.it("should return an error when no radius is provided", function() {
+    describe("Negative: No Radius", function() {
+        it("should return an error when no radius is provided", function() {
             const input = {
                 latitude: 49.267941,
                 longitude: -123.247360,
@@ -404,12 +402,12 @@ mocha.describe("Test Validate Event Search", function() {
                 Number(input.longitude),
                 Number(input.radius)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "No radius provided");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("No radius provided");
         });
     });
-    mocha.describe("Negative: Invalid Latitude", function() {
-        mocha.it("should return an error when an invalid latitude is provided", function() {
+    describe("Negative: Invalid Latitude", function() {
+        it("should return an error when an invalid latitude is provided", function() {
             const input = {
                 latitude: 300.267941,
                 longitude: -123.247360,
@@ -420,12 +418,12 @@ mocha.describe("Test Validate Event Search", function() {
                 Number(input.longitude),
                 Number(input.radius)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Invalid coordinates");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Invalid coordinates");
         });
     });
-    mocha.describe("Negative: Invalid Longitude", function() {
-        mocha.it("should return an error when an invalid longitude is provided", function() {
+    describe("Negative: Invalid Longitude", function() {
+        it("should return an error when an invalid longitude is provided", function() {
             const input = {
                 latitude: 49.267941,
                 longitude: -323.247360,
@@ -436,12 +434,12 @@ mocha.describe("Test Validate Event Search", function() {
                 Number(input.longitude),
                 Number(input.radius)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Invalid coordinates");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Invalid coordinates");
         });
     });
-    mocha.describe("Negative: Invalid Radius (negative)", function() {
-        mocha.it("should return an error when an invalid radius is provided", function() {
+    describe("Negative: Invalid Radius (negative)", function() {
+        it("should return an error when an invalid radius is provided", function() {
             const input = {
                 latitude: 49.267941,
                 longitude: -123.247360,
@@ -452,12 +450,12 @@ mocha.describe("Test Validate Event Search", function() {
                 Number(input.longitude),
                 Number(input.radius)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Radius must be a non-negative integer");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Radius must be a non-negative integer");
         });
     });
-    mocha.describe("Negative: Invalid Radius (too large)", function() {
-        mocha.it("should return an error when an invalid radius is provided", function() {
+    describe("Negative: Invalid Radius (too large)", function() {
+        it("should return an error when an invalid radius is provided", function() {
             const input = {
                 latitude: 49.267941,
                 longitude: -123.247360,
@@ -468,8 +466,8 @@ mocha.describe("Test Validate Event Search", function() {
                 Number(input.longitude),
                 Number(input.radius)
             );
-            assert.equal(valid.ok, false);
-            assert.equal(valid.error, "Radius cannot exceed 100,000m (100km)");
+            expect(valid.ok).toBe(false);
+            expect(valid.error).toEqual("Radius cannot exceed 100,000m (100km)");
         });
     });
 });
