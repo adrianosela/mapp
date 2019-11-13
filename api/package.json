@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "mocha",
-    "lint": "eslint ./ --fix"
+    "test": "jest",
+    "lint": "eslint --ignore-pattern '/__tests__/*' ./ --fix"
   },
   "repository": {
     "type": "git",
@@ -29,13 +29,13 @@
     "fcm-notification": "^2.0.0",
     "google-auth-library": "^5.3.0",
     "is-valid-coordinates": "^1.0.0",
+    "jest": "^24.9.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.2",
     "mongoose": "^5.7.5",
     "tracer": "^1.0.1"
   },
   "devDependencies": {
-    "eslint": "^6.6.0",
-    "mocha": "^6.2.2"
+    "eslint": "^6.6.0"
   }
 }
