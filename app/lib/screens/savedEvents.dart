@@ -7,17 +7,14 @@ import 'package:app/components/reusableFunctions.dart';
 import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
-
+import 'package:app/screens/eventScreen.dart';
 
 class SavedEventsPage extends StatefulWidget {
-
   @override
   _SavedEventsPageState createState() => _SavedEventsPageState();
 }
 
-
 class _SavedEventsPageState extends State<SavedEventsPage> {
-
   String userToken;
 
   List<String> rows = new List<String>();
@@ -32,7 +29,6 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,9 +40,8 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
         ],
       ),
       body: ListView.builder(
-        // itemCount: this.count,
-          itemBuilder: (context, index) => this._buildRow(context, index)
-      ),
+          // itemCount: this.count,
+          itemBuilder: (context, index) => this._buildRow(context, index)),
     );
   }
 
@@ -56,6 +51,18 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
       final id = ids[index];
       return ListTile(
         title: ReusableFunctions.listItemTextButton(item, id, context),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => new EventPage(eventId: id)));
+        },
+        onLongPress: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => new EventPage(eventId: id)));
+        },
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -78,14 +85,13 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
 
   _getSubscribedEvents() async {
     var response = await UserController.getSubscribedEvents(userToken);
-    if(response != null) {
-      response.forEach((id, name){
+    if (response != null) {
+      response.forEach((id, name) {
         ids.add(id);
         rows.add(name);
       });
     }
   }
-
 
   Map<String, dynamic> _toJson(id) => {
     'eventIds' : id

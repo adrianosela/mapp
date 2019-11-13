@@ -20,6 +20,7 @@ import 'package:app/models/fcmToken.dart';
 
 import 'package:app/screens/inviteFriendsScreen.dart';
 import 'package:app/screens/searchedEvents.dart';
+import 'package:app/screens/eventScreen.dart';
 
 class MapPage extends StatefulWidget {
   final String userId;
@@ -62,6 +63,8 @@ class _MapPageState extends State<MapPage> {
     'sports': true,
     'other': true,
   };
+
+  Map<MarkerId, String> eventIds = new Map<MarkerId, String>();
 
   //Text Controllers
   TextEditingController eventNameCont = TextEditingController();
@@ -265,14 +268,15 @@ class _MapPageState extends State<MapPage> {
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               Event event = new Event(
-                                  name: eventNameCont.text,
-                                  description: eventDescriptionCont.text,
-                                  longitude: latlang.longitude,
-                                  latitude: latlang.latitude,
-                                  date: eventDate,
-                                  duration: eventDurationCont.text,
-                                  public: isSwitched,
-                                  invited: usersToInvite);
+                                name: eventNameCont.text,
+                                description: eventDescriptionCont.text,
+                                longitude: latlang.longitude,
+                                latitude: latlang.latitude,
+                                date: eventDate,
+                                duration: eventDurationCont.text,
+                                public: isSwitched,
+                                invited: usersToInvite,
+                              );
 
                               eventId = await eventController.createEvent(
                                   "https://mapp-254321.appspot.com/event",
@@ -336,12 +340,21 @@ class _MapPageState extends State<MapPage> {
 
         final MarkerId markerId = MarkerId(event.eventId);
 
+        eventIds[markerId] = event.eventId;
+
         final LatLng position =
             new prefix0.LatLng(event.latitude, event.longitude);
         Marker marker = Marker(
           markerId: markerId,
           draggable: false,
           position: position,
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        new EventPage(eventId: eventIds[markerId])));
+          },
           //With this parameter you automatically obtain latitude and longitude
           infoWindow: InfoWindow(
             title: event.name,
@@ -439,32 +452,32 @@ class _MapPageState extends State<MapPage> {
                           ),
                           SimpleDialogOption(
                               child: Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: RaisedButton(
-                                  child: Text("Search"),
-                                  onPressed: () async {
-                                    List<String> categories = new List<String>();
+                            padding: const EdgeInsets.all(2.0),
+                            child: RaisedButton(
+                              child: Text("Search"),
+                              onPressed: () async {
+                                List<String> categories = new List<String>();
 
-                                    for (String category in categoriesMap.keys) {
-                                      if (categoriesMap[category]) {
-                                        categories.add(category);
-                                      }
-                                    }
-                                    List<Event> events =
+                                for (String category in categoriesMap.keys) {
+                                  if (categoriesMap[category]) {
+                                    categories.add(category);
+                                  }
+                                }
+                                List<Event> events =
                                     await eventController.searchEvents(
                                         eventSearchCont.text,
                                         categories,
                                         userToken);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                            new SearchedEventsPage(events: events)));
-                                    eventSearchCont.clear();
-                                  },
-                                ),
-                              )
-                          ),
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            new SearchedEventsPage(
+                                                events: events)));
+                                eventSearchCont.clear();
+                              },
+                            ),
+                          )),
                         ],
                       );
                     });
