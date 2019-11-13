@@ -301,12 +301,20 @@ let subscribeToEvents = async function(req, res) {
         });
 
         for (let event of events) {
-            user.pendingInvites.pull(event._id);
-            user.subscribedEvents.addToSet(event._id);
+            if (event.public) {
+                user.subscribedEvents.addToSet(event._id);
 
-            event.invited.pull(user._id);
-            event.followers.addToSet(userId);
-            await event.save();
+                event.followers.addToSet(userId);
+                await event.save();
+            }
+            else if (event.invited.includes(userId)) {
+                user.pendingInvites.pull(event._id);
+                user.subscribedEvents.addToSet(event._id);
+
+                event.invited.pull(user._id);
+                event.followers.addToSet(userId);
+                await event.save();
+            }
         }
 
         await user.save();
