@@ -43,46 +43,61 @@ class ReusableFunctions{
       ),
       onTap: () async {
         var response = await EventController.getEvent(userToken, id.toString());
-        print(response);
         //TODO add styling
-        return AlertDialog(
-          content: Form(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ReusableFunctions.titleText("Event Details"),
-                Padding(
-                  padding: EdgeInsets.all(2.0),
-                  child: Text("Event Name: " + response["name"].toString())
-                ),
-                Padding(
-                  padding: EdgeInsets.all(2.0),
-                  child: Text("Description: " + response["description"].toString())
-                ),
-                Padding(
-                  padding: EdgeInsets.all(2.0),
-                  child: Text("Start Time: " + DateTime.fromMillisecondsSinceEpoch(int.parse(response["startTime"]) * 1000).toString())
-                ),
-                Padding(
-                  padding: EdgeInsets.all(2.0),
-                  child: Text("End Time: " + DateTime.fromMillisecondsSinceEpoch(int.parse(response["endTime"]) * 1000).toString())
-                ),
-                Padding(
-                  padding: EdgeInsets.all(2.0),
-                  child: Text((response["privateEvent"] == "true") ? "Private Event" : "Public Event"),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: RaisedButton(
-                    child: Text("Ok"),
-                    onPressed: () async {
-                        Navigator.of(context).pop();
-                    },
+        showDialog(
+            context: context,
+            builder: (BuildContext context)
+            {
+              return AlertDialog(
+                content: Form(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ReusableFunctions.titleText("Event Details"),
+                      Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text("Event Name: " + response["name"].toString())
+                      ),
+                      Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                              "Description: " + response["description"].toString())
+                      ),
+                      Padding(
+                          padding: EdgeInsets.all(2.0),
+                          //TODO fix how this is displayed
+                          child: Text("Start Time: " +
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  int.parse(response["startTime"]) * 1000)
+                                  .toString())
+                      ),
+                      Padding(
+                          padding: EdgeInsets.all(2.0),
+                          //TODO fix how this is displayed
+                          child: Text("End Time: " +
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  int.parse(response["endTime"]) * 1000).toString())
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: Text((response["privateEvent"] == "true")
+                            ? "Private Event"
+                            : "Public Event"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: RaisedButton(
+                          child: Text("Ok"),
+                          onPressed: () async {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
+                ),
+              );
+            }
         );
       },
     );
