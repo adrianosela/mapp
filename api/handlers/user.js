@@ -302,8 +302,14 @@ let subscribeToEvents = async function(req, res) {
 
         for (let event of events) {
             if (event.public) {
+                if (user.pendingInvites.includes(event._id)) {
+                    user.pendingInvites.pull(event._id);
+                }
                 user.subscribedEvents.addToSet(event._id);
-
+                
+                if (event.invited.includes(userId)) {
+                    event.invited.pull(userId);
+                }
                 event.followers.addToSet(userId);
                 await event.save();
             }
