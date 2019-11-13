@@ -306,10 +306,18 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       //TODO need to pass event_id into the MarkerId, using event name for now
       final MarkerId markerId = MarkerId(eventId);
+      eventIds[markerId] = eventId;
       Marker marker = Marker(
         markerId: markerId,
         draggable: false,
         position: latlang,
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                  new EventPage(eventId: eventIds[markerId])));
+        },
         //With this parameter you automatically obtain latitude and longitude
         infoWindow: InfoWindow(
           title: eventNameCont.text,
