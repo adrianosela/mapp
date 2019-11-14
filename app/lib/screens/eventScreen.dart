@@ -6,6 +6,7 @@ import 'package:app/components/reusableFunctions.dart';
 import 'package:intl/intl.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:app/controllers/eventController.dart';
+import 'package:app/controllers/userController.dart';
 import 'package:app/models/eventModel.dart';
 import 'package:app/models/fcmToken.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -83,6 +84,13 @@ class _EventPageState extends State<EventPage> {
             child: Text((event.public) ? "Private Event" : "Public Event"),
           ),
           Padding(
+            padding: EdgeInsets.all(2.0),
+            child: RaisedButton(
+              onPressed: _subscribeToEvent,
+              child: Text('Going'),
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.all(2.0),
             child: RaisedButton(
               child: Text("Ok"),
@@ -115,4 +123,9 @@ class _EventPageState extends State<EventPage> {
       throw 'Could not launch $url';
     }
   }
+
+  _subscribeToEvent() async {
+    await UserController.postSubscribe(userToken, { 'eventIds': eventId});
+  }
+
 }
