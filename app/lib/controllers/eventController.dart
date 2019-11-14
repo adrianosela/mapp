@@ -167,7 +167,6 @@ class EventController {
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
-    print(event.date.year);
     return event;
   }
 
