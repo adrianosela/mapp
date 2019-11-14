@@ -25,6 +25,7 @@ class _EventPageState extends State<EventPage> {
   Event event;
   final String eventId;
   String address;
+
   _EventPageState({this.eventId});
 
   @override
@@ -49,74 +50,77 @@ class _EventPageState extends State<EventPage> {
       return Scaffold(
         appBar: AppBar(
           title: Text(event.name),
-
         ),
         body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ReusableFunctions.titleText("Event Details"),
-          Padding(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ReusableFunctions.titleText("Event Details"),
+            Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Text("About: " + event.description)),
+            Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Text("Starts on " +
+                    new DateFormat.yMMMEd().format(event.date) +
+                    " " +
+                    new DateFormat.jm().format(event.date))),
+            Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Text("Ends on " +
+                    new DateFormat.yMMMEd().format(event.date
+                        .add(new Duration(hours: int.parse(event.duration)))) +
+                    " " +
+                    new DateFormat.jm().format(event.date
+                        .add(new Duration(hours: int.parse(event.duration)))))),
+            Padding(
               padding: EdgeInsets.all(2.0),
-              child: Text("About: " + event.description)
-          ),
-
-          Padding(
+              child: Text(address),
+            ),
+            Padding(
               padding: EdgeInsets.all(2.0),
-              child: Text("Starts on " + new DateFormat.yMMMEd().format(event.date) + " " + new DateFormat.jm().format(event.date))
-          ),
-          Padding(
+              child: RaisedButton(
+                onPressed: _openMap,
+                child: Text('Directions'),
+              ),
+            ),
+            Padding(
               padding: EdgeInsets.all(2.0),
-              child: Text("Ends on " + new DateFormat.yMMMEd().format(event.date.add(new Duration(hours: int.parse(event.duration)))) + " " + new DateFormat.jm().format(event.date.add(new Duration(hours: int.parse(event.duration)))))
-          ),
-          Padding(
-            padding: EdgeInsets.all(2.0),
-            child: Text(address),
-          ),
-          Padding(
-            padding: EdgeInsets.all(2.0),
-            child: RaisedButton(
-              onPressed: _openMap,
-              child: Text('Directions'),
+              child: Text((event.public) ? "Private Event" : "Public Event"),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(2.0),
-            child: Text((event.public) ? "Private Event" : "Public Event"),
-          ),
-          Padding(
-            padding: EdgeInsets.all(2.0),
-            child: RaisedButton(
-              onPressed: _subscribeToEvent,
-              child: Text('Going'),
+            Padding(
+              padding: EdgeInsets.all(2.0),
+              child: RaisedButton(
+                onPressed: _subscribeToEvent,
+                child: Text('Going'),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: RaisedButton(
-              child: Text("Ok"),
-              onPressed: () async {
-                Navigator.of(context).pop();
-              },
-            ),
-          )
-        ],
-      ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: RaisedButton(
+                child: Text("Ok"),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                },
+              ),
+            )
+          ],
+        ),
       );
     }
   }
 
   Future<Event> _getEvent() async {
     Event event = await EventController.getEventObject(userToken, eventId);
-    final coordinates = new Coordinates(
-        event.latitude, event.longitude);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(
-        coordinates);
+    final coordinates = new Coordinates(event.latitude, event.longitude);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     this.address = addresses.first.addressLine;
     return event;
   }
 
   _openMap() async {
-    var url = 'https://www.google.com/maps/search/?api=1&query=${event.latitude},${event.longitude}';
+    var url =
+        'https://www.google.com/maps/search/?api=1&query=${event.latitude},${event.longitude}';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -125,7 +129,6 @@ class _EventPageState extends State<EventPage> {
   }
 
   _subscribeToEvent() async {
-    await UserController.postSubscribe(userToken, { 'eventIds': eventId});
+    await UserController.postSubscribe(userToken, {'eventIds': eventId});
   }
-
 }
