@@ -376,13 +376,24 @@ let searchUsers = async function(req, res) {
         ]
     };
 
-    User.find(query, function(err, users) {
-        if (err) {
-            logger.error(err);
-            return res.status(500).send("Could not retrieve users");
+    try {
+        let users = await User.find(query);
+
+        let response = [];
+        for (let user of users) {
+            let userObject = {
+                id: user._id,
+                name: user.name
+            };
+            response.push(userObject);
         }
-        res.send(users);
-    });
+
+        res.json(response);
+    }
+    catch (e) {
+        logger.error(err);
+        res.status(500).send("Could not search for users");
+    }
 };
 
 module.exports = {
