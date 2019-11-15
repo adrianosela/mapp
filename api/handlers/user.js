@@ -391,7 +391,7 @@ let searchUsers = async function(req, res) {
         res.json(response);
     }
     catch (e) {
-        logger.error(err);
+        logger.error(e);
         res.status(500).send("Could not search for users");
     }
 };
