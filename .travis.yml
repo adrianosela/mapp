@@ -4,7 +4,7 @@ services:
   - mongodb # runs a mongo process on port 27017
 
 node_js:
-  - node # latest 'stable' version
+  - lts/* # latest 'stable' version
 
 before_script:
   # mongo does not immediately accept connections
