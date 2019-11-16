@@ -10,16 +10,13 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run: pwd && ls -la
-      - run: cd api
-      - run: pwd && ls -la
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-{{ checksum "./api/package.json" }}
             - v1-dependencies-
-      - run: npm install
+      - run: cd api && npm install
       - save_cache:
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm test
+            - api/node_modules
+          key: v1-dependencies-{{ checksum "./api/package.json" }}
+      - run: cd api && npm test
