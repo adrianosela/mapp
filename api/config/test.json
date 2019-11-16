@@ -2,7 +2,7 @@
 	"environment": "test",
 	"port": 80,
 	"database": {
-		"url": "mongodb+srv://travis:test@localhost:27017/testdb?retryWrites=true",
+		"url": "mongodb://travis:test@localhost:27017/testdb?retryWrites=true",
 		"name": "testdb"
 	},
 	"auth": {
