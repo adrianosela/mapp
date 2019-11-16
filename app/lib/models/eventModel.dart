@@ -18,8 +18,8 @@ class Event {
       longitude: json['location']['coordinates'][0],
       latitude: json['location']['coordinates'][1],
       description: json['description'],
-      date: new DateTime.fromMicrosecondsSinceEpoch(json['startTime']*1000),
-      duration: json['duration'],
+      date: new DateTime.fromMillisecondsSinceEpoch(json['startTime']*1000),
+      duration: DateTime.fromMillisecondsSinceEpoch(json['endTime']*1000).difference(DateTime.fromMillisecondsSinceEpoch(json['startTime']*1000)).inHours.toString(),
       public: json['public'],
     );
     event.eventId = json['_id'];
@@ -33,7 +33,7 @@ class Event {
     'latitude' : latitude,
     'description' : description,
     'startTime' : (date.toUtc().millisecondsSinceEpoch/1000).round(),
-    'endTime' : (date.toUtc().millisecondsSinceEpoch/1000).round() + int.parse(duration),
+    'endTime' : (date.add(new Duration(hours: int.parse(duration))).toUtc().millisecondsSinceEpoch/1000).round(),
     'public' :  public,
     'invited' : invited
   };
