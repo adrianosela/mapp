@@ -43,5 +43,5 @@ describe("Test Authentication Flow", function() {
         //     const res = await request.post("/register").send(reqBody);
         //     expect(res.status).toBe(400);
         // });
-    })
+    });
 });
