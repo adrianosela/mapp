@@ -10,6 +10,7 @@ jobs:
     working_directory: ~/repo/api
     steps:
       - checkout
+      - run: pwd && ls -la
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
