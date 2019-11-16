@@ -8,7 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
-    working_directory: ~/api
+    working_directory: /api
     steps:
       - checkout
       - restore_cache:
