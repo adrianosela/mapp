@@ -8,110 +8,84 @@ const validator = require("../validator/validator");
 let User = require("../models/user");
 let UserSettings = require("../models/userSettings");
 
-let register = async function(req, resp) {
+let register = async function(req, res) {
     // read request body
     const { email, password, name } = req.body;
 
     // validate inputs
     let validation = validator.newUser(email, password, name);
     if (validation.ok === false) {
-        return resp.status(400).send(validation.error);
+        return res.status(400).send(validation.error);
     }
 
-    // check email is not used
-    UserSettings.findOne({ email: req.body.email }, function(err, user) {
+    try {
+         // check email is not used
+        let user = await UserSettings.findOne({ email: req.body.email });
         if (user) {
-            return resp.status(400).send("User with that email already exists");
+            return res.status(400).send("User with that email already exists");
         }
-    });
 
-    const hashed = await bcrypt.hash(req.body.password, 10);
+        const hashed = await bcrypt.hash(req.body.password, 10);
 
-    let newUserSettings = new UserSettings({
-        email: req.body.email,
-        hash: hashed
-    });
+        let newUserSettings = new UserSettings({
+            email: req.body.email,
+            hash: hashed
+        });
+        await newUserSettings.save();
 
-    let savedUserSettings;
-    try {
-        savedUserSettings = await newUserSettings.save();
+        let newUser = new User({
+            _id: newUserSettings._id, // same BSON id as user settings
+            name: req.body.name
+        });
+        await newUser.save();
+
+        res.json(newUser);
     }
     catch (e) {
         logger.error(e);
-        return resp.status(500).send("Could not save new user settings");
+        return res.status(500).send("Could not register user");
     }
-
-    let newUser = new User({
-        _id: savedUserSettings._id, // same BSON id as user settings
-        name: req.body.name
-    });
-
-    let savedUser;
-    try {
-        savedUser = await newUser.save();
-    }
-    catch (e) {
-        logger.error(e);
-        return resp.status(500).send("Could not save new user");
-    }
-
-    resp.json(savedUser);
 };
 
 // trade basic credentials for a signed JWT
-let login = async function(req, resp) {
+let login = async function(req, res) {
     // read request body
     const { email, password } = req.body;
 
     // validate inputs
     let validation = validator.existingUser(email, password);
     if (validation.ok === false) {
-        return resp.status(400).send(validation.error);
+        return res.status(400).send(validation.error);
     }
 
-    // fetch user from db
-    let user;
     try {
-        user = await UserSettings.findOne({ email: req.body.email });
+        let user = await UserSettings.findOne({ email: req.body.email });
         // note that we are returning a 401 - Unauthorized instead of
         // 404 - NotFound in order not expose whether a given email exists
         if (!user) {
-            return resp.status(401).send("Unauthorized");
+            return res.status(401).send("Unauthorized");
         }
-    }
-    catch (e) {
-        logger.error(e);
-        return resp.status(500).send();
-    }
 
-    // check whether hashed password matches stored hash
-    try {
+        // check whether hashed password matches stored hash
         const match = await bcrypt.compare(req.body.password, user.hash);
         if (!match) {
-            resp.status(401).send("Unauthorized");
+            res.status(401).send("Unauthorized");
             return;
         }
-    }
-    catch (e) {
-        logger.error(e);
-        return resp.status(500).send();
-    }
 
-    // construct session token
-    let token;
-    try {
-        token = await jwt.sign(
+        // construct session token
+        let token = await jwt.sign(
             { id: user._id, email: user.email },
             config.auth.signing_secret,
             { expiresIn: "24h" }
         );
+
+        res.json({ token });
     }
     catch (e) {
         logger.error(e);
-        return resp.status(401).send("Unauthorized");
+        return res.status(500).send("Could not login user");
     }
-
-    resp.json({ token });
 };
 
 let whoami = async function(req, resp) {
