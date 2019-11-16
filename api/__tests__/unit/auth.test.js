@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
-const app = require("../server");
-const User = require("../models/user");
+const app = require("../../server");
+const User = require("../../models/user");
 const request = supertest(app);
 
 describe("Test Auth Endpoints", function() {

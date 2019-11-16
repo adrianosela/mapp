@@ -1,4 +1,4 @@
-let validator = require("../validator/validator");
+let validator = require("../../validator/validator");
 
 // Test Validate Existing User - user login validation
 describe("Test Validate Existing User", function() {
