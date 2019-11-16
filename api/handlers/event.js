@@ -1,6 +1,7 @@
 const logger = require("tracer").console();
 const notifications = require("../notifications/notifications");
 const validator = require("../validator/validator");
+const eventHelpers = require("../utils/event");
 
 // import Event and User schemas
 let Event = require("../models/event");
@@ -179,7 +180,7 @@ let deleteEvent = async function(req, res) {
         }
 
         await Event.findByIdAndDelete(eventId);
-        
+
         let response = {
             message: "Event deleted successfully!",
             data: {
@@ -298,14 +299,12 @@ let findEvents = async function(req, res) {
         if (!user) {
             return res.status(404).send("Requesting user not found");
         }
-
         let nearEvents = await Event.find(nearEventsQuery)
             .gte("endTime", (Date.now() / 1000));
-        let relevantEvents = getRelevantEventsForUser(nearEvents, user);
 
+        let relevantEvents = eventHelpers.relevantForUser(nearEvents, user);
         let userEvents = await Event.find(userEventsQuery)
             .gte("endTime", (Date.now() / 1000));
-
         let events = userEvents.concat(relevantEvents);
         res.json(events);
     }
@@ -350,45 +349,6 @@ let searchEvents = async function(req, res) {
         logger.error(e);
         res.status(500).send("Could not search for events");
     }
-};
-
-let getRelevantEventsForUser = function(events, user, limit = 50) {
-    for (let event of events) {
-        event.attendingFriends = friendsGoingToEvent(user, event);
-    }
-
-    events.sort(function(eventA, eventB) {
-        if ((eventA.attendingFriends > 0) || (eventB.attendingFriends > 0)) {
-            return eventB.attendingFriends - eventA.attendingFriends;
-        }
-
-        return eventB.followers.length - eventA.followers.length;
-    });
-
-    if (limit > events.length) {
-        limit = events.length;
-    }
-
-    events.splice(limit);
-    return events;
-};
-
-let friendsGoingToEvent = function(user, event) {
-    if (event == null) {
-        return 0;
-    }
-
-    let userFriends = user.following;
-    let attendingEvent = event.followers;
-
-    let attendingFriends = 0;
-    for (let friend of userFriends) {
-        if (attendingEvent.includes(friend)) {
-            attendingFriends++;
-        }
-    }
-
-    return attendingFriends;
 };
 
 module.exports = {
