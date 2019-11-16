@@ -19,7 +19,7 @@ let register = async function(req, res) {
     }
 
     try {
-         // check email is not used
+        // check email is not used
         let user = await UserSettings.findOne({ email: req.body.email });
         if (user) {
             return res.status(400).send("User with that email already exists");
