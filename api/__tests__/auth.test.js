@@ -22,7 +22,7 @@ describe("Test Auth Endpoints", function() {
             email: "testing@gmail.com",
             password: "testing123",
             name: "Test Dummy"
-        }
+        };
 
         await request.post("/register").send(reqBody);
     });
@@ -30,8 +30,8 @@ describe("Test Auth Endpoints", function() {
     afterEach(async function() {
         const collections = Object.keys(mongoose.connection.collections);
         for (const collectionName of collections) {
-          const collection = mongoose.connection.collections[collectionName];
-          await collection.deleteMany();
+            const collection = mongoose.connection.collections[collectionName];
+            await collection.deleteMany();
         }
     });
 
@@ -41,7 +41,7 @@ describe("Test Auth Endpoints", function() {
                 email: "test@gmail.com",
                 password: "testing123",
                 name: "Auth Test"
-            }
+            };
             
             const res = await request.post("/register").send(reqBody);
             expect(res.status).toBe(200);
@@ -58,7 +58,7 @@ describe("Test Auth Endpoints", function() {
                 email: "testing@gmail.com",
                 password: "testing123",
                 name: "Test Dummy"
-            }
+            };
 
             const res = await request.post("/register").send(reqBody);
             expect(res.status).toBe(400);
@@ -70,7 +70,7 @@ describe("Test Auth Endpoints", function() {
             const reqBody = {
                 email: "testing@gmail.com",
                 password: "testing123"
-            }
+            };
 
             const res = await request.post("/login").send(reqBody);
             expect(res.status).toBe(200);
@@ -81,7 +81,7 @@ describe("Test Auth Endpoints", function() {
             const reqBody = {
                 email: "testing@gmail.com",
                 password: "incorrect"
-            }
+            };
 
             const res = await request.post("/login").send(reqBody);
             expect(res.status).toBe(401);
@@ -91,7 +91,7 @@ describe("Test Auth Endpoints", function() {
             const reqBody = {
                 email: "incorrect@gmail.com",
                 password: "incorrect"
-            }
+            };
 
             const res = await request.post("/login").send(reqBody);
             expect(res.status).toBe(401);
