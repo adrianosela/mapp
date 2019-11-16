@@ -14,4 +14,7 @@ before_script:
   # install dependencies
   - cd api && npm install
 
+script:
+  - make tests
+
 cache: npm
