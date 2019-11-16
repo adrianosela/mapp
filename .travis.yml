@@ -1,11 +1,17 @@
 language: node_js
+
 services:
-  - mongodb
+  - mongodb # runs a mongo process on port 27017
+
 node_js:
-  - 'lts/*'
+  - node # latest 'stable' version
+
 before_script:
-  - sleep 5 # mongo does not immediately accept connections
+  # mongo does not immediately accept connections
+  - sleep 5
+  # create a new database named "testdb" and create a test db user for it
   - mongo testdb --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
-  - cd api
-  - npm install
+  # install dependencies
+  - cd api && npm install
+
 cache: npm
