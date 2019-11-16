@@ -1,5 +1,11 @@
 language: node_js
+services:
+  - mongodb
 node_js:
   - 'lts/*'
-before_script: cd api && npm install
+before_script:
+  - sleep 5 # mongo does not immediately accept connections
+  - mongo testdb --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+  - cd api
+  - npm install
 cache: npm
