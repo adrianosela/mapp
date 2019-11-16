@@ -11,10 +11,9 @@ import 'package:app/models/fcmToken.dart';
 
 import 'package:app/screens/inviteToEventsScreen.dart';
 
-
 class FriendsPage extends StatefulWidget {
+  final Map<String, String> events;
 
-  final  Map<String, String> events;
   FriendsPage({this.events});
 
   @override
@@ -23,7 +22,8 @@ class FriendsPage extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPage> {
   String userToken;
-  final  Map<String, String> events;
+  final Map<String, String> events;
+
   _FriendsPageState({this.events});
 
   Icon cusIcon = Icon(Icons.search);
@@ -50,9 +50,9 @@ class _FriendsPageState extends State<FriendsPage> {
         title: cusWidget,
         actions: <Widget>[
           IconButton(
-            onPressed: (){
+            onPressed: () {
               setState(() {
-                if(this.cusIcon.icon == Icons.search) {
+                if (this.cusIcon.icon == Icons.search) {
                   this.cusIcon = Icon(Icons.cancel);
                   this.cusWidget = TextField(
                     textInputAction: TextInputAction.go,
@@ -62,15 +62,18 @@ class _FriendsPageState extends State<FriendsPage> {
                     ),
                     style: ReusableStyles.cusWidget(),
                     onSubmitted: (String str) {
-                      //TODO send to backend
                       setState(() {
                         searchText = str;
+                        _getSearch(searchText);
                       });
                     },
                   );
                 } else {
                   this.cusIcon = Icon(Icons.search);
                   this.cusWidget = Text("Friends");
+                  setState(() {
+                    _getUsers();
+                  });
                 }
               });
             },
@@ -80,9 +83,8 @@ class _FriendsPageState extends State<FriendsPage> {
         ],
       ),
       body: ListView.builder(
-        // itemCount: this.count,
-          itemBuilder: (context, index) => this._buildRow(context, index)
-      ),
+          // itemCount: this.count,
+          itemBuilder: (context, index) => this._buildRow(context, index)),
     );
   }
 
@@ -92,35 +94,58 @@ class _FriendsPageState extends State<FriendsPage> {
       final id = ids[index];
       return ListTile(
         title: ReusableFunctions.listItemText(item),
-        trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () async {
-                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new InviteToEventsPage(events: events, userId: id)));
-                  }
-              ),
-              IconButton(
-                  icon: Icon(Icons.more_horiz),
-                  onPressed: () {
-                    setState(() {
-                      //TODO delete user popup??
-                    });
-                  }
-              ),
-            ]
-        ),
+        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () async {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new InviteToEventsPage(
+                            events: events, userId: id)));
+              }),
+          IconButton(
+              icon: Icon(Icons.more_horiz),
+              onPressed: () {
+                UserController.followUser(userToken, id);
+                setState(() {});
+              }),
+        ]),
       );
     }
   }
 
   _getUsers() async {
+    setState(() {
+      ids.clear();
+      rows.clear();
+    });
     var response = await UserController.getUserFollowing(userToken);
-    if(response != null) {
-      response.forEach((id, name){
-        ids.add(id);
-        rows.add(name);
+    if (response != null) {
+      response.forEach((id, name) {
+        setState(() {
+          ids.add(id);
+          rows.add(name);
+        });
+      });
+    }
+  }
+
+  _getSearch(String search) async {
+    setState(() {
+      ids.clear();
+      rows.clear();
+    });
+    var response = await UserController.searchUsers(userToken, search);
+    if (response != null) {
+      print("here");
+      print(search);
+      print(response);
+      response.forEach((id, name) {
+        setState(() {
+          ids.add(id);
+          rows.add(name);
+        });
       });
     }
   }
