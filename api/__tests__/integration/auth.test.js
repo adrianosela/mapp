@@ -12,6 +12,7 @@ describe("Test Authentication Handlers", function() {
             useUnifiedTopology: true
         });
     });
+    
     // wipe mock mongo after testing
     afterAll(async function() {
         const collections = Object.keys(mongoose.connection.collections);
@@ -38,12 +39,23 @@ describe("Test Authentication Handlers", function() {
         });
     });
 
+    describe("Negative: Register User with Existing Email", function() {
+        it("Should not register user with existing email", async function() {
+            const reqBody = {
+                email: "test@gmail.com",
+                password: "testing123",
+                name: "Auth Test 2"
+            };
+            const res = await request.post("/register").send(reqBody);
+            expect(res.status).toBe(400);
+        });
+    });
+
     describe("Positive: Login User", function() {
         it("Should login user", async function() {
             const reqBody = {
                 email: "test@gmail.com",
-                password: "testing123",
-                name: "Auth Test"
+                password: "testing123"
             };
             const res = await request.post("/login").send(reqBody);
             expect(res.status).toBe(200);
@@ -54,8 +66,7 @@ describe("Test Authentication Handlers", function() {
         it("Should not login user with incorrect password", async function() {
             const reqBody = {
                 email: "test@gmail.com",
-                password: "badpassword",
-                name: "Auth Test"
+                password: "badpassword"
             };
             const res = await request.post("/login").send(reqBody);
             expect(res.status).toBe(401);
@@ -67,7 +78,6 @@ describe("Test Authentication Handlers", function() {
             const reqBody = {
                 email: "incorrect@gmail.com",
                 password: "incorrect"
-
             };
             const res = await request.post("/login").send(reqBody);
             expect(res.status).toBe(401);
