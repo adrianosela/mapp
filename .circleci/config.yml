@@ -7,9 +7,11 @@ jobs:
     docker:
       - image: circleci/node:latest
 
-    working_directory: ~/repo/api
+    working_directory: ~/repo
     steps:
       - checkout
+      - run: pwd && ls -la
+      - run: cd api
       - run: pwd && ls -la
       - restore_cache:
           keys:
