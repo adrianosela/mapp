@@ -53,18 +53,28 @@ class ReusableFunctions{
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      ReusableFunctions.titleText("Event Details"),
                       Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: Text("Event Name: " + response["name"].toString())
+                          padding: EdgeInsets.all(4.0),
+                          child: Text(response["name"],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  color: Colors.blue
+                              )
+                          )
                       ),
                       Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: EdgeInsets.all(3.0),
                           child: Text(
-                              "Description: " + response["description"].toString())
+                              "Description: " + response["description"],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17.0
+                              )
+                          )
                       ),
                       Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: EdgeInsets.all(3.0),
                           //TODO fix how this is displayed
                           child: Text("Start Time: " +
                               DateTime.fromMillisecondsSinceEpoch(
@@ -72,22 +82,37 @@ class ReusableFunctions{
                                   .toString())
                       ),
                       Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: EdgeInsets.all(3.0),
                           //TODO fix how this is displayed
                           child: Text("End Time: " +
                               DateTime.fromMillisecondsSinceEpoch(
                                   int.parse(response["endTime"]) * 1000).toString())
                       ),
                       Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text((response["privateEvent"] == "true")
-                            ? "Private Event"
-                            : "Public Event"),
+                          padding: EdgeInsets.all(3.0),
+                          child: Text((response["privateEvent"] == "true")
+                              ? "Private Event"
+                              : "Public Event",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0
+                              )
+                          )
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: const EdgeInsets.all(3.0),
                         child: RaisedButton(
-                          child: Text("Ok"),
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          disabledColor: Colors.grey,
+                          disabledTextColor: Colors.black,
+                          padding: EdgeInsets.all(3.0),
+                          splashColor: Colors.blueAccent,
+                          child: Text("Ok",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0
+                              )),
                           onPressed: () async {
                             Navigator.of(context).pop();
                           },

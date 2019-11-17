@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:app/components/moreHorizWidget.dart';
-import 'package:app/components/drawerWidget.dart';
-import 'package:app/components/reusableFunctions.dart';
 import 'package:intl/intl.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:app/controllers/eventController.dart';
@@ -51,59 +48,131 @@ class _EventPageState extends State<EventPage> {
         appBar: AppBar(
           title: Text(event.name),
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ReusableFunctions.titleText("Event Details"),
-            Padding(
-                padding: EdgeInsets.all(2.0),
-                child: Text("About: " + event.description)),
-            Padding(
-                padding: EdgeInsets.all(2.0),
-                child: Text("Starts on " +
-                    new DateFormat.yMMMEd().format(event.date) +
-                    " " +
-                    new DateFormat.jm().format(event.date))),
-            Padding(
-                padding: EdgeInsets.all(2.0),
-                child: Text("Ends on " +
-                    new DateFormat.yMMMEd().format(event.date
-                        .add(new Duration(hours: int.parse(event.duration)))) +
-                    " " +
-                    new DateFormat.jm().format(event.date
-                        .add(new Duration(hours: int.parse(event.duration)))))),
-            Padding(
-              padding: EdgeInsets.all(2.0),
-              child: Text(address),
-            ),
-            Padding(
-              padding: EdgeInsets.all(2.0),
-              child: RaisedButton(
-                onPressed: _openMap,
-                child: Text('Directions'),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(2.0),
-              child: Text((event.public) ? "Private Event" : "Public Event"),
-            ),
-            Padding(
-              padding: EdgeInsets.all(2.0),
-              child: RaisedButton(
-                onPressed: _subscribeToEvent,
-                child: Text('Going'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: RaisedButton(
-                child: Text("Ok"),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                },
-              ),
+        body: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(3.0),
+                  child: Text("Event Details",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          color: Colors.blue
+                      ))
+                ),
+                Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Text("About: " + event.description,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                      )
+                    ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(2.0),
+                  child: Text((event.public) ? "Private Event" : "Public Event",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0
+                      )),
+                ),
+                Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Text("Starts on " +
+                        new DateFormat.yMMMEd().format(event.date) +
+                        " " +
+                        new DateFormat.jm().format(event.date),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0
+                        ))),
+                Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Text("Ends on " +
+                        new DateFormat.yMMMEd().format(event.date
+                            .add(new Duration(hours: int.parse(event.duration)))) +
+                        " " +
+                        new DateFormat.jm().format(event.date
+                            .add(new Duration(hours: int.parse(event.duration)))),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0
+                        ))),
+                Padding(
+                  padding: EdgeInsets.all(2.0),
+                  child: Text(address,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0
+                      )),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: RaisedButton(
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.black,
+                        padding: EdgeInsets.all(2.0),
+                        splashColor: Colors.blueAccent,
+                        onPressed: _openMap,
+                        child: Text('Directions',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17.0
+                            )),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(3.0),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: RaisedButton(
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.black,
+                        padding: EdgeInsets.all(2.0),
+                        splashColor: Colors.blueAccent,
+                        onPressed: _subscribeToEvent,
+                        child: Text('Going',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17.0
+                            )),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: RaisedButton(
+                    color: Colors.blue,
+                    textColor: Colors.white,
+                    disabledColor: Colors.grey,
+                    disabledTextColor: Colors.black,
+                    padding: EdgeInsets.all(2.0),
+                    splashColor: Colors.blueAccent,
+                    child: Text("Ok",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0
+                        )),
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
             )
-          ],
         ),
       );
     }
