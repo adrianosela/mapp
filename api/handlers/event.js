@@ -299,12 +299,15 @@ let findEvents = async function(req, res) {
         if (!user) {
             return res.status(404).send("Requesting user not found");
         }
+
         let nearEvents = await Event.find(nearEventsQuery)
             .gte("endTime", (Date.now() / 1000));
 
         let relevantEvents = eventHelpers.relevantForUser(nearEvents, user);
+
         let userEvents = await Event.find(userEventsQuery)
             .gte("endTime", (Date.now() / 1000));
+
         let events = userEvents.concat(relevantEvents);
         res.json(events);
     }
