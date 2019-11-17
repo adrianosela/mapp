@@ -1,12 +1,10 @@
 const logger = require("tracer").console();
-const notifications = require("../notifications/notifications");
 const validator = require("../validator/validator");
 const eventHelpers = require("../utils/event");
 
 // import Event and User schemas
 let Event = require("../models/event");
 let User = require("../models/user");
-let UserSettings = require("../models/userSettings");
 
 // retrieve all data on an event by id in query string
 let getEvent = async function(req, resp) {
@@ -63,7 +61,7 @@ let createEvent = async function(req, resp) {
             return resp.status(400).send(val.error);
         }
 
-        let newEvent = new Event({
+        let event = await (new Event({
             name: name,
             description: description,
             location: { type: "Point", coordinates: [lon, lat] },
@@ -72,39 +70,13 @@ let createEvent = async function(req, resp) {
             creator: creator,
             public: public,
             invited: invited
-        });
-
-        let event = await newEvent.save();
+        })).save();
 
         let creatorUser = await User.findById(creator);
         creatorUser.createdEvents.addToSet(event._id);
         await creatorUser.save();
 
-        if (invited != null && invited.length !== 0) {
-            let users = await User.find({
-                _id: { $in: invited }
-            });
-            for (let user of users) {
-                user.pendingInvites.addToSet(event._id);
-                await user.save();
-            }
-
-            // Notify Invited Users
-            let userSettings = await UserSettings.find({
-                _id: { $in: invited }
-            });
-
-            let invitedUsersTokens = [];
-            for (let user of userSettings) {
-                invitedUsersTokens.push(user.fcmToken);
-            }
-
-            let notification = {
-                title: "New Event Invitation",
-                body: `You have been invited to ${event.name} by ${event.creator}`
-            };
-            notifications.notify(notification, invitedUsersTokens);
-        }
+        await eventHelpers.inviteUsers(event, invited, false, true);
 
         let response = {
             message: "Event created successfully!",
@@ -196,48 +168,21 @@ let deleteEvent = async function(req, res) {
 };
 
 // invite people to an event
-let invitePeople = async function(req, resp) {
+let invitePeople = async function(req, res) {
     try {
         const eventId = req.body.eventId;
         if (!eventId) {
-            return resp.status(400).send("No event id provided");
+            return res.status(400).send("No event id provided");
         }
 
         let invited = req.body.invited;
-        if (!invited) {
-            invited = [];
-        }
 
         let event = await Event.findById(eventId);
         if (!event) {
-            return resp.status(404).send("Event not found");
+            return res.status(404).send("Event not found");
         }
 
-        let users = await User.find({
-            _id: { $in: invited }
-        });
-        for (let user of users) {
-            event.invited.addToSet(user._id);
-            user.pendingInvites.addToSet(event._id);
-            await user.save();
-        }
-
-        await event.save();
-
-        let userSettings = await UserSettings.find({
-            _id: { $in: invited }
-        });
-
-        let invitedUsersTokens = [];
-        for (let user of userSettings) {
-            invitedUsersTokens.push(user.fcmToken);
-        }
-
-        let notification = {
-            title: "New Event Invitation",
-            body: `You have been invited to ${event.name} by ${event.creator}`
-        };
-        notifications.notify(notification, invitedUsersTokens);
+        await eventHelpers.inviteUsers(event, invited, true, true);
 
         let response = {
             message: "Event updated with invited users",
@@ -245,11 +190,11 @@ let invitePeople = async function(req, resp) {
                 eventId: event._id
             }
         };
-        resp.json(response);
+        res.json(response);
     }
     catch (e) {
         logger.error(e);
-        return resp.status(500).send("Can't Invite Users to Event");
+        return res.status(500).send("Can't Invite Users to Event");
     }
 };
 

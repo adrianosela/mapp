@@ -1,3 +1,8 @@
+const notifications = require("../notifications/notifications");
+
+let User = require("../models/user");
+let UserSettings = require("../models/userSettings");
+
 let friendsGoingToEvent = function(user, event) {
     if (event == null) {
         return 0;
@@ -37,7 +42,44 @@ let getRelevantEventsForUser = function(events, user, limit = 50) {
     return events;
 };
 
+let addUsersAndSendInvites = async function(event, invited, add = false, notify = true) {
+    let invitedUsersTokens = [];
+    if (invited != null && invited.length !== 0) {
+        let users = await User.find({
+            _id: { $in: invited }
+        });
+        for (let user of users) {
+            if (add === true) {
+                event.invited.addToSet(user._id);
+            }
+            user.pendingInvites.addToSet(event._id);
+            await user.save();
+        }
+
+        if (add === true) {
+            await event.save();
+        }
+
+        let userSettings = await UserSettings.find({
+            _id: { $in: invited }
+        });
+        for (let user of userSettings) {
+            invitedUsersTokens.push(user.fcmToken);
+        }
+
+        let notification = {
+            title: "New Event Invitation",
+            body: `You have been invited to ${event.name} by ${event.creator}`
+        };
+        if (notify === true) {
+            notifications.notify(notification, invitedUsersTokens);
+        }
+    }
+    return invitedUsersTokens.length;
+};
+
 module.exports = {
     friendsGoing: friendsGoingToEvent,
-    relevantForUser: getRelevantEventsForUser
+    relevantForUser: getRelevantEventsForUser,
+    inviteUsers: addUsersAndSendInvites
 };
