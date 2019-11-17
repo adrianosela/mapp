@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const eventHelper = require("../../utils/event");
 const User = require("../../models/user");
-const UserSettings = require("../../models/usersettings");
+const UserSettings = require("../../models/userSettings");
 const Event = require("../../models/event");
 
 describe("Test Event Utils", function() {
