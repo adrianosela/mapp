@@ -76,6 +76,7 @@ let createEvent = async function(req, resp) {
         creatorUser.createdEvents.addToSet(event._id);
         await creatorUser.save();
 
+        // add = false, notify = true
         await eventHelpers.inviteUsers(event, invited, false, true);
 
         let response = {
@@ -182,6 +183,7 @@ let invitePeople = async function(req, res) {
             return res.status(404).send("Event not found");
         }
 
+        // add = true, notify = true
         await eventHelpers.inviteUsers(event, invited, true, true);
 
         let response = {
