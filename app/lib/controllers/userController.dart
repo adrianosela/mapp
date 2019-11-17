@@ -91,6 +91,33 @@ class UserController {
     });
   }
 
+  static Future<String> unfollowUser(token, String userId) async {
+    var uri = Uri.https(
+      "mapp-254321.appspot.com",
+      "/user/unfollow",
+    );
+
+    var body = {"userToUnfollowId": userId};
+    return http
+        .post(uri,
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": "Bearer $token"
+        },
+        body: jsonEncode(body))
+        .then((http.Response response) {
+      final int statusCode = response.statusCode;
+      print(jsonEncode(body));
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        print(statusCode);
+        print(json);
+        throw new Exception("Error while fetching data");
+      }
+
+      return null;
+    });
+  }
+
   ///Get events user clicked "going to"
   static Future<Map<String, String>> getCreatedEvents(String id) async {
     Map<String, String> query = {'id': id};
