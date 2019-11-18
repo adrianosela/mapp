@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
+import 'package:app/components/router.dart';
+
 import 'package:app/models/userModel.dart';
+
 import 'package:app/controllers/loginController.dart';
-import 'package:app/screens/map.dart';
 
 
 
@@ -94,10 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         } else {
                           //save userId
                           user.userId = response;
-                          //navigate to map screen
-                          Navigator.push(context, new MaterialPageRoute(builder: (
-                              context) =>
-                          new MapPage(userId: userId.toString())));
+                          _showAlert();
                         }
                       }
                     },
@@ -111,6 +110,53 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
+    );
+  }
+
+  _showAlert() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Form(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.all(3.0),
+                    child: Text(
+                        "Succesfully Registered",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17.0
+                        )
+                    )
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: RaisedButton(
+                    color: Colors.blue,
+                    textColor: Colors.white,
+                    disabledColor: Colors.grey,
+                    disabledTextColor: Colors.black,
+                    padding: EdgeInsets.all(3.0),
+                    splashColor: Colors.blueAccent,
+                    child: Text("Ok",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0
+                        )),
+                    onPressed: () async {
+                      //navigate to login screen
+                      Navigator.pushNamedAndRemoveUntil(context, Router.homeRoute, (_) => false);
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 }
