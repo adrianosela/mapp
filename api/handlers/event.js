@@ -103,12 +103,17 @@ let updateEvent = async function(req, resp) {
             return resp.status(400).send("No updated event specified");
         }
 
+        let latitude = Number(newEvent.latitude);
+        let longitude = Number(newEvent.longitude);
+        delete newEvent.latitude;
+        delete newEvent.longitude;
+
         // validate input event
         let val = validator.event(
             newEvent.name,
             newEvent.description,
-            Number(newEvent.latitude),
-            Number(newEvent.longitude),
+            latitude,
+            longitude,
             Number(newEvent.startTime),
             Number(newEvent.endTime)
         );
@@ -121,6 +126,7 @@ let updateEvent = async function(req, resp) {
             return resp.status(403).send("Requesting user is not the event creator");
         }
 
+        newEvent.location = { type: "Point", coordinates: [longitude, latitude] };
         for (let property in newEvent) {
             event[property] = newEvent[property];
         }
