@@ -148,7 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         )),
                     onPressed: () async {
                       //navigate to login screen
-                      Navigator.pushNamed(context, Router.homeRoute);
+                      Navigator.pushNamedAndRemoveUntil(context, Router.homeRoute, (_) => false);
                     },
                   ),
                 )
