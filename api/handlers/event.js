@@ -55,6 +55,12 @@ let createEvent = async function(req, resp) {
             invited = [];
         }
 
+        let categories = req.body.categories;
+        if (!categories) {
+            // avoid null array
+            categories = [];
+        }
+
         // validate inputs
         let val = validator.event(name, description, lat, lon, start, end);
         if (val.ok === false) {
@@ -69,7 +75,8 @@ let createEvent = async function(req, resp) {
             endTime: end,
             creator: creator,
             public: public,
-            invited: invited
+            invited: invited,
+            categories: categories
         })).save();
 
         let creatorUser = await User.findById(creator);
