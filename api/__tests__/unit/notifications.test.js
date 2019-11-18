@@ -23,5 +23,10 @@ describe("Test Notifications Controller", function() {
             notifications.initialize({}, false);
             expect(notifications.notify("mock message", mockTokens)).toBe(mockTokens.length);
         });
+        it("should notify multiple when multiple users is given", function() {
+            let mockTokens = ["mock-user-token", "mock-user-token-2"];
+            notifications.initialize({}, false);
+            expect(notifications.notify("mock message", mockTokens)).toBe(mockTokens.length);
+        });
     });
 });
