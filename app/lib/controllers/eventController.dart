@@ -136,7 +136,7 @@ class EventController {
     return event;
   }
 
-  
+
   ///Delete an event
   static Future<String> deleteEvent(String token) async {
 
