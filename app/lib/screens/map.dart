@@ -196,9 +196,10 @@ class _MapPageState extends State<MapPage> {
                         padding: EdgeInsets.all(2.0),
                         child: FlatButton(
                             onPressed: () {
-                              DatePicker.showDatePicker(context,
+
+                              DatePicker.showDateTimePicker(context,
                                   showTitleActions: true,
-                                  minTime: DateTime(2019, 3, 5),
+                                  minTime: DateTime.now(),
                                   maxTime: DateTime(2023, 6, 7),
                                   onChanged: (date) {}, onConfirm: (date) {
                                 eventDate = date;
