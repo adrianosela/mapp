@@ -72,7 +72,6 @@ class _MapPageState extends State<MapPage> {
     'other': false,
   };
 
-
   Map<MarkerId, String> eventIds = new Map<MarkerId, String>();
 
   //Text Controllers
@@ -168,6 +167,9 @@ class _MapPageState extends State<MapPage> {
   }
 
   _onLongTapMap(LatLng latlang) {
+    for (String category in eventCategoriesMap.keys) {
+      eventCategoriesMap[category] = false;
+    }
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -274,24 +276,25 @@ class _MapPageState extends State<MapPage> {
                         padding: const EdgeInsets.all(2.0),
                         child: RaisedButton(
                           onPressed: () {
-                            for (String category in eventCategoriesMap.keys) {
-                              eventCategoriesMap[category] = false;
-                            }
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return StatefulBuilder(builder: (context, setState) {
+                                  return StatefulBuilder(
+                                      builder: (context, setState) {
                                     return SimpleDialog(
-                                      title: ReusableFunctions.titleText("Categories"),
+                                      title: ReusableFunctions.titleText(
+                                          "Categories"),
                                       children: <Widget>[
                                         SimpleDialogOption(
                                           child: CheckboxListTile(
                                             title: Text("Social"),
                                             value: eventCategoriesMap['social'],
-                                            selected: eventCategoriesMap['social'],
+                                            selected:
+                                                eventCategoriesMap['social'],
                                             onChanged: (val) {
                                               setState(() {
-                                                eventCategoriesMap['social'] = val;
+                                                eventCategoriesMap['social'] =
+                                                    val;
                                               });
                                             },
                                           ),
@@ -299,11 +302,14 @@ class _MapPageState extends State<MapPage> {
                                         SimpleDialogOption(
                                           child: CheckboxListTile(
                                             title: Text("Community"),
-                                            value: eventCategoriesMap['community'],
-                                            selected: eventCategoriesMap['community'],
+                                            value:
+                                                eventCategoriesMap['community'],
+                                            selected:
+                                                eventCategoriesMap['community'],
                                             onChanged: (bool val) {
                                               setState(() {
-                                                eventCategoriesMap['community'] = val;
+                                                eventCategoriesMap[
+                                                    'community'] = val;
                                               });
                                             },
                                           ),
@@ -312,10 +318,12 @@ class _MapPageState extends State<MapPage> {
                                           child: CheckboxListTile(
                                             title: Text("Sports"),
                                             value: eventCategoriesMap['sports'],
-                                            selected: eventCategoriesMap['sports'],
+                                            selected:
+                                                eventCategoriesMap['sports'],
                                             onChanged: (val) {
                                               setState(() {
-                                                eventCategoriesMap['sports'] = val;
+                                                eventCategoriesMap['sports'] =
+                                                    val;
                                               });
                                             },
                                           ),
@@ -323,11 +331,14 @@ class _MapPageState extends State<MapPage> {
                                         SimpleDialogOption(
                                           child: CheckboxListTile(
                                             title: Text("Corporate"),
-                                            selected: eventCategoriesMap['corporate'],
-                                            value: eventCategoriesMap['corporate'],
+                                            selected:
+                                                eventCategoriesMap['corporate'],
+                                            value:
+                                                eventCategoriesMap['corporate'],
                                             onChanged: (val) {
                                               setState(() {
-                                                eventCategoriesMap['corporate'] = val;
+                                                eventCategoriesMap[
+                                                    'corporate'] = val;
                                               });
                                             },
                                           ),
@@ -335,26 +346,27 @@ class _MapPageState extends State<MapPage> {
                                         SimpleDialogOption(
                                           child: CheckboxListTile(
                                             title: Text("Other"),
-                                            selected: eventCategoriesMap['other'],
+                                            selected:
+                                                eventCategoriesMap['other'],
                                             value: eventCategoriesMap['other'],
                                             onChanged: (val) {
                                               setState(() {
-                                                eventCategoriesMap['other'] = val;
+                                                eventCategoriesMap['other'] =
+                                                    val;
                                               });
                                             },
                                           ),
                                         ),
                                         SimpleDialogOption(
                                             child: Padding(
-                                              padding: const EdgeInsets.all(2.0),
-                                              child: RaisedButton(
-                                                child: Text("Ok"),
-                                                onPressed: () async {
-
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            )),
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: RaisedButton(
+                                            child: Text("Ok"),
+                                            onPressed: () async {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        )),
                                       ],
                                     );
                                   });
@@ -396,8 +408,6 @@ class _MapPageState extends State<MapPage> {
                               //TODO Need to pass Title to add to marker
                               _addMarkerLongPressed(latlang);
 
-
-
                               //TODO append event to list of created events, show new pin on map?
                               Navigator.of(context).pop();
                             }
@@ -428,7 +438,7 @@ class _MapPageState extends State<MapPage> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                  new EventPage(eventId: eventIds[markerId])));
+                      new EventPage(eventId: eventIds[markerId])));
         },
         //With this parameter you automatically obtain latitude and longitude
         infoWindow: InfoWindow(
