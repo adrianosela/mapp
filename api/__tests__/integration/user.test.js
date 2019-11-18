@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
+const notifications = require("../../notifications/notifications");
 const app = require("../../server");
 const Event = require("../../models/event");
 const request = supertest(app);
@@ -55,6 +56,9 @@ describe("Test User Handlers", function() {
             useNewUrlParser: true,
             useUnifiedTopology: true 
         });
+
+        // Dont Notify in Testing Mode
+        notifications.initialize(null, false);
         
         await registerDummyUsers();
         await createDummyEvents(dummyUsers[0]._id);
@@ -249,7 +253,7 @@ describe("Test User Handlers", function() {
             const userToken = await loginDummyUser(dummyUsersInfo[1]);
 
             const reqBody = {
-                "userToFollowId": dummyUsers[0]._id.toString()
+                userToFollowId: dummyUsers[0]._id.toString()
             };
             const res = await request.post("/user/follow")
                 .set("Authorization", `Bearer ${userToken}`) 
@@ -276,7 +280,7 @@ describe("Test User Handlers", function() {
             const userToken = await loginDummyUser(dummyUsersInfo[1]);
 
             const reqBody = {
-                "userToFollowId": mongoose.Types.ObjectId().toString()
+                userToFollowId: mongoose.Types.ObjectId().toString()
             };
             const res = await request.post("/user/follow")
                 .set("Authorization", `Bearer ${userToken}`) 
@@ -337,7 +341,7 @@ describe("Test User Handlers", function() {
             const userToken = await loginDummyUser(dummyUsersInfo[1]);
 
             const reqBody = {
-                "eventIds": [dummyEvents[0]._id.toString()]
+                eventIds: [dummyEvents[0]._id.toString()]
             };
             const res = await request.post("/user/subscribe")
                 .set("Authorization", `Bearer ${userToken}`) 
@@ -383,6 +387,146 @@ describe("Test User Handlers", function() {
             expect(json(res.body[0].name)).toEqual(json(dummyEvents[0].name));
         });
     });
+
+    describe("Positive: Retrieve Pending Invites", function() {
+        it("Should return user's pending invitations (one)", async function() {
+            const userToken1 = await loginDummyUser(dummyUsersInfo[0]);
+            const status = await inviteUserToEvent(userToken1, dummyEvents[1]._id.toString(), dummyUsers[1]._id.toString());
+            expect(status).toBe(200);
+
+            const userToken2 = await loginDummyUser(dummyUsersInfo[1]);
+
+            const res = await request.get("/user/pending")
+                .set("Authorization", `Bearer ${userToken2}`);
+            
+            expect(res.status).toBe(200);
+            expect(json(res.body[0].id)).toEqual(json(dummyEvents[1]._id));
+            expect(json(res.body[0].name)).toEqual(json(dummyEvents[1].name));
+        });
+
+        it("Should return user's pending invitations (none)", async function() {
+            const userToken = await loginDummyUser(dummyUsersInfo[0]);
+
+            const res = await request.get("/user/pending")
+                .set("Authorization", `Bearer ${userToken}`);
+            
+            expect(res.status).toBe(200);
+            expect(json(res.body)).toEqual([]);
+        });
+    });
+
+    describe("Positive: Decline Invite", function() {
+        it("Should decline pending invitation", async function() {
+            const userToken = await loginDummyUser(dummyUsersInfo[0]);
+
+            const reqBody = {
+                eventId: dummyEvents[1]._id.toString()
+            };
+            const res = await request.post("/user/declineInvite")
+                .set("Authorization", `Bearer ${userToken}`)
+                .send(reqBody);
+            
+            expect(res.status).toBe(200);
+            expect(json(res.text)).toEqual("Successfully removed event invite");
+        });
+    });
+
+    describe("Negative: Decline Invite With Incorrect Parameters", function() {
+        it("Should return 400 (Bad Request) with missing parameters", async function() {
+            const userToken = await loginDummyUser(dummyUsersInfo[1]);
+
+            const reqBody = {};
+            const res = await request.post("/user/declineInvite")
+                .set("Authorization", `Bearer ${userToken}`) 
+                .send(reqBody);
+
+            expect(res.status).toBe(400);
+        });
+
+        it("Should return 404 (Not Found) with non-existing event id", async function() {
+            const userToken = await loginDummyUser(dummyUsersInfo[1]);
+
+            const reqBody = {
+                eventId: mongoose.Types.ObjectId().toString()
+            };
+            const res = await request.post("/user/declineInvite")
+                .set("Authorization", `Bearer ${userToken}`) 
+                .send(reqBody);
+
+            expect(res.status).toBe(404);
+        });
+    });
+
+    describe("Positive: Unfollow User", function() {
+        it("Should unfollow selected user", async function() {
+            const userToken = await loginDummyUser(dummyUsersInfo[1]);
+
+            const reqBody = {
+                userToUnfollowId: dummyUsers[0]._id.toString()
+            };
+            const res = await request.post("/user/unfollow")
+                .set("Authorization", `Bearer ${userToken}`) 
+                .send(reqBody);
+
+            expect(res.status).toBe(200);
+            expect(json(res.text)).toEqual("Successfully unfollowed requested user");
+        });
+    });
+
+    describe("Negative: Unfollow User With Incorrect Parameters", function() {
+        it("Should return 400 (Bad Request) with missing parameters", async function() {
+            const userToken = await loginDummyUser(dummyUsersInfo[1]);
+
+            const reqBody = {};
+            const res = await request.post("/user/unfollow")
+                .set("Authorization", `Bearer ${userToken}`) 
+                .send(reqBody);
+
+            expect(res.status).toBe(400);
+        });
+
+        it("Should return 404 (Not Found) with non-existing user id", async function() {
+            const userToken = await loginDummyUser(dummyUsersInfo[1]);
+
+            const reqBody = {
+                userToUnfollowId: mongoose.Types.ObjectId().toString()
+            };
+            const res = await request.post("/user/unfollow")
+                .set("Authorization", `Bearer ${userToken}`) 
+                .send(reqBody);
+
+            expect(res.status).toBe(404);
+        });
+    });
+
+    describe("Positive: Unsubscribe from Event", function() {
+        it("Should unsubscribe from public event", async function() {
+            const userToken = await loginDummyUser(dummyUsersInfo[1]);
+
+            const reqBody = {
+                eventIds: [dummyEvents[0]._id.toString()]
+            };
+            const res = await request.post("/user/unsubscribe")
+                .set("Authorization", `Bearer ${userToken}`) 
+                .send(reqBody);
+
+            expect(res.status).toBe(200);
+            expect(json(res.body)).not.toContain(json(dummyEvents[0]._id));
+        });
+    });
+
+    describe("Negative: Unsubscribe from Event With Incorrect Parameters", function() {
+        it("Should return 400 (Bad Request) with missing parameters", async function() {
+            const userToken = await loginDummyUser(dummyUsersInfo[1]);
+
+            const reqBody = {};
+            const res = await request.post("/user/unsubscribe")
+                .set("Authorization", `Bearer ${userToken}`) 
+                .send(reqBody);
+
+            expect(res.status).toBe(400);
+        });
+    });
 });
 
 var registerDummyUsers = async function() {
@@ -410,6 +554,18 @@ var createDummyEvents = async function(creatorId) {
     }
 
     dummyEvents = generatedEvents;
+};
+
+var inviteUserToEvent = async function(userToken, eventId, invitedUser) {
+    const reqBody = {
+        eventId: eventId,
+        invited: [invitedUser]
+    };
+    const res = await request.post("/event/invite")
+        .set("Authorization", `Bearer ${userToken}`) 
+        .send(reqBody);
+
+    return res.status;
 };
 
 var json = function(object) {
