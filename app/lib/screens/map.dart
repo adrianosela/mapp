@@ -57,12 +57,21 @@ class _MapPageState extends State<MapPage> {
 
   //Map Filter
   Map<String, bool> categoriesMap = {
-    'social': true,
-    'community': true,
-    'corporate': true,
-    'sports': true,
-    'other': true,
+    'social': false,
+    'community': false,
+    'corporate': false,
+    'sports': false,
+    'other': false,
   };
+
+  Map<String, bool> eventCategoriesMap = {
+    'social': false,
+    'community': false,
+    'corporate': false,
+    'sports': false,
+    'other': false,
+  };
+
 
   Map<MarkerId, String> eventIds = new Map<MarkerId, String>();
 
@@ -257,9 +266,102 @@ class _MapPageState extends State<MapPage> {
                                           new InviteFriendsPage()));
                               usersToInvite = result;
                             },
-                            icon: Icon(Icons.add),
+                            icon: Icon(Icons.person_add),
                           ),
                         ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                            for (String category in eventCategoriesMap.keys) {
+                              eventCategoriesMap[category] = false;
+                            }
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return StatefulBuilder(builder: (context, setState) {
+                                    return SimpleDialog(
+                                      title: ReusableFunctions.titleText("Categories"),
+                                      children: <Widget>[
+                                        SimpleDialogOption(
+                                          child: CheckboxListTile(
+                                            title: Text("Social"),
+                                            value: eventCategoriesMap['social'],
+                                            selected: eventCategoriesMap['social'],
+                                            onChanged: (val) {
+                                              setState(() {
+                                                eventCategoriesMap['social'] = val;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        SimpleDialogOption(
+                                          child: CheckboxListTile(
+                                            title: Text("Community"),
+                                            value: eventCategoriesMap['community'],
+                                            selected: eventCategoriesMap['community'],
+                                            onChanged: (bool val) {
+                                              setState(() {
+                                                eventCategoriesMap['community'] = val;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        SimpleDialogOption(
+                                          child: CheckboxListTile(
+                                            title: Text("Sports"),
+                                            value: eventCategoriesMap['sports'],
+                                            selected: eventCategoriesMap['sports'],
+                                            onChanged: (val) {
+                                              setState(() {
+                                                eventCategoriesMap['sports'] = val;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        SimpleDialogOption(
+                                          child: CheckboxListTile(
+                                            title: Text("Corporate"),
+                                            selected: eventCategoriesMap['corporate'],
+                                            value: eventCategoriesMap['corporate'],
+                                            onChanged: (val) {
+                                              setState(() {
+                                                eventCategoriesMap['corporate'] = val;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        SimpleDialogOption(
+                                          child: CheckboxListTile(
+                                            title: Text("Other"),
+                                            selected: eventCategoriesMap['other'],
+                                            value: eventCategoriesMap['other'],
+                                            onChanged: (val) {
+                                              setState(() {
+                                                eventCategoriesMap['other'] = val;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        SimpleDialogOption(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(2.0),
+                                              child: RaisedButton(
+                                                child: Text("Ok"),
+                                                onPressed: () async {
+
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            )),
+                                      ],
+                                    );
+                                  });
+                                });
+                          },
+                          child: Text("Select Categories"),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(2.0),
@@ -267,6 +369,13 @@ class _MapPageState extends State<MapPage> {
                           child: Text("Save"),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
+                              List<String> categories = new List<String>();
+
+                              for (String category in eventCategoriesMap.keys) {
+                                if (eventCategoriesMap[category]) {
+                                  categories.add(category);
+                                }
+                              }
                               Event event = new Event(
                                 name: eventNameCont.text,
                                 description: eventDescriptionCont.text,
@@ -276,6 +385,7 @@ class _MapPageState extends State<MapPage> {
                                 duration: eventDurationCont.text,
                                 public: isSwitched,
                                 invited: usersToInvite,
+                                categories: categories,
                               );
 
                               eventId = await eventController.createEvent(
@@ -285,6 +395,8 @@ class _MapPageState extends State<MapPage> {
 
                               //TODO Need to pass Title to add to marker
                               _addMarkerLongPressed(latlang);
+
+
 
                               //TODO append event to list of created events, show new pin on map?
                               Navigator.of(context).pop();
