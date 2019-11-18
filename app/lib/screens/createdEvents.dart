@@ -129,8 +129,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                         onPressed: () {
                           DatePicker.showDatePicker(context,
                               showTitleActions: true,
-                              minTime: DateTime(2019, 3, 5),
-                              maxTime: DateTime(2023, 6, 7),
+                              minTime: DateTime.now(),
+                              maxTime: DateTime.now().add(new Duration(days: 365)),
                               onChanged: (date) {}, onConfirm: (date) {
                             eventDate = date;
                           },
