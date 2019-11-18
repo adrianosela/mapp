@@ -137,7 +137,7 @@ let updateEvent = async function(req, resp) {
 let deleteEvent = async function(req, res) {
     const userId = req.authorization.id;
 
-    const eventId = req.body.eventId;
+    const eventId = req.query.id;
     if (!eventId) {
         return res.status(400).send("No event id provided");
     }
