@@ -22,6 +22,8 @@ class EventController {
         query,
     );
 
+    print(uri);
+
     final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
 
     List<Event> allEvents = new List<Event>();
