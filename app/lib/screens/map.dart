@@ -200,7 +200,7 @@ class _MapPageState extends State<MapPage> {
                               DatePicker.showDateTimePicker(context,
                                   showTitleActions: true,
                                   minTime: DateTime.now(),
-                                  maxTime: DateTime(2023, 6, 7),
+                                  maxTime: DateTime.now().add(new Duration(days: 365)),
                                   onChanged: (date) {}, onConfirm: (date) {
                                 eventDate = date;
                               },
