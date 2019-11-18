@@ -94,8 +94,6 @@ class _MapPageState extends State<MapPage> {
   int locationCount = 0;
   int updateEvents = 10;
 
-
-
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
@@ -181,13 +179,12 @@ class _MapPageState extends State<MapPage> {
               children: <Widget>[
                 SimpleDialogOption(
                     child: Padding(
-                    padding: const EdgeInsets.only(top: 25.0),
-                    child: Slider(
+                  padding: const EdgeInsets.only(top: 25.0),
+                  child: Slider(
                     min: 0.0,
                     max: 20,
                     divisions: 20,
                     label: newRadius.toString(),
-
                     onChanged: (val) {
                       setState(() => newRadius = val);
                     },
@@ -507,8 +504,8 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future _addMarkers(location) async {
-    List<Event> events = await eventController.getEvents(
-        radius.toInt()*1000, location.longitude, location.latitude, userToken);
+    List<Event> events = await eventController.getEvents(radius.toInt() * 1000,
+        location.longitude, location.latitude, userToken);
 
     print(radius);
     setState(() {

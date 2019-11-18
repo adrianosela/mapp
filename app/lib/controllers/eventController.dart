@@ -5,32 +5,32 @@ import 'package:app/models/eventModel.dart';
 import 'package:http/http.dart' as http;
 
 class EventController {
-
-
   ///get all the public events in within user-preset radius
-  Future<List<Event>> getEvents(int radius, double longitude, double latitude, token) async {
-
+  Future<List<Event>> getEvents(
+      int radius, double longitude, double latitude, token) async {
     Map<String, String> query = {
-      'radius' : radius.toString(),
-      'longitude' : longitude.toString(),
-      'latitude' : latitude.toString(),
+      'radius': radius.toString(),
+      'longitude': longitude.toString(),
+      'latitude': latitude.toString(),
     };
 
     var uri = Uri.https(
-        "mapp-254321.appspot.com",
-        "/event/find",
-        query,
+      "mapp-254321.appspot.com",
+      "/event/find",
+      query,
     );
 
-    print(uri);
-
-    final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "authorization": "Bearer $token"
+    });
 
     List<Event> allEvents = new List<Event>();
     print(response.body);
     if (response.statusCode == 200) {
       var events = json.decode(response.body);
-      print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      print(
+          "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
       print(events);
       for (var event in events) {
         allEvents.add(Event.fromJson(event));
@@ -42,10 +42,10 @@ class EventController {
     return allEvents;
   }
 
-  Future<List<Event>> searchEvents(String search, List<String> categories, token) async {
-
+  Future<List<Event>> searchEvents(
+      String search, List<String> categories, token) async {
     Map<String, String> query = {
-      'eventName' : search,
+      'eventName': search,
       'categories': categories.join(','),
     };
 
@@ -54,17 +54,22 @@ class EventController {
       "/event/search",
       query,
     );
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    print(
+        "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     print("here");
     print(uri);
 
-    final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "authorization": "Bearer $token"
+    });
 
     List<Event> allEvents = new List<Event>();
     print(response.body);
     if (response.statusCode == 200) {
       var events = json.decode(response.body);
-      print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      print(
+          "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
       print(events);
       for (var event in events) {
         allEvents.add(Event.fromJson(event));
@@ -76,11 +81,16 @@ class EventController {
     return allEvents;
   }
 
-
   ///TODO
   Future<String> createEvent(String url, token, body) async {
-    return http.post(url, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"}, body: jsonEncode(body)).then((http.Response response) {
-
+    return http
+        .post(url,
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": "Bearer $token"
+            },
+            body: jsonEncode(body))
+        .then((http.Response response) {
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
@@ -92,11 +102,16 @@ class EventController {
     });
   }
 
-
   ///TODO
   static Future<String> inviteToEvent(String url, token, body) async {
-    return http.post(url, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"}, body: jsonEncode(body)).then((http.Response response) {
-
+    return http
+        .post(url,
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": "Bearer $token"
+            },
+            body: jsonEncode(body))
+        .then((http.Response response) {
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
@@ -107,13 +122,9 @@ class EventController {
     });
   }
 
-
   ///get specific event object by event id
   static Future<Event> getEventObject(String token, String eventId) async {
-
-    Map<String, String> query = {
-      'id' : eventId
-    };
+    Map<String, String> query = {'id': eventId};
 
     var uri = Uri.https(
       "mapp-254321.appspot.com",
@@ -121,14 +132,17 @@ class EventController {
       query,
     );
 
-    final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "authorization": "Bearer $token"
+    });
 
     Event event;
     print(eventId);
     print(response.body);
     if (response.statusCode == 200) {
       var eventJson = json.decode(response.body);
-      if(eventJson != null) {
+      if (eventJson != null) {
         event = new Event.fromJson(eventJson);
       }
     } else {
@@ -138,17 +152,20 @@ class EventController {
     return event;
   }
 
-
   ///Delete an event
   static Future<String> deleteEvent(String token) async {
-
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/event",
     );
 
-    final response = await http.get(uri, headers: {"Content-Type": "application/json", "authorization" : "Bearer $token"});
-    if (response.statusCode < 200 || response.statusCode > 400 || json == null) {
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "authorization": "Bearer $token"
+    });
+    if (response.statusCode < 200 ||
+        response.statusCode > 400 ||
+        json == null) {
       print(response.statusCode);
       print(json);
       throw new Exception("Error while fetching data");
