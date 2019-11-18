@@ -4,13 +4,21 @@ const logger = require("tracer").console();
 class Notifications {
     constructor() {
         this.fcm = null;
+        this.allow = true;
     }
 
-    initialize(fcmSettings) {
-        this.fcm = new Fcm(fcmSettings);
+    initialize(fcmSettings, allowNotifications = true) {
+        this.allow = allowNotifications;
+        if (this.allow) {
+            this.fcm = new Fcm(fcmSettings);
+        }
     }
 
     notify(data, usersTokens) {
+        if (!this.allow) {
+            return;
+        }
+        
         const message = {
             notification: {
                 title: data.title,
