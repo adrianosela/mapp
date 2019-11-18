@@ -178,6 +178,7 @@ class ReusableFunctions{
       disabledTextColor: Colors.black,
       padding: EdgeInsets.all(8.0),
       splashColor: Colors.blueAccent,
+      key: (text == "Login") ? new Key('login_button') : new Key('register_button'),
       onPressed: () async {
 
         if(text == "Register") {

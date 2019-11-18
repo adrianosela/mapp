@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/gestures.dart';
 
 import 'package:app/main.dart';
 import 'package:app/screens/registerScreen.dart';
@@ -16,9 +17,16 @@ import 'package:app/screens/friends.dart';
 import 'package:app/screens/pendingInvites.dart';
 import 'package:app/screens/savedEvents.dart';
 
+
+const PointerDownEvent down = PointerDownEvent(
+  pointer: 5,
+  position: Offset(10, 10),
+);
+
+
 void main() {
 
-  testWidgets('Test Login Page input fields', (WidgetTester tester) async {
+  testWidgets('Test Login Page', (WidgetTester tester) async {
 
     await tester.pumpWidget(new MyApp());
 
@@ -36,6 +44,10 @@ void main() {
     await tester.pump();
 
     expect(formKey.currentState.validate(), isTrue);
+
+    Finder loginButton = find.byKey(new Key('login_button'));
+
+    await tester.tap(loginButton);
   });
 
 
@@ -63,54 +75,33 @@ void main() {
     await tester.pump();
 
     expect(formKey.currentState.validate(), isTrue);
+
   });
 
 
 
-  /*testWidgets('Add and remove a todo', (WidgetTester tester) async {
+  testWidgets('Test Create Event functionality', (WidgetTester tester) async {
 
     MapPage page = new MapPage();
     var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
 
     await tester.pumpWidget(app);
-  });
 
+    Finder press = find.byKey(new Key('longpress'));
 
-  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+    await tester.longPress(press);
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 5));
 
-    CreatedEventsPage page = new CreatedEventsPage();
-    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
+    Finder search = find.byKey(new Key('search'));
 
-    await tester.pumpWidget(app);
-  });
+    //TODO press search isnt pressing
+    await tester.press(search);
+    //TODO need to find how to pass radius into getevents call
 
-
-  testWidgets('Add and remove a todo', (WidgetTester tester) async {
-
-    FriendsPage page = new FriendsPage();
-    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
-
-    await tester.pumpWidget(app);
 
   });
 
+  //TODO create event test
 
-  testWidgets('Add and remove a todo', (WidgetTester tester) async {
-
-    PendingInvitesPage page = new PendingInvitesPage();
-    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
-
-    await tester.pumpWidget(app);
-
-  });
-
-
-  testWidgets('Add and remove a todo', (WidgetTester tester) async {
-
-    SavedEventsPage page = new SavedEventsPage();
-    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
-
-    await tester.pumpWidget(app);
-
-  });*/
 }
