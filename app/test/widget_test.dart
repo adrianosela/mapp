@@ -9,22 +9,77 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:app/main.dart';
+import 'package:app/screens/registerScreen.dart';
+import 'package:app/screens/map.dart';
+import 'package:app/screens/createdEvents.dart';
+import 'package:app/screens/friends.dart';
+import 'package:app/screens/pendingInvites.dart';
+import 'package:app/screens/savedEvents.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  //todo add login test
+  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+    //build the widget
+    await tester.pumpWidget(MyHomePage());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    //find the saved events widget
+    expect(find.byWidget(MyHomePage()), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+
+  //todo add register test
+  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+    //build the widget
+    await tester.pumpWidget(RegisterPage());
+
+    //find the created events widget
+    expect(find.byWidget(RegisterPage()), findsOneWidget);
+  });
+
+
+  //todo add map test
+  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+    //build the widget
+    await tester.pumpWidget(MapPage());
+
+    //find the created events widget
+    expect(find.byWidget(MapPage()), findsOneWidget);
+  });
+
+
+  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+    //build the widget
+    await tester.pumpWidget(CreatedEventsPage());
+
+    //find the created events widget
+    expect(find.byWidget(CreatedEventsPage()), findsOneWidget);
+  });
+
+
+  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+    //build the widget
+    await tester.pumpWidget(FriendsPage());
+
+    //find the friends widget
+    expect(find.byWidget(FriendsPage()), findsOneWidget);
+  });
+
+
+  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+    //build the widget
+    await tester.pumpWidget(PendingInvitesPage());
+
+    //find the pending invites widget
+    expect(find.byWidget(PendingInvitesPage()), findsOneWidget);
+  });
+
+
+  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+    //build the widget
+    await tester.pumpWidget(SavedEventsPage());
+
+    //find the saved events widget
+    expect(find.byWidget(SavedEventsPage()), findsOneWidget);
   });
 }
