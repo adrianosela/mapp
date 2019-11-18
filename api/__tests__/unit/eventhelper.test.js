@@ -18,24 +18,26 @@ describe("Test Event Utils", function() {
         // mock user 1
         let mockUS = await (new UserSettings({
             email: "mock-user-1@gmail.com",
-            hash: "mock hash"
+            hash: "mock hash",
+            fcmToken: "mock-fcm-token-1"
         })).save();
         mockU = await(new User({
             _id: mockUS._id,
             name: "mock-user-1",
-            fcmToken: "mock-fcm-token-1",
+            email: "mock-user-1@gmail.com",
             following: mockfriends
         })).save();
 
         // mock user 2
         let mockUS2 = await (new UserSettings({
             email: "mock-user-2@gmail.com",
-            hash: "mock hash"
+            hash: "mock hash",
+            fcmToken: "mock-fcm-token-2"
         })).save();
         mockU2 = await(new User({
             _id: mockUS2._id,
             name: "mock-user-2",
-            fcmToken: "mock-fcm-token-2",
+            email: "mock-user-2@gmail.com",
             following: mockfriends
         })).save();
 
