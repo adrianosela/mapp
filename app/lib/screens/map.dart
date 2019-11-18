@@ -53,6 +53,9 @@ class _MapPageState extends State<MapPage> {
   var eventId;
   var msg;
 
+  double radius = 5.0;
+  double newRadius = 0;
+
   Map<String, String> eventsInRadius = new Map<String, String>();
 
   //Map Filter
@@ -63,7 +66,6 @@ class _MapPageState extends State<MapPage> {
     'sports': false,
     'other': false,
   };
-
   Map<String, bool> eventCategoriesMap = {
     'social': false,
     'community': false,
@@ -166,6 +168,48 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+  _onActionButtonTap() {
+    newRadius = radius;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return SimpleDialog(
+              title: ReusableFunctions.titleText("Event Search Radius (km)"),
+              children: <Widget>[
+                SimpleDialogOption(
+                    child: Padding(
+                  padding: const EdgeInsets.only(top: 25.0),
+                  child: Slider(
+                    min: 0.0,
+                    max: 20,
+                    divisions: 20,
+                    label: newRadius.toString(),
+                    onChanged: (val) {
+                      setState(() => newRadius = val);
+                    },
+                    value: newRadius,
+                  ),
+                )),
+                SimpleDialogOption(
+                    child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: RaisedButton(
+                    child: Text("Update Map"),
+                    onPressed: () async {
+                      radius = newRadius;
+                      LocationData curLocation = await location.getLocation();
+                      await _addMarkers(curLocation);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )),
+              ],
+            );
+          });
+        });
+  }
+
   _onLongTapMap(LatLng latlang) {
     for (String category in eventCategoriesMap.keys) {
       eventCategoriesMap[category] = false;
@@ -196,11 +240,11 @@ class _MapPageState extends State<MapPage> {
                         padding: EdgeInsets.all(2.0),
                         child: FlatButton(
                             onPressed: () {
-
                               DatePicker.showDateTimePicker(context,
                                   showTitleActions: true,
                                   minTime: DateTime.now(),
-                                  maxTime: DateTime.now().add(new Duration(days: 365)),
+                                  maxTime: DateTime.now()
+                                      .add(new Duration(days: 365)),
                                   onChanged: (date) {}, onConfirm: (date) {
                                 eventDate = date;
                               },
@@ -460,9 +504,12 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future _addMarkers(location) async {
-    List<Event> events = await eventController.getEvents(
-        5000, location.longitude, location.latitude, userToken);
+    List<Event> events = await eventController.getEvents(radius.toInt() * 1000,
+        location.longitude, location.latitude, userToken);
+
+    print(radius);
     setState(() {
+      markers.clear();
       for (Event event in events) {
         print(event.name);
         print(event.eventId);
@@ -621,6 +668,13 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
       body: _initializeMap(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await _onActionButtonTap();
+        },
+        child: Icon(Icons.filter_tilt_shift),
+        backgroundColor: Colors.green,
+      ),
     );
   }
 
