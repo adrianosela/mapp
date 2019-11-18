@@ -228,6 +228,7 @@ class ReusableFunctions{
   ///input field constructor
   static TextFormField loginInputField(String text) {
     return new TextFormField(
+      key: (text == 'password') ? new Key('password') : ((text == 'email') ? new Key('login') : new Key('name')),
       obscureText: (text == 'password') ? true : false,
       validator: (value) {
         if(text == 'email' && !RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {

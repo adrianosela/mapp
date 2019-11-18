@@ -17,69 +17,100 @@ import 'package:app/screens/pendingInvites.dart';
 import 'package:app/screens/savedEvents.dart';
 
 void main() {
-  //todo add login test
-  testWidgets('Add and remove a todo', (WidgetTester tester) async {
-    //build the widget
-    await tester.pumpWidget(MyHomePage());
 
-    //find the saved events widget
-    expect(find.byWidget(MyHomePage()), findsOneWidget);
+  testWidgets('Test Login Page input fields', (WidgetTester tester) async {
+
+    await tester.pumpWidget(new MyApp());
+
+    Finder email = find.byKey(new Key('login'));
+    Finder pwd = find.byKey(new Key('password'));
+
+    Finder formWidgetFinder = find.byType(Form);
+    Form formWidget = tester.widget(formWidgetFinder) as Form;
+    GlobalKey<FormState> formKey = formWidget.key as GlobalKey<FormState>;
+
+    expect(formKey.currentState.validate(), isFalse);
+
+    await tester.enterText(email, "email@email.com");
+    await tester.enterText(pwd, "123456textemptynot");
+    await tester.pump();
+
+    expect(formKey.currentState.validate(), isTrue);
+  });
+
+
+
+  testWidgets('Test Register Page input fields', (WidgetTester tester) async {
+
+    RegisterPage page = new RegisterPage();
+    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
+
+    await tester.pumpWidget(app);
+
+    Finder name = find.byKey(new Key('name'));
+    Finder email = find.byKey(new Key('login'));
+    Finder pwd = find.byKey(new Key('password'));
+
+    Finder formWidgetFinder = find.byType(Form);
+    Form formWidget = tester.widget(formWidgetFinder) as Form;
+    GlobalKey<FormState> formKey = formWidget.key as GlobalKey<FormState>;
+
+    expect(formKey.currentState.validate(), isFalse);
+
+    await tester.enterText(name, "name");
+    await tester.enterText(email, "email@email.com");
+    await tester.enterText(pwd, "123456textemptynot");
+    await tester.pump();
+
+    expect(formKey.currentState.validate(), isTrue);
+  });
+
+
+
+  /*testWidgets('Add and remove a todo', (WidgetTester tester) async {
+
+    MapPage page = new MapPage();
+    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
+
+    await tester.pumpWidget(app);
+  });
+
+
+  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+
+    CreatedEventsPage page = new CreatedEventsPage();
+    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
+
+    await tester.pumpWidget(app);
+  });
+
+
+  testWidgets('Add and remove a todo', (WidgetTester tester) async {
+
+    FriendsPage page = new FriendsPage();
+    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
+
+    await tester.pumpWidget(app);
 
   });
 
 
-  //todo add register test
   testWidgets('Add and remove a todo', (WidgetTester tester) async {
-    //build the widget
-    await tester.pumpWidget(RegisterPage());
 
-    //find the created events widget
-    expect(find.byWidget(RegisterPage()), findsOneWidget);
-  });
+    PendingInvitesPage page = new PendingInvitesPage();
+    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
 
+    await tester.pumpWidget(app);
 
-  //todo add map test
-  testWidgets('Add and remove a todo', (WidgetTester tester) async {
-    //build the widget
-    await tester.pumpWidget(MapPage());
-
-    //find the created events widget
-    expect(find.byWidget(MapPage()), findsOneWidget);
   });
 
 
   testWidgets('Add and remove a todo', (WidgetTester tester) async {
-    //build the widget
-    await tester.pumpWidget(CreatedEventsPage());
 
-    //find the created events widget
-    expect(find.byWidget(CreatedEventsPage()), findsOneWidget);
-  });
+    SavedEventsPage page = new SavedEventsPage();
+    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
 
+    await tester.pumpWidget(app);
 
-  testWidgets('Add and remove a todo', (WidgetTester tester) async {
-    //build the widget
-    await tester.pumpWidget(FriendsPage());
-
-    //find the friends widget
-    expect(find.byWidget(FriendsPage()), findsOneWidget);
-  });
-
-
-  testWidgets('Add and remove a todo', (WidgetTester tester) async {
-    //build the widget
-    await tester.pumpWidget(PendingInvitesPage());
-
-    //find the pending invites widget
-    expect(find.byWidget(PendingInvitesPage()), findsOneWidget);
-  });
-
-
-  testWidgets('Add and remove a todo', (WidgetTester tester) async {
-    //build the widget
-    await tester.pumpWidget(SavedEventsPage());
-
-    //find the saved events widget
-    expect(find.byWidget(SavedEventsPage()), findsOneWidget);
-  });
+  });*/
 }
