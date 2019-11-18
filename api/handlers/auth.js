@@ -35,7 +35,8 @@ let register = async function(req, res) {
 
         let newUser = new User({
             _id: newUserSettings._id, // same BSON id as user settings
-            name: req.body.name
+            name: req.body.name,
+            email: req.body.email
         });
         await newUser.save();
 
