@@ -8,9 +8,10 @@ class Event {
   final String duration;
   final bool public;
   final List<String> invited;
+  final List<String> categories;
   String eventId;
 
-  Event({this.name, this.description, this.longitude, this.latitude, this.date, this.duration, this.public, this.invited});
+  Event({this.name, this.description, this.longitude, this.latitude, this.date, this.duration, this.public, this.invited, this.categories});
 
   factory Event.fromJson(Map<String, dynamic> json) {
     Event event = new Event(
@@ -35,7 +36,8 @@ class Event {
     'startTime' : (date.toUtc().millisecondsSinceEpoch/1000).round(),
     'endTime' : (date.add(new Duration(hours: int.parse(duration))).toUtc().millisecondsSinceEpoch/1000).round(),
     'public' :  public,
-    'invited' : invited
+    'invited' : invited,
+    'categories': categories
   };
 
 }
