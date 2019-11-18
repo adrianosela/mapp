@@ -43,7 +43,7 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: Text("Search Results"),
+        title: Text("Event Search Results"),
         actions: <Widget>[
           MyPopupMenu.createPopup(context),
         ],
@@ -62,7 +62,7 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
         title: ReusableFunctions.listItemTextButton(item, id, context),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           IconButton(
-              icon: Icon(Icons.add),
+              icon: Icon(Icons.navigate_next),
               onPressed: () {
                 setState(() {
                   _goToEventPage(id);

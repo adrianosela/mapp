@@ -27,14 +27,14 @@ class _MyDrawerState extends State<MyDrawer> {
   void initState() {
     super.initState();
     userToken = FCM.getToken();
-    BackButtonInterceptor.add(myInterceptor);
+    //BackButtonInterceptor.add(myInterceptor);
   }
 
   ///forces back navigation to map screen
-  bool myInterceptor(bool stopDefaultButtonEvent) {
+  /*bool myInterceptor(bool stopDefaultButtonEvent) {
     Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => true);
     return true;
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

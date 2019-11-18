@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:intl/intl.dart';
+
 import 'package:app/components/router.dart';
 import 'package:app/components/reusableStlyes.dart';
 
@@ -8,6 +10,7 @@ import 'package:app/controllers/eventController.dart';
 
 import 'package:app/models/userModel.dart';
 import 'package:app/models/fcmToken.dart';
+import 'package:app/models/eventModel.dart';
 
 import 'package:app/screens/map.dart';
 
@@ -42,8 +45,7 @@ class ReusableFunctions{
         style: ReusableStyles.listItem(),
       ),
       onTap: () async {
-        var response = await EventController.getEvent(userToken, id.toString());
-        //TODO add styling
+        Event event = await EventController.getEventObject(userToken, id);
         showDialog(
             context: context,
             builder: (BuildContext context)
@@ -53,41 +55,75 @@ class ReusableFunctions{
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      ReusableFunctions.titleText("Event Details"),
                       Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: Text("Event Name: " + response["name"].toString())
+                          padding: EdgeInsets.all(4.0),
+                          child: Text(event.name,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                  color: Colors.blue
+                              )
+                          )
                       ),
                       Padding(
-                          padding: EdgeInsets.all(2.0),
+                          padding: EdgeInsets.all(3.0),
                           child: Text(
-                              "Description: " + response["description"].toString())
+                              "Description: " + event.description,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17.0
+                              )
+                          )
                       ),
                       Padding(
-                          padding: EdgeInsets.all(2.0),
-                          //TODO fix how this is displayed
-                          child: Text("Start Time: " +
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  int.parse(response["startTime"]) * 1000)
-                                  .toString())
+                          padding: EdgeInsets.all(3.0),
+                          child: Text((event.public)
+                              ? "Private Event"
+                              : "Public Event",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0
+                              )
+                          )
                       ),
                       Padding(
-                          padding: EdgeInsets.all(2.0),
-                          //TODO fix how this is displayed
-                          child: Text("End Time: " +
-                              DateTime.fromMillisecondsSinceEpoch(
-                                  int.parse(response["endTime"]) * 1000).toString())
+                          padding: EdgeInsets.all(3.0),
+                          child: Text("Starts on " +
+                              new DateFormat.yMMMEd().format(event.date) +
+                              " " +
+                              new DateFormat.jm().format(event.date),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0
+                              )),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text((response["privateEvent"] == "true")
-                            ? "Private Event"
-                            : "Public Event"),
+                          padding: EdgeInsets.all(3.0),
+                          child: Text("Ends on " +
+                              new DateFormat.yMMMEd().format(event.date
+                                  .add(new Duration(hours: int.parse(event.duration)))) +
+                              " " +
+                              new DateFormat.jm().format(event.date
+                                  .add(new Duration(hours: int.parse(event.duration)))),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0
+                              ))
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: const EdgeInsets.all(3.0),
                         child: RaisedButton(
-                          child: Text("Ok"),
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          disabledColor: Colors.grey,
+                          disabledTextColor: Colors.black,
+                          padding: EdgeInsets.all(3.0),
+                          splashColor: Colors.blueAccent,
+                          child: Text("Ok",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.0
+                              )),
                           onPressed: () async {
                             Navigator.of(context).pop();
                           },

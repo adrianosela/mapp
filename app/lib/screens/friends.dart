@@ -27,10 +27,12 @@ class _FriendsPageState extends State<FriendsPage> {
   _FriendsPageState({this.events});
 
   Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Friends");
+  Widget cusWidget = Text("My Friends");
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
   var searchText;
+
+  bool canAdd = false;
 
   @override
   void initState() {
@@ -64,6 +66,7 @@ class _FriendsPageState extends State<FriendsPage> {
                     onSubmitted: (String str) {
                       setState(() {
                         searchText = str;
+                        canAdd = true;
                         _getSearch(searchText);
                       });
                     },
@@ -72,6 +75,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   this.cusIcon = Icon(Icons.search);
                   this.cusWidget = Text("Friends");
                   setState(() {
+                    canAdd = false;
                     _getUsers();
                   });
                 }
@@ -92,26 +96,45 @@ class _FriendsPageState extends State<FriendsPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      return ListTile(
-        title: ReusableFunctions.listItemText(item),
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () async {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => new InviteToEventsPage(
-                            events: events, userId: id)));
-              }),
-          IconButton(
-              icon: Icon(Icons.more_horiz),
-              onPressed: () {
-                UserController.followUser(userToken, id);
-                setState(() {});
-              }),
-        ]),
-      );
+
+      if (canAdd) {
+        return ListTile(
+          title: ReusableFunctions.listItemText(item),
+          trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            IconButton(
+                icon: Icon(Icons.person_add, color: Colors.green),
+                onPressed: () {
+                  UserController.followUser(userToken, id);
+                  setState(() {
+                    rows.removeAt(index);
+                  });
+                }),
+          ]),
+        );
+      } else {
+        return ListTile(
+          title: ReusableFunctions.listItemText(item),
+          trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            IconButton(
+                icon: Icon(Icons.note_add, color: Colors.green),
+                onPressed: () async {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new InviteToEventsPage(
+                              events: events, userId: id)));
+                }),
+            IconButton(
+                icon: Icon(Icons.delete_forever, color: Colors.red),
+                onPressed: () {
+                  UserController.unfollowUser(userToken, id);
+                  setState(() {
+                    rows.removeAt(index);
+                  });
+                }),
+          ]),
+        );
+      }
     }
   }
 

@@ -55,6 +55,12 @@ let createEvent = async function(req, resp) {
             invited = [];
         }
 
+        let categories = req.body.categories;
+        if (!categories) {
+            // avoid null array
+            categories = [];
+        }
+
         // validate inputs
         let val = validator.event(name, description, lat, lon, start, end);
         if (val.ok === false) {
@@ -69,7 +75,8 @@ let createEvent = async function(req, resp) {
             endTime: end,
             creator: creator,
             public: public,
-            invited: invited
+            invited: invited,
+            categories: categories
         })).save();
 
         let creatorUser = await User.findById(creator);
@@ -103,12 +110,17 @@ let updateEvent = async function(req, resp) {
             return resp.status(400).send("No updated event specified");
         }
 
+        let latitude = Number(newEvent.latitude);
+        let longitude = Number(newEvent.longitude);
+        delete newEvent.latitude;
+        delete newEvent.longitude;
+
         // validate input event
         let val = validator.event(
             newEvent.name,
             newEvent.description,
-            Number(newEvent.latitude),
-            Number(newEvent.longitude),
+            latitude,
+            longitude,
             Number(newEvent.startTime),
             Number(newEvent.endTime)
         );
@@ -121,6 +133,7 @@ let updateEvent = async function(req, resp) {
             return resp.status(403).send("Requesting user is not the event creator");
         }
 
+        newEvent.location = { type: "Point", coordinates: [longitude, latitude] };
         for (let property in newEvent) {
             event[property] = newEvent[property];
         }
@@ -137,7 +150,7 @@ let updateEvent = async function(req, resp) {
 let deleteEvent = async function(req, res) {
     const userId = req.authorization.id;
 
-    const eventId = req.body.eventId;
+    const eventId = req.query.id;
     if (!eventId) {
         return res.status(400).send("No event id provided");
     }
