@@ -30,7 +30,6 @@ class Notifications {
         };
 
         if (this.allow) {
-
             this.fcm.sendToMultipleToken(message, usersTokens, function(err) {
                 if (err) {
                     logger.error(err);

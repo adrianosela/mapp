@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "unit": "jest ./__tests__/unit/",
-    "integration": "jest ./__tests__/integration/ --runInBand",
+    "unit": "jest ./__tests__/unit/ --coverage",
+    "integration": "jest ./__tests__/integration/ --runInBand --coverage",
     "lint": "eslint ./ --fix"
   },
   "repository": {

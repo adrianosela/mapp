@@ -74,7 +74,7 @@ describe("Test Authentication Handlers", function() {
     });
 
     describe("Negative: Login User Not in DB", function() {
-        it("Should not login user with bad password", async function() {
+        it("Should not login user with non-existing account", async function() {
             const reqBody = {
                 email: "incorrect@gmail.com",
                 password: "incorrect"

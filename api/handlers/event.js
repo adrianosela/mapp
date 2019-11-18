@@ -33,15 +33,13 @@ let createEvent = async function(req, resp) {
         const creator = req.authorization.id;
 
         // event details from req body
-        const {
-            name,
-            description,
-            latitude,
-            longitude,
-            startTime,
-            endTime,
-            public
-        } = req.body;
+        const name = req.body.name;
+        const description = req.body.description;
+        const latitude = req.body.latitude;
+        const longitude = req.body.longitude;
+        const startTime = req.body.startTime;
+        const endTime = req.body.endTime;
+        const _public = req.body.public;
 
         // enforce types
         const lat = Number(latitude);
@@ -74,7 +72,7 @@ let createEvent = async function(req, resp) {
             startTime: start,
             endTime: end,
             creator: creator,
-            public: public,
+            public: _public,
             invited: invited,
             categories: categories
         })).save();
