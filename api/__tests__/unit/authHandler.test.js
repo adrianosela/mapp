@@ -4,9 +4,8 @@ const mongoose = require("mongoose");
 const User = require("../../models/user");
 const UserSettings = require("../../models/userSettings");
 
-let response;
-
 describe("Test Auth Handlers", function() {
+    let response;
     beforeAll(async function() {
         await mongoose.connect(process.env.MONGO_URL, {
             useNewUrlParser: true,

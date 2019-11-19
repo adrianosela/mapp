@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "unit": "jest ./__tests__/unit/ --coverage",
+    "unit": "jest ./__tests__/unit/ --runInBand --coverage",
     "integration": "jest ./__tests__/integration/ --runInBand --coverage",
     "lint": "eslint ./ --fix"
   },
@@ -32,7 +32,7 @@
     "is-valid-coordinates": "^1.0.0",
     "jest-express": "^1.10.1",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.3.2",
+    "mongodb": "^3.3.4",
     "mongoose": "^5.7.5",
     "tracer": "^1.0.1"
   },

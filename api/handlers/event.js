@@ -1,6 +1,7 @@
 const logger = require("tracer").console();
 const validator = require("../validator/validator");
 const eventHelpers = require("../utils/event");
+var mongodb = require("mongodb");
 
 // import Event and User schemas
 let Event = require("../models/event");
@@ -12,6 +13,10 @@ let getEvent = async function(req, resp) {
         const eventId = req.query.id;
         if (!eventId) {
             return resp.status(400).send("No event id in query string");
+        }
+
+        if (!mongodb.ObjectID.isValid(eventId)) {
+            return resp.status(400).send("id provided is invalid");
         }
 
         let event = await Event.findById(eventId);
