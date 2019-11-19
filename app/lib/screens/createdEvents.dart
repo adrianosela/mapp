@@ -52,8 +52,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         ],
       ),
       body: ListView.builder(
-          // itemCount: this.count,
-          itemBuilder: (context, index) => this._buildRow(context, index)),
+          itemBuilder: (context, index) => this._buildRow(context, index)
+      ),
     );
   }
 
@@ -127,7 +127,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       rows.removeAt(index);
                       ReusableFunctions.showInSnackBar(
                           "Event Deleted", context);
-                      EventController.deleteEvent(userToken);
+                      EventController.deleteEvent(userToken, id);
                     });
                   }
               ),

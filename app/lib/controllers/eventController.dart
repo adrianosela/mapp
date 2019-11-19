@@ -29,9 +29,6 @@ class EventController {
     print(response.body);
     if (response.statusCode == 200) {
       var events = json.decode(response.body);
-      print(
-          "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-      print(events);
       for (var event in events) {
         allEvents.add(Event.fromJson(event));
       }
@@ -54,11 +51,6 @@ class EventController {
       "/event/search",
       query,
     );
-    print(
-        "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    print("here");
-    print(token);
-    print(uri);
 
     final response = await http.get(uri, headers: {
       "Content-Type": "application/json",
@@ -69,23 +61,17 @@ class EventController {
     print(response.body);
     if (response.statusCode == 200) {
       var events = json.decode(response.body);
-      print(
-          "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-      print(events);
       for (var event in events) {
         allEvents.add(Event.fromJson(event));
       }
     } else {
-      print(
-          "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-      print(response.statusCode);
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
     return allEvents;
   }
 
-  ///TODO
+  ///create an event
   Future<String> createEvent(String url, token, body) async {
     return http
         .post(url,
@@ -106,7 +92,7 @@ class EventController {
     });
   }
 
-  ///TODO
+  ///invite users to an event
   static Future<String> inviteToEvent(String url, token, body) async {
     return http
         .post(url,
@@ -156,14 +142,17 @@ class EventController {
     return event;
   }
 
-  ///Delete an event
-  static Future<String> deleteEvent(String token) async {
+  ///delete an event
+  static Future<String> deleteEvent(String token, eventId) async {
+    Map<String, String> query = {'id': eventId};
+
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/event",
+      query
     );
 
-    final response = await http.get(uri, headers: {
+    final response = await http.delete(uri, headers: {
       "Content-Type": "application/json",
       "authorization": "Bearer $token"
     });
@@ -174,7 +163,28 @@ class EventController {
       print(json);
       throw new Exception("Error while fetching data");
     }
-
     return null;
   }
+
+  ///TODO update an event
+  Future<String> updateEvent(String url, token, body) async {
+    return http
+        .put(url,
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": "Bearer $token"
+        },
+        body: jsonEncode(body))
+        .then((http.Response response) {
+      final int statusCode = response.statusCode;
+
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        throw new Exception("Error while fetching data");
+      }
+
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse["data"]["eventId"];
+    });
+  }
+
 }
