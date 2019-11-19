@@ -130,8 +130,13 @@ let getPendingInvites = async function(req, res) {
 let declineInvite = async function(req, res) {
     const userId = req.authorization.id;
     const eventId = req.body.eventId;
+
     if (!eventId) {
         return res.status(400).send("No event Id from pending invite");
+    }
+
+    if (!mongodb.ObjectID.isValid(eventId)) {
+        return res.status(400).send("provided id is not valid");
     }
 
     try {
