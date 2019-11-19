@@ -1,6 +1,7 @@
 const logger = require("tracer").console();
 const validator = require("../validator/validator");
 const eventHelpers = require("../utils/event");
+var mongodb = require("mongodb");
 
 // import Event and User schemas
 let Event = require("../models/event");
@@ -16,11 +17,16 @@ let getEvent = async function(req, res) {
             return res.status(400).send("No event id in query string");
         }
 
+        if (!mongodb.ObjectID.isValid(eventId)) {
+            return res.status(400).send("provided id is not valid");
+        }
+
         let event = await Event.findById(eventId);
         if (!event) {
             return res.status(404).send("Event not found");
         }
-        else if (!event.public) {
+
+        if (!event.public) {
             if (event.creator != userId && !event.invited.includes(userId) && !event.followers.includes(userId)) {
                 // Return 404 (Not Found) as user can't know about private event
                 return res.status(404).send("Event not found");
@@ -136,6 +142,7 @@ let updateEvent = async function(req, res) {
         }
 
         let event = await Event.findById(newEvent._id);
+
         if (userId != event.creator) {
             return res.status(403).send("Requesting user is not the event creator");
         }
@@ -145,8 +152,7 @@ let updateEvent = async function(req, res) {
             event[property] = newEvent[property];
         }
         await event.save();
-
-        res.send(event);
+        res.json(event);
     }
     catch (e) {
         logger.error(e);
@@ -160,6 +166,10 @@ let deleteEvent = async function(req, res) {
     const eventId = req.query.id;
     if (!eventId) {
         return res.status(400).send("No event id provided");
+    }
+
+    if (!mongodb.ObjectID.isValid(eventId)) {
+        return res.status(400).send("provided id is not valid");
     }
 
     try {

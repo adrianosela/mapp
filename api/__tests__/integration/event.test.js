@@ -54,14 +54,14 @@ var dummyEvents = [{
 describe("Test Event Handlers", function() {
 
     beforeAll(async function() {
-        await mongoose.connect(process.env.MONGO_URL, { 
+        await mongoose.connect(process.env.MONGO_URL, {
             useNewUrlParser: true,
-            useUnifiedTopology: true 
+            useUnifiedTopology: true
         });
 
         // Dont Notify in Testing Mode
         notifications.initialize(null, false);
-        
+
         await registerDummyUsers();
         await createDummyEvents(dummyUsers[0]._id);
     });
@@ -90,7 +90,7 @@ describe("Test Event Handlers", function() {
                 public: true
             };
             const res = await request.post("/event")
-                .set("Authorization", `Bearer ${userToken}`) 
+                .set("Authorization", `Bearer ${userToken}`)
                 .send(reqBody);
 
             expect(res.status).toBe(200);
@@ -113,7 +113,7 @@ describe("Test Event Handlers", function() {
                 public: true
             };
             const res = await request.post("/event")
-                .set("Authorization", `Bearer ${userToken}`) 
+                .set("Authorization", `Bearer ${userToken}`)
                 .send(reqBody);
 
             expect(res.status).toBe(400);
@@ -170,9 +170,9 @@ describe("Test Event Handlers", function() {
                 "event": updatedEvent
             };
             const res = await request.put("/event")
-                .set("Authorization", `Bearer ${userToken}`) 
+                .set("Authorization", `Bearer ${userToken}`)
                 .send(reqBody);
-
+            
             expect(res.status).toBe(200);
 
             const dummyEvent = await Event.findOne({name: dummyEvents[1].name});
@@ -200,7 +200,7 @@ describe("Test Event Handlers", function() {
                 "event": updatedEvent
             };
             const res = await request.put("/event")
-                .set("Authorization", `Bearer ${userToken}`) 
+                .set("Authorization", `Bearer ${userToken}`)
                 .send(reqBody);
 
             expect(res.status).toBe(403);
@@ -217,8 +217,8 @@ describe("Test Event Handlers", function() {
                 radius: RADIUS_IN_M
             };
             const res = await request.get("/event/find")
-                .set("Authorization", `Bearer ${userToken}`) 
-                .query(query); 
+                .set("Authorization", `Bearer ${userToken}`)
+                .query(query);
 
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(2);
@@ -233,8 +233,8 @@ describe("Test Event Handlers", function() {
                 radius: RADIUS_IN_M
             };
             const res = await request.get("/event/find")
-                .set("Authorization", `Bearer ${userToken}`) 
-                .query(query); 
+                .set("Authorization", `Bearer ${userToken}`)
+                .query(query);
 
             expect(res.status).toBe(200);
             expect(JSON.stringify(res.body)).toEqual(JSON.stringify([]));
@@ -250,8 +250,8 @@ describe("Test Event Handlers", function() {
                 longitude: LONGITUDE
             };
             const res = await request.get("/event/find")
-                .set("Authorization", `Bearer ${userToken}`) 
-                .query(query); 
+                .set("Authorization", `Bearer ${userToken}`)
+                .query(query);
 
             expect(res.status).toBe(400);
         });
@@ -266,9 +266,9 @@ describe("Test Event Handlers", function() {
                 invited: [dummyUsers[1]._id.toString()]
             };
             const res = await request.post("/event/invite")
-                .set("Authorization", `Bearer ${userToken}`) 
+                .set("Authorization", `Bearer ${userToken}`)
                 .send(reqBody);
-            
+
             expect(res.status).toBe(200);
 
             const testEvent = await Event.findOne({name: dummyEvents[0].name});
@@ -301,8 +301,8 @@ describe("Test Event Handlers", function() {
                 eventName: "Event"
             };
             const res = await request.get("/event/search")
-                .set("Authorization", `Bearer ${userToken}`) 
-                .query(query); 
+                .set("Authorization", `Bearer ${userToken}`)
+                .query(query);
 
             expect(res.status).toBe(200);
             expect(res.body.length).toBe(2);
@@ -315,8 +315,8 @@ describe("Test Event Handlers", function() {
                 eventName: "Incorrect Name"
             };
             const res = await request.get("/event/search")
-                .set("Authorization", `Bearer ${userToken}`) 
-                .query(query); 
+                .set("Authorization", `Bearer ${userToken}`)
+                .query(query);
 
             expect(res.status).toBe(200);
             expect(JSON.stringify(res.body)).toEqual(JSON.stringify([]));
@@ -331,7 +331,7 @@ describe("Test Event Handlers", function() {
                 id: dummyEvents[1]._id.toString()
             };
             const res = await request.delete("/event")
-                .set("Authorization", `Bearer ${userToken}`) 
+                .set("Authorization", `Bearer ${userToken}`)
                 .query(query);
 
             expect(res.status).toBe(401);
@@ -346,7 +346,7 @@ describe("Test Event Handlers", function() {
                 id: dummyEvents[1]._id.toString()
             };
             const res = await request.delete("/event")
-                .set("Authorization", `Bearer ${userToken}`) 
+                .set("Authorization", `Bearer ${userToken}`)
                 .query(query);
 
             expect(res.status).toBe(200);
@@ -365,7 +365,7 @@ describe("Test Event Handlers", function() {
                 id: mongoose.Types.ObjectId().toString()
             };
             const res = await request.delete("/event")
-                .set("Authorization", `Bearer ${userToken}`) 
+                .set("Authorization", `Bearer ${userToken}`)
                 .query(query);
 
             expect(res.status).toBe(404);
@@ -379,13 +379,13 @@ var registerDummyUsers = async function() {
         let res = await request.post("/register").send(dummyUser);
         generatedUsers.push(res.body);
     }
-    
+
     dummyUsers = generatedUsers;
 };
 
 var loginDummyUser = async function(dummyUserInfo) {
     let res = await request.post("/login").send(dummyUserInfo);
-    
+
     return res.body.token;
 };
 
