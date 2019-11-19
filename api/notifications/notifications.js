@@ -4,13 +4,24 @@ const logger = require("tracer").console();
 class Notifications {
     constructor() {
         this.fcm = null;
+        this.allow = true;
     }
 
-    initialize(fcmSettings) {
-        this.fcm = new Fcm(fcmSettings);
+    initialize(fcmSettings, allowNotifications = true) {
+        this.allow = allowNotifications;
+        if (this.allow) {
+            this.fcm = new Fcm(fcmSettings);
+        }
+    }
+
+    isEnabled() {
+        return this.allow;
     }
 
     notify(data, usersTokens) {
+        if (!usersTokens) {
+            return 0;
+        }
         const message = {
             notification: {
                 title: data.title,
@@ -18,11 +29,14 @@ class Notifications {
             }
         };
 
-        this.fcm.sendToMultipleToken(message, usersTokens, function(err) {
-            if (err) {
-                logger.error(err);
-            }
-        });
+        if (this.allow) {
+            this.fcm.sendToMultipleToken(message, usersTokens, function(err) {
+                if (err) {
+                    logger.error(err);
+                }
+            });
+        }
+        return usersTokens.length;
     }
 }
 

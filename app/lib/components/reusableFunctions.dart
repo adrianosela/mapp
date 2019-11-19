@@ -168,6 +168,25 @@ class ReusableFunctions{
     );
   }
 
+  static TextFormField formInputMultiLine(String text, [TextEditingController controller]) {
+    return new TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter some text';
+        }
+        return null;
+      },
+      textInputAction: TextInputAction.go,
+      decoration: InputDecoration(
+        hintText: text,
+      ),
+      controller: controller,
+      keyboardType: TextInputType.multiline,
+      maxLines: null,
+      style: ReusableStyles.formInputField(),
+    );
+  }
+
   /// login/ register button constructor
   static FlatButton loginButton(BuildContext context, String text, GlobalKey<FormState> _formKey){
 
@@ -178,6 +197,7 @@ class ReusableFunctions{
       disabledTextColor: Colors.black,
       padding: EdgeInsets.all(8.0),
       splashColor: Colors.blueAccent,
+      key: (text == "Login") ? new Key('login_button') : new Key('register_button'),
       onPressed: () async {
 
         if(text == "Register") {
@@ -228,6 +248,7 @@ class ReusableFunctions{
   ///input field constructor
   static TextFormField loginInputField(String text) {
     return new TextFormField(
+      key: (text == 'password') ? new Key('password') : ((text == 'email') ? new Key('login') : new Key('name')),
       obscureText: (text == 'password') ? true : false,
       validator: (value) {
         if(text == 'email' && !RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {

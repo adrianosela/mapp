@@ -1,6 +1,7 @@
 const logger = require("tracer").console();
 let User = require("../models/user");
 let Event = require("../models/event");
+let mongodb = require("mongodb");
 
 let getUser = async function(req, res) {
     try {
@@ -129,8 +130,13 @@ let getPendingInvites = async function(req, res) {
 let declineInvite = async function(req, res) {
     const userId = req.authorization.id;
     const eventId = req.body.eventId;
+
     if (!eventId) {
         return res.status(400).send("No event Id from pending invite");
+    }
+
+    if (!mongodb.ObjectID.isValid(eventId)) {
+        return res.status(400).send("provided id is not valid");
     }
 
     try {
@@ -225,6 +231,10 @@ let followUser = async function(req, res) {
             return res.status(400).send("No user to follow specified");
         }
 
+        if (!mongodb.ObjectID.isValid(userToFollowId)) {
+            return res.status(400).send("provided id is not valid");
+        }
+
         let userToFollow = await User.findById(userToFollowId);
         if (!userToFollow) {
             return res.status(404).send("User to follow not found");
@@ -256,6 +266,10 @@ let unfollowUser = async function(req, res) {
         const userToUnfollowId = req.body.userToUnfollowId;
         if (!userToUnfollowId) {
             return res.status(400).send("No user to unfollow specified");
+        }
+
+        if (!mongodb.ObjectID.isValid(userToUnfollowId)) {
+            return res.status(400).send("provided id is not valid");
         }
 
         let userToUnfollow = await User.findById(userToUnfollowId);
@@ -306,7 +320,7 @@ let subscribeToEvents = async function(req, res) {
                     user.pendingInvites.pull(event._id);
                 }
                 user.subscribedEvents.addToSet(event._id);
-                
+
                 if (event.invited.includes(userId)) {
                     event.invited.pull(userId);
                 }

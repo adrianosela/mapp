@@ -25,7 +25,9 @@ lint:
 	npm run lint
 
 tests:
-	npm run test
+	npm run unit
+	npm run integration
+	npm run non-functional
 
 clean:
 	rm config/production.json config/default.json
