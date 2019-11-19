@@ -30,6 +30,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   TextEditingController eventNameCont = TextEditingController();
   TextEditingController eventDescriptionCont = TextEditingController();
   TextEditingController eventDurationCont = TextEditingController();
+  TextEditingController announcementCont = TextEditingController();
 
   @override
   void initState() {
@@ -77,6 +78,40 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.message),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(builder: (context, setState) {
+                            return SimpleDialog(
+                              title: ReusableFunctions.titleText("Create Announcment"),
+                              children: <Widget>[
+                                SimpleDialogOption(
+                                  child: ReusableFunctions.formInputMultiLine(
+                                      "Create Announcment... ", announcementCont),
+                                ),
+                                SimpleDialogOption(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: RaisedButton(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text("Post"),
+                                        onPressed: () async {
+                                        //TODO add post call to send annoucment
+                                          announcementCont.clear();
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    )
+                                ),
+                              ],
+                            );
+                          });
+                        });
+                  }
+              ),
               IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {
