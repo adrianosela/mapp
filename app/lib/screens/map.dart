@@ -565,6 +565,7 @@ class _MapPageState extends State<MapPage> {
                   builder: (BuildContext context) {
                     return StatefulBuilder(builder: (context, setState) {
                       return SimpleDialog(
+                        key: new Key("search_popup"),
                         title: ReusableFunctions.titleText("Categories"),
                         children: <Widget>[
                           SimpleDialogOption(
@@ -633,9 +634,11 @@ class _MapPageState extends State<MapPage> {
                                 "Search event... ", eventSearchCont),
                           ),
                           SimpleDialogOption(
+                              key: new Key('search'),
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: RaisedButton(
+                                  padding: const EdgeInsets.all(2.0),
                                   child: Text("Search"),
                                   onPressed: () async {
                                     List<String> categories = new List<String>();
@@ -659,15 +662,14 @@ class _MapPageState extends State<MapPage> {
                                     eventSearchCont.clear();
                                   },
                                 ),
-                              )),
+                              )
+                          ),
                         ],
                       );
                     });
                   });
             },
-            child: Text("Search",
-              key: new Key('search'),
-            ),
+            child: Text("Search"),
             shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
           ),
           MyPopupMenu.createPopup(context),
@@ -689,6 +691,7 @@ class _MapPageState extends State<MapPage> {
         context: context,
         builder: (BuildContext context) {
           return new SimpleDialog(
+            key: new Key("notification"),
             title: new Text(msg),
             children: <Widget>[
               new SimpleDialogOption(

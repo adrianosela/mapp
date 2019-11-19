@@ -7,21 +7,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/gestures.dart';
 
 import 'package:app/main.dart';
 import 'package:app/screens/registerScreen.dart';
 import 'package:app/screens/map.dart';
-import 'package:app/screens/createdEvents.dart';
-import 'package:app/screens/friends.dart';
-import 'package:app/screens/pendingInvites.dart';
-import 'package:app/screens/savedEvents.dart';
-
-
-const PointerDownEvent down = PointerDownEvent(
-  pointer: 5,
-  position: Offset(10, 10),
-);
+import 'package:app/models/fcmToken.dart';
 
 
 void main() {
@@ -51,7 +41,6 @@ void main() {
   });
 
 
-
   testWidgets('Test Register Page input fields', (WidgetTester tester) async {
 
     RegisterPage page = new RegisterPage();
@@ -75,33 +64,57 @@ void main() {
     await tester.pump();
 
     expect(formKey.currentState.validate(), isTrue);
-
   });
 
 
+  testWidgets('Test Search Events functionality', (WidgetTester tester) async {
 
-  testWidgets('Test Create Event functionality', (WidgetTester tester) async {
+    await tester.pumpWidget(new MyApp());
+
+    Finder email = find.byKey(new Key('login'));
+    Finder pwd = find.byKey(new Key('password'));
+
+    await tester.enterText(email, "alex@gmail.com");
+    await tester.enterText(pwd, "alex");
+    await tester.pump();
+
+    Finder loginButton = find.byKey(new Key('login_button'));
+
+    await tester.tap(loginButton);
+    await tester.pump(const Duration(seconds: 1));
+    var token = FCM.getToken();
+    print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+    print(token);
+
+    MapPage page = new MapPage(userToken: token);
+    var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
+    await tester.pumpWidget(app);
+
+
+    Finder press = find.byKey(new Key('longpress'));
+
+    await tester.longPress(press);
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(find.byKey(new Key('search_popup')), findsOneWidget);
+
+    Finder search = find.byKey(new Key('search'));
+    
+    await tester.tap(search);
+    await tester.pump(const Duration(seconds: 1));
+  });
+
+  //TODO notifications test
+  /*testWidgets('Test Notification functionality', (WidgetTester tester) async {
 
     MapPage page = new MapPage();
     var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
 
     await tester.pumpWidget(app);
 
-    Finder press = find.byKey(new Key('longpress'));
-
-    await tester.longPress(press);
-    await tester.pump();
     await tester.pump(const Duration(seconds: 5));
 
-    Finder search = find.byKey(new Key('search'));
+    expect(find.byKey(new Key('notification')), findsOneWidget);
 
-    //TODO press search isnt pressing
-    await tester.press(search);
-    //TODO need to find how to pass radius into getevents call
-
-
-  });
-
-  //TODO create event test
-
+  });*/
 }

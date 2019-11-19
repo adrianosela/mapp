@@ -57,6 +57,7 @@ class EventController {
     print(
         "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     print("here");
+    print(token);
     print(uri);
 
     final response = await http.get(uri, headers: {
@@ -75,6 +76,9 @@ class EventController {
         allEvents.add(Event.fromJson(event));
       }
     } else {
+      print(
+          "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      print(response.statusCode);
       // If that response was not OK, throw an error.
       throw Exception('Failed to load post');
     }
