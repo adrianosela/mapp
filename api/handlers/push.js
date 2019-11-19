@@ -19,7 +19,7 @@ let postToken = async function(req, res) {
 
         // return the received fcm token as confirmation
         res.json({ token: userFcmToken });
-    } 
+    }
     catch (e) {
         logger.error(e);
         res.status(500).send("Error storing FCM Token");
@@ -55,7 +55,7 @@ let testPush = async function(req, res) {
         notifications.notify(notification, [userToNotify.fcmToken]);
 
         res.json({ success: true, message: "User notified" });
-    } 
+    }
     catch (e) {
         logger.error(e);
         res.status(500).send("Error sending push notification");

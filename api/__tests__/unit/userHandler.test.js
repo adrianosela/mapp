@@ -5,10 +5,10 @@ const Event = require("../../models/event");
 const User = require("../../models/user");
 const UserSettings = require("../../models/userSettings");
 
-describe("Test Event Handlers", function() {
+describe("Test User Handlers", function() {
     let response;
     const mockFriends = [mongoose.Types.ObjectId(), mongoose.Types.ObjectId()];
-    let mockUser, mockEventWithFriends, mockEventNoFriends;
+    let mockUser,mockUser2, mockEventWithFriends, mockEventNoFriends;
 
     beforeAll(async function() {
         await mongoose.connect(process.env.MONGO_URL, {
@@ -26,6 +26,7 @@ describe("Test Event Handlers", function() {
             _id: mockUserSettings._id,
             name: "mock-user4",
             email: "mock-user4@gmail.com",
+            followers: mockFriends,
             following: mockFriends
         })).save();
 
@@ -35,7 +36,7 @@ describe("Test Event Handlers", function() {
             hash: "mock hash",
             fcmToken: "mock-fcm-token-2"
         })).save();
-        await(new User({
+        mockUser2 = await(new User({
             _id: mockUserSettings2._id,
             name: "mock-user5",
             email: "mock-user5@gmail.com",
@@ -123,8 +124,8 @@ describe("Test Event Handlers", function() {
     describe("Test Get Followers Handler", function() {
         describe("Positive: Get Followers Handler", function() {
             it("should get all followers", async function() {
-                // TODO
-                expect(true).toBe(true);
+                await userHandler.followers({authorization:{id:mockUser._id}}, response);
+                expect(response.json).toBeCalled();
             });
         });
     });
@@ -132,8 +133,8 @@ describe("Test Event Handlers", function() {
     describe("Test Get Following Handler", function() {
         describe("Positive: Get Following Handler", function() {
             it("should get all following", async function() {
-                // TODO
-                expect(true).toBe(true);
+                await userHandler.following({authorization:{id:mockUser._id}}, response);
+                expect(response.json).toBeCalled();
             });
         });
     });
@@ -141,8 +142,8 @@ describe("Test Event Handlers", function() {
     describe("Test Get Pending Invites Handler", function() {
         describe("Positive: Get Pending Invites Handler", function() {
             it("should get all pending invites", async function() {
-                // TODO
-                expect(true).toBe(true);
+                await userHandler.pending({authorization:{id:mockUser._id}}, response);
+                expect(response.json).toBeCalled();
             });
         });
     });
@@ -159,8 +160,8 @@ describe("Test Event Handlers", function() {
     describe("Test Subscribed Events Handler", function() {
         describe("Positive: Subscribed Events Handler", function() {
             it("should be able to get all events user is susbcribed to", async function() {
-                // TODO
-                expect(true).toBe(true);
+                await userHandler.subscribed({authorization:{id:mockUser._id}}, response);
+                expect(response.json).toBeCalled();
             });
         });
     });
@@ -168,8 +169,8 @@ describe("Test Event Handlers", function() {
     describe("Test Created Events Handler", function() {
         describe("Positive: Created Events Handler", function() {
             it("should be able to get all events user created", async function() {
-                // TODO
-                expect(true).toBe(true);
+                await userHandler.created({authorization:{id:mockUser._id}}, response);
+                expect(response.json).toBeCalled();
             });
         });
     });
@@ -177,17 +178,29 @@ describe("Test Event Handlers", function() {
     describe("Test Follow User Handler", function() {
         describe("Positive: Follow User Handler", function() {
             it("should be able follow given users", async function() {
-                // TODO
-                expect(true).toBe(true);
+                await userHandler.follow({body:{userToFollowId: mockUser2._id.toString()}, authorization:{id:mockUser._id}}, response);
+                expect(response.send).toBeCalledWith("Successfully followed requested user");
+            });
+        });
+        describe("Negative: Follow User Handler", function() {
+            it("should reject request if bad id is provided", async function() {
+                await userHandler.follow({body:{userToFollowId: "bad id"}, authorization:{id:mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
             });
         });
     });
 
     describe("Test Unfollow User Handler", function() {
         describe("Positive: Unfollow User Handler", function() {
-            it("should be able unfollow given users", async function() {
-                // TODO
-                expect(true).toBe(true);
+            it("should be able to unfollow given users", async function() {
+                await userHandler.unfollow({body:{userToUnfollowId: mockUser2._id.toString()}, authorization:{id:mockUser._id}}, response);
+                expect(response.send).toBeCalledWith("Successfully unfollowed requested user");
+            });
+        });
+        describe("Negative: Unfollow User Handler", function() {
+            it("should reject request if bad id is provided", async function() {
+                await userHandler.unfollow({body:{userToUnfollowId: "bad id"}, authorization:{id:mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
             });
         });
     });
