@@ -553,6 +553,10 @@ class _MapPageState extends State<MapPage> {
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[
+          Opacity(
+            key: new Key("longpress"),
+            opacity: 0.0,
+          ),
           FlatButton(
             textColor: Colors.white,
             onPressed: () {
@@ -561,6 +565,7 @@ class _MapPageState extends State<MapPage> {
                   builder: (BuildContext context) {
                     return StatefulBuilder(builder: (context, setState) {
                       return SimpleDialog(
+                        key: new Key("search_popup"),
                         title: ReusableFunctions.titleText("Categories"),
                         children: <Widget>[
                           SimpleDialogOption(
@@ -629,33 +634,36 @@ class _MapPageState extends State<MapPage> {
                                 "Search event... ", eventSearchCont),
                           ),
                           SimpleDialogOption(
+                              key: new Key('search'),
                               child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: RaisedButton(
-                              child: Text("Search"),
-                              onPressed: () async {
-                                List<String> categories = new List<String>();
+                                padding: const EdgeInsets.all(2.0),
+                                child: RaisedButton(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Text("Search"),
+                                  onPressed: () async {
+                                    List<String> categories = new List<String>();
 
-                                for (String category in categoriesMap.keys) {
-                                  if (categoriesMap[category]) {
-                                    categories.add(category);
-                                  }
-                                }
-                                List<Event> events =
+                                    for (String category in categoriesMap.keys) {
+                                      if (categoriesMap[category]) {
+                                        categories.add(category);
+                                      }
+                                    }
+                                    List<Event> events =
                                     await eventController.searchEvents(
                                         eventSearchCont.text,
                                         categories,
                                         userToken);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
                                             new SearchedEventsPage(
                                                 events: events)));
-                                eventSearchCont.clear();
-                              },
-                            ),
-                          )),
+                                    eventSearchCont.clear();
+                                  },
+                                ),
+                              )
+                          ),
                         ],
                       );
                     });
@@ -683,6 +691,7 @@ class _MapPageState extends State<MapPage> {
         context: context,
         builder: (BuildContext context) {
           return new SimpleDialog(
+            key: new Key("notification"),
             title: new Text(msg),
             children: <Widget>[
               new SimpleDialogOption(
