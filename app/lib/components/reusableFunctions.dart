@@ -168,6 +168,25 @@ class ReusableFunctions{
     );
   }
 
+  static TextFormField formInputMultiLine(String text, [TextEditingController controller]) {
+    return new TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please enter some text';
+        }
+        return null;
+      },
+      textInputAction: TextInputAction.go,
+      decoration: InputDecoration(
+        hintText: text,
+      ),
+      controller: controller,
+      keyboardType: TextInputType.multiline,
+      maxLines: null,
+      style: ReusableStyles.formInputField(),
+    );
+  }
+
   /// login/ register button constructor
   static FlatButton loginButton(BuildContext context, String text, GlobalKey<FormState> _formKey){
 
