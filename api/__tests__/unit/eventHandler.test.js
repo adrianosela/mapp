@@ -232,24 +232,24 @@ describe("Test Event Handlers", function() {
             });
         });
 
-        // describe("Test Update Event Handler", function() {
-        //     describe("Positive: Update Event", function() {
-        //         it("should get an existing event by id", async function() {
-        //             let mockE = {
-        //                 _id: mockEventWithFriends._id,
-        //                 creator: mockUser._id,
-        //                 name: "Dummy Event 17",
-        //                 description: "Test Event 17",
-        //                 latitude: LATITUDE,
-        //                 longitude: LONGITUDE,
-        //                 startTime: TODAY_IN_EPOCH,
-        //                 endTime: TODAY_IN_EPOCH + DAY_IN_SEC,
-        //                 _public: true,
-        //             };
-        //             await eventHandler.update({body:{event:mockE}, authorization: {id: mockUser._id}}, response);
-        //             expect(response.status).toBeCalled();
-        //         });
-        //     });
-        // });
+        describe("Test Update Event Handler", function() {
+            describe("Positive: Update Event", function() {
+                it("should get an existing event by id", async function() {
+                    let mockE = {
+                        _id: mockEventWithFriends._id,
+                        creator: mockUser._id,
+                        name: "Dummy Event 17",
+                        description: "Test Event 17",
+                        latitude: LATITUDE,
+                        longitude: LONGITUDE,
+                        startTime: TODAY_IN_EPOCH,
+                        endTime: TODAY_IN_EPOCH + DAY_IN_SEC,
+                        _public: true,
+                    };
+                    await eventHandler.update({body:{event:mockE}, authorization: {id: mockUser._id.toString()}}, response);
+                    expect(response.json).toBeCalled();
+                });
+            });
+        });
     });
 });
