@@ -251,5 +251,21 @@ describe("Test Event Handlers", function() {
                 });
             });
         });
+
+        describe("Test Delete Event Handler", function() {
+            // TODO
+        });
+
+        describe("Test Invite To Event Handler", function() {
+            // TODO
+        });
+
+        describe("Test Search Event Handler", function() {
+            // TODO
+        });
+
+        describe("Test Find Event Handler", function() {
+            // TODO
+        });
     });
 });
