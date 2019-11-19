@@ -253,19 +253,71 @@ describe("Test Event Handlers", function() {
         });
 
         describe("Test Delete Event Handler", function() {
-            // TODO
+            describe("Positive: Delete Event", function() {
+                it("should delete an event by id if one is creator", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+            });
+            describe("Negative: Delete Event", function() {
+                it("should not be able to delete event if user is not creator", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+                it("request rejected with no id", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+                it("request rejected with bad id", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+            });
         });
 
         describe("Test Invite To Event Handler", function() {
-            // TODO
+            describe("Positive: Invite To Event", function() {
+                it("should be able to invite to an event user is a going to", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+            });
+            describe("Negative: Invite To Event", function() {
+                it("should not be able to invite to private event", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+                it("request rejected with bad event id", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+                it("request rejected with no event id", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+            });
         });
 
         describe("Test Search Event Handler", function() {
-            // TODO
+            describe("Positive: Search Event", function() {
+                it("should be able to search event names by substring", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+            });
         });
 
         describe("Test Find Event Handler", function() {
-            // TODO
+            describe("Positive: Find Event", function() {
+                it("should be able to find events in radius", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+                it("should not get events out of radius", async function() {
+                // TODO
+                    expect(true).toBe(true);
+                });
+            });
         });
     });
 });

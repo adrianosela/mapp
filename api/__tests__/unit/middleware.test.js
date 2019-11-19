@@ -15,20 +15,20 @@ describe("Test Auth Middleware", function() {
 
     describe("Positive: VerifyToken", function() {
         it("should pass when valid token is provided in x-access-token header", async function() {
-          let token = await jwt.sign(
-              { id: "anything", email: "someemail@gmail.com" },
-              config.auth.signing_secret,
-              { expiresIn: "24h" }
-          );
+            let token = await jwt.sign(
+                { id: "anything", email: "someemail@gmail.com" },
+                config.auth.signing_secret,
+                { expiresIn: "24h" }
+            );
             await mw.verifyToken({headers:{"x-access-token":token}}, response, mockCallback);
             expect(mockCallback).toBeCalled();
         });
         it("should pass when valid token is provided in authorization header", async function() {
-          let token = await jwt.sign(
-              { id: "anything", email: "someemail@gmail.com" },
-              config.auth.signing_secret,
-              { expiresIn: "24h" }
-          );
+            let token = await jwt.sign(
+                { id: "anything", email: "someemail@gmail.com" },
+                config.auth.signing_secret,
+                { expiresIn: "24h" }
+            );
             await mw.verifyToken({headers:{"authorization":token}}, response, mockCallback);
             expect(mockCallback).toBeCalled();
         });
