@@ -7,18 +7,27 @@ let Event = require("../models/event");
 let User = require("../models/user");
 
 // retrieve all data on an event by id in query string
-let getEvent = async function(req, resp) {
+let getEvent = async function(req, res) {
     try {
+        const userId = req.authorization.id;
+
         const eventId = req.query.id;
         if (!eventId) {
-            return resp.status(400).send("No event id in query string");
+            return res.status(400).send("No event id in query string");
         }
 
         let event = await Event.findById(eventId);
         if (!event) {
-            return resp.status(404).send("Event not found");
+            return res.status(404).send("Event not found");
         }
-        resp.json(event);
+        else if (!event.public) {
+            if (event.creator != userId && !event.invited.includes(userId) && !event.followers.includes(userId)) {
+                // Return 404 (Not Found) as user can't know about private event
+                return res.status(404).send("Event not found");
+            }
+        }
+
+        res.json(event);
     }
     catch (e) {
         logger.error(e);
@@ -29,7 +38,7 @@ let getEvent = async function(req, resp) {
 // create an event (from json request body)
 let createEvent = async function(req, resp) {
     try {
-    // creator from token
+        // creator from token
         const creator = req.authorization.id;
 
         // event details from req body
