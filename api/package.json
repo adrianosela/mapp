@@ -7,6 +7,7 @@
     "start": "node index.js",
     "unit": "jest ./__tests__/unit/ --coverage",
     "integration": "jest ./__tests__/integration/ --runInBand --coverage",
+    "non-functional": "jest ./__tests__/non-functiona/",
     "lint": "eslint ./ --fix"
   },
   "repository": {
