@@ -149,6 +149,105 @@ describe("Test Event Handlers", function() {
                 expect(response.status).toBeCalledWith(400);
                 expect(response.send).toBeCalledWith("No event name provided");
             });
+            it("should not create event without description", async function() {
+                let mockE = {
+                    name: "Test Event 17",
+                    latitude: LATITUDE,
+                    longitude: LONGITUDE,
+                    startTime: TODAY_IN_EPOCH,
+                    endTime: TODAY_IN_EPOCH + DAY_IN_SEC,
+                    _public: false,
+                };
+                await eventHandler.create({body:mockE, authorization: {id: mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
+                expect(response.send).toBeCalledWith("No event description provided");
+            });
+            it("should not create event without latitude", async function() {
+                let mockE = {
+                    name: "test event 18",
+                    description: "Test Event 18 description",
+                    longitude: LONGITUDE,
+                    startTime: TODAY_IN_EPOCH,
+                    endTime: TODAY_IN_EPOCH + DAY_IN_SEC,
+                    _public: false,
+                };
+                await eventHandler.create({body:mockE, authorization: {id: mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
+                expect(response.send).toBeCalledWith("No latitude provided");
+            });
+            it("should not create event without longitude", async function() {
+                let mockE = {
+                    description: "Test Event 17",
+                    name: "someeventname",
+                    latitude: LATITUDE,
+                    startTime: TODAY_IN_EPOCH,
+                    endTime: TODAY_IN_EPOCH + DAY_IN_SEC,
+                    _public: false,
+                };
+                await eventHandler.create({body:mockE, authorization: {id: mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
+                expect(response.send).toBeCalledWith("No longitude provided");
+            });
+            it("should not create an event without start time", async function() {
+                let mockE = {
+                    name: "Dummy Event 17",
+                    description: "Test Event 17",
+                    latitude: LATITUDE,
+                    longitude: LONGITUDE,
+                    endTime: TODAY_IN_EPOCH + DAY_IN_SEC,
+                    _public: false,
+                };
+                await eventHandler.create({body:mockE, authorization: {id: mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
+                expect(response.send).toBeCalledWith("No start time provided");
+            });
+            it("should not create an event without end time", async function() {
+                let mockE = {
+                    name: "Dummy Event 17",
+                    description: "Test Event 17",
+                    latitude: LATITUDE,
+                    longitude: LONGITUDE,
+                    startTime: TODAY_IN_EPOCH,
+                    _public: false,
+                };
+                await eventHandler.create({body:mockE, authorization: {id: mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
+                expect(response.send).toBeCalledWith("No end time provided");
+            });
+            it("should not create an event with end time before start time ", async function() {
+                let mockE = {
+                    name: "Dummy Event 17",
+                    description: "Test Event 17",
+                    latitude: LATITUDE,
+                    longitude: LONGITUDE,
+                    endTime: TODAY_IN_EPOCH,
+                    startTime: TODAY_IN_EPOCH + DAY_IN_SEC,
+                    _public: false,
+                };
+                await eventHandler.create({body:mockE, authorization: {id: mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
+                expect(response.send).toBeCalledWith("Event end time cannot be before start time");
+            });
+        });
+
+        describe("Test Update Event Handler", function() {
+            describe("Positive: Update Event", function() {
+                it("should get an existing event by id", async function() {
+                    let mockE = {
+                        _id: mockEventWithFriends._id,
+                        creator: mockUser._id,
+                        name: "Dummy Event 17",
+                        description: "Test Event 17",
+                        latitude: LATITUDE,
+                        longitude: LONGITUDE,
+                        startTime: TODAY_IN_EPOCH,
+                        endTime: TODAY_IN_EPOCH + DAY_IN_SEC,
+                        _public: false,
+                    };
+                    await eventHandler.update({body:{event:mockE}, authorization: {id: mockUser._id}}, response);
+                    expect(response.json).toBeCalled();
+                });
+            });
         });
     });
 });

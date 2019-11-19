@@ -132,7 +132,7 @@ let updateEvent = async function(req, resp) {
         }
 
         let event = await Event.findById(newEvent._id);
-        if (userId != event.creator) {
+        if (userId.toString() !== event.creator.toString()) {
             return resp.status(403).send("Requesting user is not the event creator");
         }
 
@@ -142,7 +142,7 @@ let updateEvent = async function(req, resp) {
         }
         await event.save();
 
-        resp.send(event);
+        resp.json(event);
     }
     catch (e) {
         logger.error(e);
