@@ -27,6 +27,16 @@ describe("Test Auth Handlers", function() {
         })).save();
     });
 
+    // wipe mock mongo after testing
+    afterAll(async function() {
+        const collections = Object.keys(mongoose.connection.collections);
+        for (const collectionName of collections) {
+            const collection = mongoose.connection.collections[collectionName];
+            await collection.deleteMany();
+        }
+        await mongoose.connection.close();
+    });
+
     beforeEach(() => {
         response = new Response();
     });
