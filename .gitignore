@@ -2,3 +2,4 @@
 node_modules
 /api/config/default.json
 /api/config/production.json
+/api/coverage

@@ -7,41 +7,48 @@ let Event = require("../models/event");
 let User = require("../models/user");
 
 // retrieve all data on an event by id in query string
-let getEvent = async function(req, resp) {
+let getEvent = async function(req, res) {
     try {
+        const userId = req.authorization.id;
+
         const eventId = req.query.id;
         if (!eventId) {
-            return resp.status(400).send("No event id in query string");
+            return res.status(400).send("No event id in query string");
         }
 
         let event = await Event.findById(eventId);
         if (!event) {
-            return resp.status(404).send("Event not found");
+            return res.status(404).send("Event not found");
         }
-        resp.json(event);
+        else if (!event.public) {
+            if (event.creator != userId && !event.invited.includes(userId) && !event.followers.includes(userId)) {
+                // Return 404 (Not Found) as user can't know about private event
+                return res.status(404).send("Event not found");
+            }
+        }
+
+        res.json(event);
     }
     catch (e) {
         logger.error(e);
-        return resp.status(500).send("Could not retrieve event");
+        return res.status(500).send("Could not retrieve event");
     }
 };
 
 // create an event (from json request body)
-let createEvent = async function(req, resp) {
+let createEvent = async function(req, res) {
     try {
-    // creator from token
+        // creator from token
         const creator = req.authorization.id;
 
         // event details from req body
-        const {
-            name,
-            description,
-            latitude,
-            longitude,
-            startTime,
-            endTime,
-            public
-        } = req.body;
+        const name = req.body.name;
+        const description = req.body.description;
+        const latitude = req.body.latitude;
+        const longitude = req.body.longitude;
+        const startTime = req.body.startTime;
+        const endTime = req.body.endTime;
+        const _public = req.body.public;
 
         // enforce types
         const lat = Number(latitude);
@@ -64,7 +71,7 @@ let createEvent = async function(req, resp) {
         // validate inputs
         let val = validator.event(name, description, lat, lon, start, end);
         if (val.ok === false) {
-            return resp.status(400).send(val.error);
+            return res.status(400).send(val.error);
         }
 
         let event = await (new Event({
@@ -74,7 +81,7 @@ let createEvent = async function(req, resp) {
             startTime: start,
             endTime: end,
             creator: creator,
-            public: public,
+            public: _public,
             invited: invited,
             categories: categories
         })).save();
@@ -92,22 +99,22 @@ let createEvent = async function(req, resp) {
                 eventId: event._id
             }
         };
-        resp.json(response);
+        res.json(response);
     }
     catch (e) {
         logger.error(e);
-        return resp.status(500).send("Failed to create event");
+        return res.status(500).send("Failed to create event");
     }
 };
 
 // update an event if user is creator
-let updateEvent = async function(req, resp) {
+let updateEvent = async function(req, res) {
     try {
         const userId = req.authorization.id;
 
         const newEvent = req.body.event;
         if (!newEvent) {
-            return resp.status(400).send("No updated event specified");
+            return res.status(400).send("No updated event specified");
         }
 
         let latitude = Number(newEvent.latitude);
@@ -125,12 +132,12 @@ let updateEvent = async function(req, resp) {
             Number(newEvent.endTime)
         );
         if (val.ok === false) {
-            return resp.status(400).send(val.error);
+            return res.status(400).send(val.error);
         }
 
         let event = await Event.findById(newEvent._id);
         if (userId != event.creator) {
-            return resp.status(403).send("Requesting user is not the event creator");
+            return res.status(403).send("Requesting user is not the event creator");
         }
 
         newEvent.location = { type: "Point", coordinates: [longitude, latitude] };
@@ -139,11 +146,11 @@ let updateEvent = async function(req, resp) {
         }
         await event.save();
 
-        resp.send(event);
+        res.send(event);
     }
     catch (e) {
         logger.error(e);
-        return resp.status(500).send("Error updating event");
+        return res.status(500).send("Error updating event");
     }
 };
 

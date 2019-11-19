@@ -14,11 +14,14 @@ class Notifications {
         }
     }
 
+    isEnabled() {
+        return this.allow;
+    }
+
     notify(data, usersTokens) {
-        if (!this.allow) {
-            return;
+        if (!usersTokens) {
+            return 0;
         }
-        
         const message = {
             notification: {
                 title: data.title,
@@ -26,11 +29,14 @@ class Notifications {
             }
         };
 
-        this.fcm.sendToMultipleToken(message, usersTokens, function(err) {
-            if (err) {
-                logger.error(err);
-            }
-        });
+        if (this.allow) {
+            this.fcm.sendToMultipleToken(message, usersTokens, function(err) {
+                if (err) {
+                    logger.error(err);
+                }
+            });
+        }
+        return usersTokens.length;
     }
 }
 

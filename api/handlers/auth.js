@@ -70,8 +70,7 @@ let login = async function(req, res) {
         // check whether hashed password matches stored hash
         const match = await bcrypt.compare(req.body.password, user.hash);
         if (!match) {
-            res.status(401).send("Unauthorized");
-            return;
+            return res.status(401).send("Unauthorized");
         }
 
         // construct session token
