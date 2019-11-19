@@ -1,3 +1,4 @@
+let notifications = require("../../notifications/notifications");
 const eventHandler = require("./../../handlers/event");
 const Response = require("jest-express/lib/response").Response;
 const mongoose = require("mongoose");
@@ -9,11 +10,14 @@ const DAY_IN_SEC = 86400;
 const TODAY_IN_EPOCH = Math.floor(Date.now() / 1000);
 const LONGITUDE = -123.249572;
 const LATITUDE = 49.261718;
+const RADIUS_IN_M = 50000;
+
+notifications.initialize({}, false);
 
 describe("Test Event Handlers", function() {
     let response;
     const mockFriends = [mongoose.Types.ObjectId(), mongoose.Types.ObjectId()];
-    let mockUser, mockEventWithFriends, mockEventNoFriends;
+    let mockUser, mockUser2, mockEventWithFriends, mockEventNoFriends, mockEventToDelete;
 
     beforeAll(async function() {
         await mongoose.connect(process.env.MONGO_URL, {
@@ -40,7 +44,7 @@ describe("Test Event Handlers", function() {
             hash: "mock hash",
             fcmToken: "mock-fcm-token-2"
         })).save();
-        await(new User({
+        mockUser2 = await(new User({
             _id: mockUserSettings2._id,
             name: "mock-user5",
             email: "mock-user5@gmail.com",
@@ -68,7 +72,7 @@ describe("Test Event Handlers", function() {
             startTime: 1572928473,
             endTime: 1572928573,
             creator: mockUser._id,
-            public: true,
+            public: false,
             invited: [],
             followers: []
         })).save();
@@ -89,7 +93,21 @@ describe("Test Event Handlers", function() {
         await mongoose.connection.close();
     });
 
-    beforeEach(() => {
+    beforeEach(async function() {
+        // mock event with no friends
+        mockEventToDelete = await(new Event({
+            name: "delete me",
+            description: "mock event description",
+            location: { type: "Point", coordinates: [-123.247360, 49.267941] },
+            startTime: 1572928473,
+            endTime: 1572928573,
+            creator: mockUser._id,
+            public: true,
+            invited: [],
+            followers: [],
+            categories: ["sports"]
+        })).save();
+
         response = new Response();
     });
 
@@ -255,22 +273,22 @@ describe("Test Event Handlers", function() {
         describe("Test Delete Event Handler", function() {
             describe("Positive: Delete Event", function() {
                 it("should delete an event by id if one is creator", async function() {
-                // TODO
-                    expect(true).toBe(true);
+                    await eventHandler.delete({query:{id:mockEventToDelete._id.toString()}, authorization:{id:mockUser._id.toString()}}, response);
+                    expect(response.json).toBeCalled();
                 });
             });
             describe("Negative: Delete Event", function() {
                 it("should not be able to delete event if user is not creator", async function() {
-                // TODO
-                    expect(true).toBe(true);
+                    await eventHandler.delete({query:{id:mockEventToDelete._id.toString()}, authorization:{id:mockUser2._id.toString()}}, response);
+                    expect(response.status).toBeCalledWith(401);
                 });
                 it("request rejected with no id", async function() {
-                // TODO
-                    expect(true).toBe(true);
+                    await eventHandler.delete({query:{}, authorization:{id:mockUser2._id.toString()}}, response);
+                    expect(response.status).toBeCalledWith(400);
                 });
                 it("request rejected with bad id", async function() {
-                // TODO
-                    expect(true).toBe(true);
+                    await eventHandler.delete({query:{id: "badid"}, authorization:{id:mockUser2._id.toString()}}, response);
+                    expect(response.status).toBeCalledWith(400);
                 });
             });
         });
@@ -278,31 +296,22 @@ describe("Test Event Handlers", function() {
         describe("Test Invite To Event Handler", function() {
             describe("Positive: Invite To Event", function() {
                 it("should be able to invite to an event user is a going to", async function() {
-                // TODO
-                    expect(true).toBe(true);
+                    await eventHandler.invite({body:{eventId: mockEventToDelete._id.toString(), invited: mockFriends, mock: true}, authorization:{id:mockUser._id.toString()}}, response);
+                    expect(response.json).toBeCalled();
                 });
             });
             describe("Negative: Invite To Event", function() {
                 it("should not be able to invite to private event", async function() {
-                // TODO
+                    // TODO
                     expect(true).toBe(true);
                 });
                 it("request rejected with bad event id", async function() {
-                // TODO
-                    expect(true).toBe(true);
+                    await eventHandler.invite({body:{eventId: "bad id", invited: mockFriends, mock: true}, authorization:{id:mockUser._id.toString()}}, response);
+                    expect(response.status).toBeCalledWith(400);
                 });
                 it("request rejected with no event id", async function() {
-                // TODO
-                    expect(true).toBe(true);
-                });
-            });
-        });
-
-        describe("Test Search Event Handler", function() {
-            describe("Positive: Search Event", function() {
-                it("should be able to search event names by substring", async function() {
-                // TODO
-                    expect(true).toBe(true);
+                    await eventHandler.invite({body:{invited: mockFriends, mock: true}, authorization:{id:mockUser._id.toString()}}, response);
+                    expect(response.status).toBeCalledWith(400);
                 });
             });
         });
@@ -310,12 +319,55 @@ describe("Test Event Handlers", function() {
         describe("Test Find Event Handler", function() {
             describe("Positive: Find Event", function() {
                 it("should be able to find events in radius", async function() {
-                // TODO
-                    expect(true).toBe(true);
+                    await eventHandler.find({
+                        query:{
+                            longitude: LONGITUDE,
+                            latitude: LATITUDE,
+                            radius: RADIUS_IN_M,
+                            categories: ["sports"]
+                        }, authorization:{id:mockUser._id.toString()}}, response);
+                    expect(response.json).toBeCalled();
                 });
-                it("should not get events out of radius", async function() {
-                // TODO
-                    expect(true).toBe(true);
+            });
+            describe("Negative: Find Event", function() {
+                it("should not get events without longitude", async function() {
+                    await eventHandler.find({
+                        query:{
+                            latitude: LATITUDE,
+                            radius: RADIUS_IN_M,
+                            categories: ["sports"]
+                        }, authorization:{id:mockUser._id.toString()}}, response);
+                    expect(response.status).toBeCalledWith(400);
+                });
+                it("should not get events without latitude", async function() {
+                    await eventHandler.find({
+                        query:{
+                            longitude: LONGITUDE,
+                            radius: RADIUS_IN_M,
+                            categories: ["sports"]
+                        }, authorization:{id:mockUser._id.toString()}}, response);
+                    expect(response.status).toBeCalledWith(400);
+                });
+                it("should not get events without radius", async function() {
+                    await eventHandler.find({
+                        query:{
+                            longitude: LONGITUDE,
+                            latitude: LATITUDE,
+                            categories: ["sports"]
+                        }, authorization:{id:mockUser._id.toString()}}, response);
+                    expect(response.status).toBeCalledWith(400);
+                });
+            });
+        });
+
+        describe("Test Search Event Handler", function() {
+            describe("Positive: Search Event", function() {
+                it("should be able to search event names by substring", async function() {
+                    await eventHandler.search({
+                        query:{eventName: mockEventToDelete.name.toString(), categories: ["sports"]},
+                        authorization:{id:mockUser._id.toString()}
+                    }, response);
+                    expect(response.json).toBeCalled();
                 });
             });
         });

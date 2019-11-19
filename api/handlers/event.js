@@ -206,6 +206,10 @@ let invitePeople = async function(req, res) {
             return res.status(400).send("No event id provided");
         }
 
+        if (!mongodb.ObjectID.isValid(eventId)) {
+            return res.status(400).send("provided id is not valid");
+        }
+
         let invited = req.body.invited;
 
         let event = await Event.findById(eventId);
@@ -214,14 +218,14 @@ let invitePeople = async function(req, res) {
         }
 
         // add = true, notify = true
-        await eventHelpers.inviteUsers(event, invited, true, true);
-
+        await eventHelpers.inviteUsers(event, invited, true, (!req.body.mock || req.body.mock === false));
         let response = {
             message: "Event updated with invited users",
             data: {
                 eventId: event._id
             }
         };
+
         res.json(response);
     }
     catch (e) {
