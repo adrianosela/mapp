@@ -151,18 +151,18 @@ describe("Test User Handlers", function() {
     describe("Test Decline Invite Handler", function() {
         describe("Positive: Decline Invite Handler", function() {
             it("should be able to decline an invite", async function() {
-              await userHandler.decline({body:{eventId:mockEventWithFriends._id.toString()}, authorization:{id:mockUser._id}}, response);
-              expect(response.send).toBeCalledWith("Successfully removed event invite");
+                await userHandler.decline({body:{eventId:mockEventWithFriends._id.toString()}, authorization:{id:mockUser._id}}, response);
+                expect(response.send).toBeCalledWith("Successfully removed event invite");
             });
         });
         describe("Negative: Decline Invite Handler", function() {
             it("should reject request without event id", async function() {
-              await userHandler.decline({body:{}, authorization:{id:mockUser._id.toString()}}, response);
-              expect(response.status).toBeCalledWith(400);
+                await userHandler.decline({body:{}, authorization:{id:mockUser._id.toString()}}, response);
+                expect(response.status).toBeCalledWith(400);
             });
             it("should reject request without invalid id", async function() {
-              await userHandler.decline({body:{eventId: "bad id"}, authorization:{id:mockUser._id.toString()}}, response);
-              expect(response.status).toBeCalledWith(400);
+                await userHandler.decline({body:{eventId: "bad id"}, authorization:{id:mockUser._id.toString()}}, response);
+                expect(response.status).toBeCalledWith(400);
             });
         });
     });
@@ -218,42 +218,42 @@ describe("Test User Handlers", function() {
     describe("Test User Subscribe To Events Handler", function() {
         describe("Positive: Subscribe To Event Handler", function() {
             it("should be able to subscribe to an event", async function() {
-              await userHandler.subscribe({body:{eventIds: [mockEventWithFriends._id.toString()]}, authorization:{id:mockUser._id}}, response);
-              expect(response.send).toBeCalled();
+                await userHandler.subscribe({body:{eventIds: [mockEventWithFriends._id.toString()]}, authorization:{id:mockUser._id}}, response);
+                expect(response.send).toBeCalled();
             });
         });
     });
 
     describe("Test User Unsubscribe To Events Handler", function() {
         describe("Positive: Unsubscribe To Event Handler", function() {
-          it("should be able to unsubscribe to an event", async function() {
-            await userHandler.unsubscribe({body:{eventIds: [mockEventWithFriends._id.toString()]}, authorization:{id:mockUser._id}}, response);
-            expect(response.send).toBeCalled();
-          });
+            it("should be able to unsubscribe to an event", async function() {
+                await userHandler.unsubscribe({body:{eventIds: [mockEventWithFriends._id.toString()]}, authorization:{id:mockUser._id}}, response);
+                expect(response.send).toBeCalled();
+            });
         });
         describe("Negative: Unsubscribe To Event Handler", function() {
-          it("should reject request with empty ids array", async function() {
-            await userHandler.unsubscribe({body:{eventIds: []}, authorization:{id:mockUser._id}}, response);
-            expect(response.status).toBeCalledWith(400);
-            expect(response.send).toBeCalledWith("No events to unsubscribe from");
-          });
-          it("should reject request with no eventIds array", async function() {
-            await userHandler.unsubscribe({body:{}, authorization:{id:mockUser._id}}, response);
-            expect(response.status).toBeCalledWith(400);
-            expect(response.send).toBeCalledWith("No events to unsubscribe from");
-          });
+            it("should reject request with empty ids array", async function() {
+                await userHandler.unsubscribe({body:{eventIds: []}, authorization:{id:mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
+                expect(response.send).toBeCalledWith("No events to unsubscribe from");
+            });
+            it("should reject request with no eventIds array", async function() {
+                await userHandler.unsubscribe({body:{}, authorization:{id:mockUser._id}}, response);
+                expect(response.status).toBeCalledWith(400);
+                expect(response.send).toBeCalledWith("No events to unsubscribe from");
+            });
         });
     });
 
     describe("Test Search Users Handler", function() {
         describe("Positive: Search Users Handler", function() {
             it("should be able to search users by name substring", async function() {
-              await userHandler.search({query:{username: mockUser2.name.toString()}, authorization:{id:mockUser._id}}, response);
-              expect(response.json).toBeCalled();
+                await userHandler.search({query:{username: mockUser2.name.toString()}, authorization:{id:mockUser._id}}, response);
+                expect(response.json).toBeCalled();
             });
             it("should return success with no username", async function() {
-              await userHandler.search({query:{}, authorization:{id:mockUser._id}}, response);
-              expect(response.json).toBeCalled();
+                await userHandler.search({query:{}, authorization:{id:mockUser._id}}, response);
+                expect(response.json).toBeCalled();
             });
         });
     });
