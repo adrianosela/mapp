@@ -8,7 +8,7 @@
     "unit": "jest ./__tests__/unit/ --runInBand --coverage",
     "integration": "jest ./__tests__/integration/ --runInBand --coverage",
     "non-functional": "jest ./__tests__/non-functional/ --runInBand",
-    "lint": "eslint ./handlers/event.js --fix"
+    "lint": "eslint ./ --fix"
   },
   "repository": {
     "type": "git",
