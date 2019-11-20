@@ -234,7 +234,7 @@ let getAnnouncementsForEvent = async function(req, res) {
         logger.error(e);
         return res.status(500).send("Cannot get announcements for event");
     }
-}
+};
 
 // Create Event Announcement and notify subscribers
 let createAnnouncement = async function(req, res) {
