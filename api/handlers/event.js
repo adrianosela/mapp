@@ -270,7 +270,11 @@ let createAnnouncement = async function(req, res) {
             }));
         }
 
-        announcements.messages.addToSet(message);
+        let msgObject = {
+            message: message,
+            timestamp: (Date.now() / 1000)
+        }
+        announcements.messages.addToSet(msgObject);
         await announcements.save();
 
         await eventHelpers.notifyAnnouncements(event, message);
