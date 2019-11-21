@@ -1,12 +1,18 @@
 class FCM {
-  String token;
+  static String token;
   static String userToken;
-
-  FCM({this.token});
 
   Map<String, dynamic> toJson() => {
     'fcmToken' : token
   };
+
+  static setFcmToken(str) {
+    token = str;
+  }
+
+  static getFcmToken() {
+    return token;
+  }
 
   static setToken(str) {
     userToken = str;

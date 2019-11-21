@@ -129,18 +129,18 @@ class _MapPageState extends State<MapPage> {
 
     ///only show notifications for Android
     if (Platform.isAndroid) {
-      _firebaseMessaging.getToken().then((token) {
-        print(
-            '-----------------------------------------------------------------------------------------------');
-        FCM fcm = new FCM(token: token);
-        LoginController.postFCM(fcm.toJson(), userToken);
+      _firebaseMessaging.getToken().then((token) async {
 
-        print('---------------------------------');
-        print(userId);
+        ///get new notifications token if we just logged in
+        if(FCM.getFcmToken() == null) {
 
-        print("-----------------");
-        print(userToken);
-        //print(token);
+          Map<String, dynamic> toJson(token) => {
+            'fcmToken' : token
+          };
+
+          LoginController.postFCM(toJson(token), userToken);
+          FCM.setFcmToken(token);
+        }
       });
 
       _firebaseMessaging.configure(
