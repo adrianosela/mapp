@@ -450,10 +450,8 @@ class _MapPageState extends State<MapPage> {
                                   userToken,
                                   event.toJson());
 
-                              //TODO Need to pass Title to add to marker
                               _addMarkerLongPressed(latlang);
 
-                              //TODO append event to list of created events, show new pin on map?
                               Navigator.of(context).pop();
                             }
                           },
