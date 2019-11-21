@@ -410,7 +410,7 @@ let searchUsers = async function(req, res) {
                 name: user.name,
                 friend: false
             };
-            if (reqUser.following.includes(user)) {
+            if (reqUser.following.includes(user._id)) {
                 userObject.friend = true;
             }
 
