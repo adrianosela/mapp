@@ -379,7 +379,27 @@ let findEvents = async function(req, res) {
             .gte("endTime", (Date.now() / 1000));
 
         let events = userEvents.concat(relevantEvents);
-        res.json(events);
+
+        let eventsObject = [];
+        for (let event of events) {
+            let eventObject = event.toJSON();
+            if (event.creator == userId) { 
+                eventObject.relevance = "created";
+            }
+            else if (event.followers.includes(userId)) {
+                eventObject.relevance = "subscribed";
+            }
+            else if (event.invited.includes(userId)) {
+                eventObject.relevance = "invited";
+            }
+            else {
+                eventObject.relevance = "public";
+            }
+    
+            eventsObject.push(eventObject);
+        }
+
+        res.json(eventsObject);
     }
     catch (e) {
         logger.error(e);
