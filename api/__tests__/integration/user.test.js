@@ -153,7 +153,7 @@ describe("Test User Handlers", function() {
     });
 
     describe("Positive: Search Users", function() {
-        it("Should return users that contain name (two)", async function() {
+        it("Should return users that contain name (one, not myself)", async function() {
             const userToken = await loginDummyUser(dummyUsersInfo[0]);
 
             const query = {
@@ -164,11 +164,8 @@ describe("Test User Handlers", function() {
                 .query(query);
 
             expect(res.status).toBe(200);
-            for (let i = 0; i < res.body.length; i++) {
-                let user = json(res.body[i]);
-                expect(user.id).toEqual(json(dummyUsers[i]._id));
-                expect(user.name).toEqual(json(dummyUsers[i].name));
-            }
+            expect(json(res.body[0].id)).toEqual(json(dummyUsers[1]._id));
+            expect(json(res.body[0].name)).toEqual(json(dummyUsers[1].name));
         });
 
         it("Should return users that match name (one)", async function() {
@@ -200,7 +197,7 @@ describe("Test User Handlers", function() {
             expect(json(res.body)).toEqual([]);
         });
 
-        it("Should return users that contain email (two)", async function() {
+        it("Should return users that contain email (one, not myself)", async function() {
             const userToken = await loginDummyUser(dummyUsersInfo[0]);
 
             const query = {
@@ -211,11 +208,8 @@ describe("Test User Handlers", function() {
                 .query(query);
 
             expect(res.status).toBe(200);
-            for (let i = 0; i < res.body.length; i++) {
-                let user = json(res.body[i]);
-                expect(user.id).toEqual(json(dummyUsers[i]._id));
-                expect(user.name).toEqual(json(dummyUsers[i].name));
-            }
+            expect(json(res.body[0].id)).toEqual(json(dummyUsers[1]._id));
+            expect(json(res.body[0].name)).toEqual(json(dummyUsers[1].name));
         });
 
         it("Should return users that match email (one)", async function() {
