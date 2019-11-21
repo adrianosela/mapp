@@ -119,9 +119,14 @@ let updateEvent = async function(req, res) {
     try {
         const userId = req.authorization.id;
 
+        const eventId = req.body.eventId;
         const newEvent = req.body.event;
-        if (!newEvent) {
+        if (!newEvent || !eventId) {
             return res.status(400).send("No updated event specified");
+        }
+
+        if (!mongodb.ObjectID.isValid(eventId)) {
+            return res.status(400).send("Event id provided is not valid");
         }
 
         let latitude = Number(newEvent.latitude);
@@ -142,7 +147,7 @@ let updateEvent = async function(req, res) {
             return res.status(400).send(val.error);
         }
 
-        let event = await Event.findById(newEvent._id);
+        let event = await Event.findById(eventId);
 
         if (userId != event.creator) {
             return res.status(403).send("Requesting user is not the event creator");
