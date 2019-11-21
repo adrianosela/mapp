@@ -9,9 +9,10 @@ class Event {
   final bool public;
   final List<String> invited;
   final List<String> categories;
+  final String relevance;
   String eventId;
 
-  Event({this.name, this.description, this.longitude, this.latitude, this.date, this.duration, this.public, this.invited, this.categories});
+  Event({this.name, this.description, this.longitude, this.latitude, this.date, this.duration, this.public, this.invited, this.categories, this.relevance});
 
   factory Event.fromJson(Map<String, dynamic> json) {
     Event event = new Event(
@@ -22,6 +23,7 @@ class Event {
       date: new DateTime.fromMillisecondsSinceEpoch(json['startTime']*1000),
       duration: DateTime.fromMillisecondsSinceEpoch(json['endTime']*1000).difference(DateTime.fromMillisecondsSinceEpoch(json['startTime']*1000)).inHours.toString(),
       public: json['public'],
+      relevance: json['relevance'],
     );
     event.eventId = json['_id'];
     return event;
