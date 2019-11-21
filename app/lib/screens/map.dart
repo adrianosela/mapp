@@ -105,9 +105,6 @@ class _MapPageState extends State<MapPage> {
     super.initState();
 
     this.userToken = FCM.getToken();
-    print("OOOOOOOOOOOOOOOOOOOO");
-    print(userToken);
-    print(FCM.getFcmToken());
 
     location.onLocationChanged().listen((location) async {
       if (!mapSet) {
