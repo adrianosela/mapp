@@ -240,7 +240,7 @@ let getAnnouncementsForEvent = async function(req, res) {
 let createAnnouncement = async function(req, res) {
     const userId = req.authorization.id;
 
-    const eventId = req.body.id;
+    const eventId = req.body.eventId;
     const message = req.body.message;
     // TODO: Move to Validator
     if (!eventId || !message) {
@@ -272,8 +272,8 @@ let createAnnouncement = async function(req, res) {
 
         let msgObject = {
             message: message,
-            timestamp: (Date.now() / 1000)
-        }
+            timestamp: Math.floor((Date.now() / 1000))
+        };
         announcements.messages.addToSet(msgObject);
         await announcements.save();
 
