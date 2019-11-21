@@ -38,8 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called
-
     return new Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
