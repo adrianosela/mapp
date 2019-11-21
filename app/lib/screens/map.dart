@@ -440,7 +440,7 @@ class _MapPageState extends State<MapPage> {
                                 latitude: latlang.latitude,
                                 date: eventDate,
                                 duration: eventDurationCont.text,
-                                public: isSwitched,
+                                public: !isSwitched,
                                 invited: usersToInvite,
                                 categories: categories,
                               );
@@ -520,6 +520,19 @@ class _MapPageState extends State<MapPage> {
 
         final LatLng position =
             new prefix0.LatLng(event.latitude, event.longitude);
+
+        BitmapDescriptor color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
+
+        if (event.relevance == "invited"){
+          color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+        } else if (event.relevance == "public"){
+          color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+        } else if (event.relevance == "subscribed"){
+          color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+        } else {
+          color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
+        }
+
         Marker marker = Marker(
           markerId: markerId,
           draggable: false,
@@ -537,7 +550,8 @@ class _MapPageState extends State<MapPage> {
             snippet: event.description,
           ),
           //TODO Change color of marker depending on event type
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+
+          icon: color,
         );
         markers[markerId] = marker;
       }

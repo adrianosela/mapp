@@ -29,7 +29,7 @@ class UserController {
     return following;
   }
 
-  static Future<Map<String, String>> searchUsers(token, String search) async {
+  static Future<Map<String, List<String>>> searchUsers(token, String search) async {
     Map<String, String> query = {
       'username': search,
     };
@@ -40,7 +40,7 @@ class UserController {
       query,
     );
 
-    Map<String, String> following = new Map<String, String>();
+    Map<String, List<String>> following = new Map<String, List<String>>();
 
     final response = await http.get(uri, headers: {
       "Content-Type": "application/json",
@@ -53,7 +53,8 @@ class UserController {
       var userContainer = json.decode(response.body);
       if (userContainer != null) {
         for (var instance in userContainer) {
-          following[instance["id"].toString()] = instance["name"].toString();
+          var friends = [instance["name"].toString(), instance["friend"].toString()];
+          following[instance["id"].toString()] = friends;
         }
       }
     } else {
