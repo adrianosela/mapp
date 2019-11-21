@@ -105,6 +105,9 @@ class _MapPageState extends State<MapPage> {
     super.initState();
 
     this.userToken = FCM.getToken();
+    print("OOOOOOOOOOOOOOOOOOOO");
+    print(userToken);
+    print(FCM.getFcmToken());
 
     location.onLocationChanged().listen((location) async {
       if (!mapSet) {
@@ -147,6 +150,8 @@ class _MapPageState extends State<MapPage> {
           onMessage: (Map<String, dynamic> message) async {
         setState(() {
           msg = "$message";
+          msg = msg.split("body: ")[1];
+          msg = msg.split("}, d")[0];
         });
         _showNotification();
         print('on message $message');
@@ -179,31 +184,33 @@ class _MapPageState extends State<MapPage> {
               children: <Widget>[
                 SimpleDialogOption(
                     child: Padding(
-                  padding: const EdgeInsets.only(top: 25.0),
-                  child: Slider(
-                    min: 0.0,
-                    max: 20,
-                    divisions: 20,
-                    label: newRadius.toString(),
-                    onChanged: (val) {
-                      setState(() => newRadius = val);
-                    },
-                    value: newRadius,
-                  ),
-                )),
+                      padding: const EdgeInsets.only(top: 25.0),
+                      child: Slider(
+                        min: 0.0,
+                        max: 20,
+                        divisions: 20,
+                        label: newRadius.toString(),
+                        onChanged: (val) {
+                          setState(() => newRadius = val);
+                        },
+                        value: newRadius,
+                      ),
+                    )
+                ),
                 SimpleDialogOption(
                     child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: RaisedButton(
-                    child: Text("Update Map"),
-                    onPressed: () async {
-                      radius = newRadius;
-                      LocationData curLocation = await location.getLocation();
-                      await _addMarkers(curLocation);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                )),
+                      padding: const EdgeInsets.all(2.0),
+                      child: RaisedButton(
+                        child: Text("Update Map"),
+                        onPressed: () async {
+                          radius = newRadius;
+                          LocationData curLocation = await location.getLocation();
+                          await _addMarkers(curLocation);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    )
+                ),
               ],
             );
           });
@@ -320,6 +327,12 @@ class _MapPageState extends State<MapPage> {
                       Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: RaisedButton(
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          disabledColor: Colors.grey,
+                          disabledTextColor: Colors.black,
+                          padding: EdgeInsets.all(6.0),
+                          splashColor: Colors.blueAccent,
                           onPressed: () {
                             showDialog(
                                 context: context,
@@ -423,6 +436,12 @@ class _MapPageState extends State<MapPage> {
                       Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: RaisedButton(
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          disabledColor: Colors.grey,
+                          disabledTextColor: Colors.black,
+                          padding: EdgeInsets.all(2.0),
+                          splashColor: Colors.blueAccent,
                           child: Text("Save"),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
@@ -690,14 +709,35 @@ class _MapPageState extends State<MapPage> {
         builder: (BuildContext context) {
           return new SimpleDialog(
             key: new Key("notification"),
-            title: new Text(msg),
+            title: ReusableFunctions.titleText("Notification"),
             children: <Widget>[
-              new SimpleDialogOption(
-                child: new Text("Ok"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text(msg,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15.0,
+                    )),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 65.0),
+                child: RaisedButton(
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  disabledColor: Colors.grey,
+                  disabledTextColor: Colors.black,
+                  padding: EdgeInsets.all(2.0),
+                  splashColor: Colors.blueAccent,
+                  onPressed:() {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Ok',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17.0
+                      )),
+                ),
+              ),
             ],
           );
         });

@@ -21,7 +21,7 @@ class ReusableFunctions{
   static TextEditingController nameController = new TextEditingController();
   static var userToken;
 
-  //TODO
+  ///confirmation message alert
   static void showInSnackBar(String value, BuildContext context) {
     Scaffold.of(context).showSnackBar(new SnackBar(
       content: new Text(value),
@@ -29,7 +29,7 @@ class ReusableFunctions{
     ));
   }
 
-  //TODO
+  ///sidebar list items
   static Text listItemText(String text) {
     return new Text(
       text,
@@ -37,7 +37,7 @@ class ReusableFunctions{
     );
   }
 
-  //TODO
+  ///sidebar clickable list item
   static GestureDetector listItemTextButton(String text, String id, context) {
     return new GestureDetector(
       child: Text(
@@ -139,7 +139,7 @@ class ReusableFunctions{
     );
   }
 
-  //TODO
+  ///any widget title heading
   static Text titleText(String text) {
     return new Text(
       text,
@@ -147,7 +147,7 @@ class ReusableFunctions{
     );
   }
 
-  //TODO
+  ///create/update event form input fields
   static TextFormField formInput(String text, [TextEditingController controller]) {
     return new TextFormField(
       validator: (value) {
@@ -289,7 +289,7 @@ class ReusableFunctions{
     return userToken;
   }
 
-  ///TODO add styling?
+  ///used in registration confirmation
   static Future<void> ackAlert(BuildContext context, String response) {
     return showDialog<void>(
       context: context,

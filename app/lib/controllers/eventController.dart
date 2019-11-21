@@ -182,8 +182,7 @@ class EventController {
         throw new Exception("Error while fetching data");
       }
 
-      Map<String, dynamic> jsonResponse = json.decode(response.body);
-      return jsonResponse["data"]["eventId"];
+      return null;
     });
   }
 
