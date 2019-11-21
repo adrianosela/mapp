@@ -67,9 +67,11 @@ let addUsersAndSendInvites = async function(event, invited, add = false, notify 
             invitedUsersTokens.push(user.fcmToken);
         }
 
+        let creator = await User.findById(event.creator);
+
         let notification = {
             title: "New Event Invitation",
-            body: `You have been invited to ${event.name} by ${event.creator}`
+            body: `You have been invited to ${event.name} by ${creator.name}`
         };
         if (notify === true) {
             notifications.notify(notification, invitedUsersTokens);
@@ -78,8 +80,31 @@ let addUsersAndSendInvites = async function(event, invited, add = false, notify 
     return invitedUsersTokens.length;
 };
 
+let notifyNewAnnouncement = async function(event, message, notify = true) {
+    let subscribedUsersTokens = [];
+    if (event.followers != null && event.followers.length !== 0) {
+        let creator = await User.findById(event.creator);
+
+        let userSettings = await UserSettings.find({
+            _id: { $in: event.followers }
+        });
+        for (let user of userSettings) {
+            subscribedUsersTokens.push(user.fcmToken);
+        }
+
+        let notification = {
+            title: "New Event Announcement",
+            body: `${creator.name} just announced: ${message}`
+        };
+        if (notify) {
+            notifications.notify(notification, subscribedUsersTokens);
+        }
+    }
+};
+
 module.exports = {
     friendsGoing: friendsGoingToEvent,
     relevantForUser: getRelevantEventsForUser,
-    inviteUsers: addUsersAndSendInvites
+    inviteUsers: addUsersAndSendInvites,
+    notifyAnnouncements: notifyNewAnnouncement
 };

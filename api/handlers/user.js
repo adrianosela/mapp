@@ -382,23 +382,38 @@ let unsubscribeFromEvents = async function(req, res) {
 
 // get users by username regex
 let searchUsers = async function(req, res) {
+    const userId = req.authorization.id;
+
     const userInfo = req.query.username;
     const query = {
-        $or: [
-            { name: { $regex: "^" + userInfo } },
-            { email: { $regex: "^" + userInfo } }
+        $and: [
+            { _id: { "$ne": userId } },
+            {
+                $or: [
+                    { name: { $regex: "^" + userInfo, $options: "$i" } },
+                    { email: { $regex: "^" + userInfo, $options: "$i" } }
+                ]
+            }
         ]
+        
     };
 
     try {
+        let reqUser = await User.findById(userId);
+
         let users = await User.find(query);
 
         let response = [];
         for (let user of users) {
             let userObject = {
                 id: user._id,
-                name: user.name
+                name: user.name,
+                friend: false
             };
+            if (reqUser.following.includes(user._id)) {
+                userObject.friend = true;
+            }
+
             response.push(userObject);
         }
 

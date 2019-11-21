@@ -17,6 +17,12 @@ router.delete("/event", middleware.verifyToken, eventHandlers.delete);
 // invite people to an event
 router.post("/event/invite", middleware.verifyToken, eventHandlers.invite);
 
+// Get Event Announcements
+router.get("/event/announcements", middleware.verifyToken, eventHandlers.getAnnouncements);
+
+// Create new event announcement and notify users assiting to event
+router.post("/event/announcement", middleware.verifyToken, eventHandlers.announcement);
+
 // get all public events within a given radius of user coordinates
 // which satisfy conditions in the request
 router.get("/event/find", middleware.verifyToken, eventHandlers.find);
