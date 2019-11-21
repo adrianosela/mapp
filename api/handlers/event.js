@@ -3,9 +3,10 @@ const validator = require("../validator/validator");
 const eventHelpers = require("../utils/event");
 var mongodb = require("mongodb");
 
-// import Event and User schemas
+// import Event, User, and Announcement schemas
 let Event = require("../models/event");
 let User = require("../models/user");
+let Announcement = require("../models/announcement");
 
 // retrieve all data on an event by id in query string
 let getEvent = async function(req, res) {
@@ -118,9 +119,14 @@ let updateEvent = async function(req, res) {
     try {
         const userId = req.authorization.id;
 
+        const eventId = req.body.eventId;
         const newEvent = req.body.event;
-        if (!newEvent) {
+        if (!newEvent || !eventId) {
             return res.status(400).send("No updated event specified");
+        }
+
+        if (!mongodb.ObjectID.isValid(eventId)) {
+            return res.status(400).send("Event id provided is not valid");
         }
 
         let latitude = Number(newEvent.latitude);
@@ -141,7 +147,7 @@ let updateEvent = async function(req, res) {
             return res.status(400).send(val.error);
         }
 
-        let event = await Event.findById(newEvent._id);
+        let event = await Event.findById(eventId);
 
         if (userId != event.creator) {
             return res.status(403).send("Requesting user is not the event creator");
@@ -195,6 +201,94 @@ let deleteEvent = async function(req, res) {
     catch (e) {
         logger.error(e);
         return res.status(500).send("Can't Delete Event");
+    }
+};
+
+// Get Announcements for specific event
+let getAnnouncementsForEvent = async function(req, res) {
+    const userId = req.authorization.id;
+
+    const eventId = req.query.id;
+    if (!eventId) {
+        return res.status(400).send("No event id in query string");
+    }
+
+    if (!mongodb.ObjectID.isValid(eventId)) {
+        return res.status(400).send("provided id is not valid");
+    }
+
+    try {
+        let event = await Event.findById(eventId);
+        if (!event) {
+            return res.status(404).send("Event not found");
+        }
+
+        if (!event.public) {
+            if (event.creator != userId && !event.invited.includes(userId) && !event.followers.includes(userId)) {
+                // Return 404 (Not Found) as user can't know about private event
+                return res.status(404).send("Event not found");
+            }
+        }
+
+        let announcements = await Announcement.findOne({
+            eventId: eventId
+        });
+        return res.json(announcements);
+    }
+    catch (e) {
+        logger.error(e);
+        return res.status(500).send("Cannot get announcements for event");
+    }
+};
+
+// Create Event Announcement and notify subscribers
+let createAnnouncement = async function(req, res) {
+    const userId = req.authorization.id;
+
+    const eventId = req.body.eventId;
+    const message = req.body.message;
+    // TODO: Move to Validator
+    if (!eventId || !message) {
+        return res.status(400).send("Event id and/or message not provided");
+    }
+
+    if (!mongodb.ObjectID.isValid(eventId)) {
+        return res.status(400).send("Event id is not valid");
+    }
+
+    try {
+        let event = await Event.findById(eventId);
+        if (!event) {
+            return res.status(404).send("Event not found");
+        }
+
+        if (event.creator != userId) {
+            return res.status(401).send("Requesting user can't create announcement to event");
+        }
+
+        let announcements = await Announcement.findOne({
+            eventId: eventId
+        });
+        if (!announcements) {
+            announcements = await (new Announcement({
+                eventId: eventId
+            }));
+        }
+
+        let msgObject = {
+            message: message,
+            timestamp: Math.floor((Date.now() / 1000))
+        };
+        announcements.messages.addToSet(msgObject);
+        await announcements.save();
+
+        await eventHelpers.notifyAnnouncements(event, message);
+
+        return res.send("Announcement created successfully");
+    }
+    catch (e) {
+        logger.error(e);
+        return res.status(500).send("Can't create announcement");
     }
 };
 
@@ -290,7 +384,27 @@ let findEvents = async function(req, res) {
             .gte("endTime", (Date.now() / 1000));
 
         let events = userEvents.concat(relevantEvents);
-        res.json(events);
+
+        let eventsObject = [];
+        for (let event of events) {
+            let eventObject = event.toJSON();
+            if (event.creator == userId) { 
+                eventObject.relevance = "created";
+            }
+            else if (event.followers.includes(userId)) {
+                eventObject.relevance = "subscribed";
+            }
+            else if (event.invited.includes(userId)) {
+                eventObject.relevance = "invited";
+            }
+            else {
+                eventObject.relevance = "public";
+            }
+    
+            eventsObject.push(eventObject);
+        }
+
+        res.json(eventsObject);
     }
     catch (e) {
         logger.error(e);
@@ -340,6 +454,8 @@ module.exports = {
     create: createEvent,
     update: updateEvent,
     delete: deleteEvent,
+    getAnnouncements: getAnnouncementsForEvent,
+    announcement: createAnnouncement,
     invite: invitePeople,
     find: findEvents,
     search: searchEvents

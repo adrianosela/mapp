@@ -39,6 +39,6 @@ router.post("/user/subscribe", middleware.verifyToken, userHandlers.subscribe);
 router.post("/user/unsubscribe", middleware.verifyToken, userHandlers.unsubscribe);
 
 // get users by username regex
-router.get("/user/search", userHandlers.search);
+router.get("/user/search", middleware.verifyToken, userHandlers.search);
 
 module.exports = router;
