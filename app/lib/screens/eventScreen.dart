@@ -73,7 +73,7 @@ class _EventPageState extends State<EventPage> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(2.0),
-                  child: Text((event.public) ? "Private Event" : "Public Event",
+                  child: Text((event.public) ? "Public Event" : "Private Event",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0

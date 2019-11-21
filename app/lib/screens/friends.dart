@@ -28,11 +28,10 @@ class _FriendsPageState extends State<FriendsPage> {
 
   Icon cusIcon = Icon(Icons.search);
   Widget cusWidget = Text("My Friends");
-  List<String> rows = new List<String>();
+  List<List<String>> rows = new List<List<String>>();
   List<String> ids = new List<String>();
   var searchText;
 
-  bool canAdd = false;
 
   @override
   void initState() {
@@ -66,7 +65,6 @@ class _FriendsPageState extends State<FriendsPage> {
                     onSubmitted: (String str) {
                       setState(() {
                         searchText = str;
-                        canAdd = true;
                         _getSearch(searchText);
                       });
                     },
@@ -75,7 +73,6 @@ class _FriendsPageState extends State<FriendsPage> {
                   this.cusIcon = Icon(Icons.search);
                   this.cusWidget = Text("Friends");
                   setState(() {
-                    canAdd = false;
                     _getUsers();
                   });
                 }
@@ -97,9 +94,9 @@ class _FriendsPageState extends State<FriendsPage> {
       final item = rows[index];
       final id = ids[index];
 
-      if (canAdd) {
+      if (item[1] == "false") {
         return ListTile(
-          title: ReusableFunctions.listItemText(item),
+          title: ReusableFunctions.listItemText(item[0]),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
             IconButton(
                 icon: Icon(Icons.person_add, color: Colors.green),
@@ -113,7 +110,7 @@ class _FriendsPageState extends State<FriendsPage> {
         );
       } else {
         return ListTile(
-          title: ReusableFunctions.listItemText(item),
+          title: ReusableFunctions.listItemText(item[0]),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
             IconButton(
                 icon: Icon(Icons.note_add, color: Colors.green),
@@ -148,7 +145,7 @@ class _FriendsPageState extends State<FriendsPage> {
       response.forEach((id, name) {
         setState(() {
           ids.add(id);
-          rows.add(name);
+          rows.add([name, "true"]);
         });
       });
     }
@@ -164,10 +161,11 @@ class _FriendsPageState extends State<FriendsPage> {
       print("here");
       print(search);
       print(response);
-      response.forEach((id, name) {
+      response.forEach((id, user) {
         setState(() {
           ids.add(id);
-          rows.add(name);
+          print(user);
+          rows.add(user);
         });
       });
     }
