@@ -95,7 +95,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(2.0),
                                       child: RaisedButton(
-                                        padding: const EdgeInsets.all(2.0),
+                                        color: Colors.blue,
+                                        textColor: Colors.white,
+                                        disabledColor: Colors.grey,
+                                        disabledTextColor: Colors.black,
+                                        padding: EdgeInsets.all(2.0),
+                                        splashColor: Colors.blueAccent,
                                         child: Text("Post"),
                                         onPressed: () async {
                                         //TODO add post call to send annoucment
@@ -173,7 +178,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           DatePicker.showDatePicker(context,
                               showTitleActions: true,
                               minTime: DateTime.now(),
-                              maxTime: DateTime.now().add(new Duration(days: 365)),
+                              maxTime: DateTime.now()
+                                  .add(new Duration(days: 365)),
                               onChanged: (date) {}, onConfirm: (date) {
                             eventDate = date;
                           },
