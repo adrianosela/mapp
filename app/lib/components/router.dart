@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:app/main.dart';
 import 'package:app/screens/createdEvents.dart';
-import 'package:app/screens/editSettingsPage.dart';
 import 'package:app/screens/friends.dart';
 import 'package:app/screens/inviteFriendsScreen.dart';
 import 'package:app/screens/inviteToEventsScreen.dart';
@@ -16,7 +15,6 @@ import 'package:app/screens/eventScreen.dart';
 class Router {
   static const String homeRoute = '/';
   static const String createdEventsRoute = '/createdEvents';
-  static const String editSettingsRoute = '/editSettings';
   static const String friendsRoute = '/friends';
   static const String inviteRoute = '/inviteFriends';
   static const String inviteToRoute = '/inviteToEvents';
@@ -33,8 +31,6 @@ class Router {
         return MaterialPageRoute(builder: (_) => MyHomePage());
       case createdEventsRoute:
         return MaterialPageRoute(builder: (_) => CreatedEventsPage());
-      case editSettingsRoute:
-        return MaterialPageRoute(builder: (_) => EditSettingsPage());
       case friendsRoute:
         return MaterialPageRoute(builder: (_) => FriendsPage());
       case inviteRoute:
@@ -57,8 +53,10 @@ class Router {
         return MaterialPageRoute(
             builder: (_) => Scaffold(
                   body: Center(
-                      child: Text('No route defined for ${settings.name}')),
-                ));
+                      child: Text('No route defined for ${settings.name}')
+                  ),
+                )
+        );
     }
   }
 }

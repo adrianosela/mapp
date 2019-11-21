@@ -166,10 +166,10 @@ class EventController {
     return null;
   }
 
-  ///TODO update an event
-  Future<String> updateEvent(String url, token, body) async {
+  ///updates an event
+  static Future<String> updateEvent(token, body) async {
     return http
-        .put(url,
+        .put("https://mapp-254321.appspot.com/event",
         headers: {
           "Content-Type": "application/json",
           "authorization": "Bearer $token"

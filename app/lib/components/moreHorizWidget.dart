@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/router.dart';
 
-///
+
 class Constants {
-  static const String Settings = "Settings";
   static const String Logout = "Logout";
 
   static const List<String> choices = <String>[
-    Settings,
-    Logout,
+    Logout
   ];
 }
 
-
-///
+///side logout menu
 class MyPopupMenu {
 
   static BuildContext mycontext;
@@ -37,11 +34,7 @@ class MyPopupMenu {
   }
 
   static void choiceAction(String choice) {
-    if(choice == Constants.Logout) {
-      Navigator.pushNamedAndRemoveUntil(mycontext, Router.homeRoute, (_) => false);
-    } else if (choice == Constants.Settings) {
-      Navigator.pushNamed(mycontext, Router.editSettingsRoute);
-    }
+    Navigator.pushNamedAndRemoveUntil(mycontext, Router.homeRoute, (_) => false);
   }
 }
 

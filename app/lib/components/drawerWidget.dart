@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:back_button_interceptor/back_button_interceptor.dart';
-
 import 'package:app/components/router.dart';
 
 import 'package:app/screens/friends.dart';
@@ -27,14 +25,8 @@ class _MyDrawerState extends State<MyDrawer> {
   void initState() {
     super.initState();
     userToken = FCM.getToken();
-    //BackButtonInterceptor.add(myInterceptor);
   }
 
-  ///forces back navigation to map screen
-  /*bool myInterceptor(bool stopDefaultButtonEvent) {
-    Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => true);
-    return true;
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -55,30 +47,40 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 title: Text('Map'),
                 onTap: () {
+                  Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
                   Navigator.pushNamed(context, Router.mapRoute);
                 },
               ),
               ListTile(
                 title: Text('Friends'),
                 onTap: () {
+                  Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
                   Navigator.push(context, MaterialPageRoute(builder: (context) => FriendsPage(events: events)));
                 },
               ),
               ListTile(
                 title: Text('Created Events'),
                 onTap: () {
+                  Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
                   Navigator.pushNamed(context, Router.createdEventsRoute);
                 },
               ),
               ListTile(
                 title: Text('Saved Events'),
                 onTap: () {
+                  Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
                   Navigator.pushNamed(context, Router.savedEventsRoute);
                 },
               ),
               ListTile(
                 title: Text('Pending Invites'),
                 onTap: () {
+                  Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
                   Navigator.pushNamed(context, Router.pendingInvitesRoute);
                 },
               ),

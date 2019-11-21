@@ -6,10 +6,13 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
+import 'package:app/components/router.dart';
 
 import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
+import 'package:app/models/eventModel.dart';
+
 import 'package:app/screens/eventScreen.dart';
 
 class CreatedEventsPage extends StatefulWidget {
@@ -24,12 +27,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   List<String> ids = new List<String>();
 
   ///vars for edit event alert dialog
-  bool isSwitched = true;
   var eventDate;
   final _formKey = GlobalKey<FormState>();
-  TextEditingController eventNameCont = TextEditingController();
-  TextEditingController eventDescriptionCont = TextEditingController();
-  TextEditingController eventDurationCont = TextEditingController();
   TextEditingController announcementCont = TextEditingController();
 
   @override
@@ -115,8 +114,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
               IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {
-                    setState(() {
-                      _update();
+                    setState(()  {
+                      _update(id);
                     });
                   }
               ),
@@ -137,7 +136,16 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
     }
   }
 
-  _update() {
+  _update(String id) async {
+
+    Event event_prev = await EventController.getEventObject(userToken, id);
+
+    TextEditingController eventNameCont = TextEditingController(text: event_prev.name);
+    TextEditingController eventDescriptionCont = TextEditingController(text:  event_prev.description);
+    TextEditingController eventDurationCont = TextEditingController(text: event_prev.duration);
+
+    bool isSwitched = event_prev.public;
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -217,10 +225,25 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       onPressed: () async {
                         if(_formKey.currentState.validate()) {
 
-                          ReusableFunctions.showInSnackBar(
-                              "Event Updated", context);
+                          Event event = new Event(
+                            name: eventNameCont.text,
+                            description: eventDescriptionCont.text,
+                            longitude: event_prev.longitude,
+                            latitude: event_prev.latitude,
+                            date: (eventDate == null) ? event_prev.date : eventDate,
+                            duration: eventDurationCont.text,
+                            public: isSwitched,
+                            invited: event_prev.invited,
+                            categories: event_prev.categories,
+                          );
 
-                          // TODO backend event update call
+                          Map<String, dynamic> eventToJson(event2) =>
+                              {
+                                'event': event2,
+                                'eventId': id
+                              };
+
+                          await EventController.updateEvent(userToken, eventToJson(event.toJson()));
 
                           ///clear text controllers
                           eventNameCont.clear();
@@ -228,6 +251,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           eventDurationCont.clear();
 
                           Navigator.of(context).pop();
+                          Navigator.pushNamed(context, Router.createdEventsRoute);
                         }
                       },
                     ),
