@@ -48,8 +48,6 @@ class _MyDrawerState extends State<MyDrawer> {
                 title: Text('Map'),
                 onTap: () {
                   Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
-                  Navigator.pushNamed(context, Router.mapRoute);
                 },
               ),
               ListTile(
