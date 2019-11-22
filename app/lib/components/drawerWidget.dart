@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/router.dart';
 
-import 'package:app/screens/friends.dart';
+import 'package:app/screens/following.dart';
+
 import 'package:app/models/fcmToken.dart';
 
 
@@ -51,11 +52,19 @@ class _MyDrawerState extends State<MyDrawer> {
                 },
               ),
               ListTile(
-                title: Text('Friends'),
+                title: Text('Followers'),
                 onTap: () {
                   Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FriendsPage(events: events)));
+                  Navigator.pushNamed(context, Router.followersRoute);
+                },
+              ),
+              ListTile(
+                title: Text('Following'),
+                onTap: () {
+                  Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FollowingPage(events: events)));
                 },
               ),
               ListTile(
