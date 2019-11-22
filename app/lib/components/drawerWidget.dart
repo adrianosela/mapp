@@ -26,6 +26,8 @@ class _MyDrawerState extends State<MyDrawer> {
   void initState() {
     super.initState();
     userToken = FCM.getToken();
+    print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+    print(events);
   }
 
 

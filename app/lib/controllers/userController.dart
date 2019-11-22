@@ -40,8 +40,6 @@ class UserController {
       "authorization": "Bearer $token"
     });
 
-    print("_______________________________________");
-    print(response.statusCode);
     if (response.statusCode == 200) {
       var userContainer = json.decode(response.body);
       if (userContainer != null) {

@@ -9,7 +9,6 @@ import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
 
-import 'package:app/screens/inviteToEventsScreen.dart';
 
 class FollowingPage extends StatefulWidget {
   final Map<String, String> events;
@@ -113,16 +112,7 @@ class _FollowingPageState extends State<FollowingPage> {
           title: ReusableFunctions.listItemText(item[0]),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
             IconButton(
-                icon: Icon(Icons.note_add),
-                onPressed: () async {
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => new InviteToEventsPage(
-                              events: events, userId: id)));
-                }),
-            IconButton(
-                icon: Icon(Icons.delete_forever),
+                icon: Icon(Icons.delete),
                 onPressed: () {
                   UserController.unfollowUser(userToken, id);
                   setState(() {

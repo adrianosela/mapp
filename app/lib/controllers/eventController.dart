@@ -148,26 +148,6 @@ class EventController {
     return annnouncements;
   }
 
-  ///invite users to an event
-  static Future<String> inviteToEvent(String url, token, body) async {
-    return http
-        .post(url,
-            headers: {
-              "Content-Type": "application/json",
-              "authorization": "Bearer $token"
-            },
-            body: jsonEncode(body))
-        .then((http.Response response) {
-      final int statusCode = response.statusCode;
-
-      if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw new Exception("Error while fetching data");
-      }
-
-      return statusCode.toString();
-    });
-  }
-
   ///get specific event object by event id
   static Future<Event> getEventObject(String token, String eventId) async {
     Map<String, String> query = {'id': eventId};
@@ -241,5 +221,4 @@ class EventController {
       return null;
     });
   }
-
 }

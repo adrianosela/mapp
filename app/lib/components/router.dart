@@ -5,7 +5,6 @@ import 'package:app/screens/createdEvents.dart';
 import 'package:app/screens/followers.dart';
 import 'package:app/screens/following.dart';
 import 'package:app/screens/inviteFriendsScreen.dart';
-import 'package:app/screens/inviteToEventsScreen.dart';
 import 'package:app/screens/map.dart';
 import 'package:app/screens/pendingInvites.dart';
 import 'package:app/screens/registerScreen.dart';
@@ -19,7 +18,6 @@ class Router {
   static const String followersRoute = '/followers';
   static const String followingRoute = '/following';
   static const String inviteRoute = '/inviteFriends';
-  static const String inviteToRoute = '/inviteToEvents';
   static const String mapRoute = '/map';
   static const String pendingInvitesRoute = '/pendingInvites';
   static const String registerRoute = '/registerRoute';
@@ -39,8 +37,6 @@ class Router {
         return MaterialPageRoute(builder: (_) => FollowingPage());
       case inviteRoute:
         return MaterialPageRoute(builder: (_) => InviteFriendsPage());
-      case inviteToRoute:
-        return MaterialPageRoute(builder: (_) => InviteToEventsPage());
       case mapRoute:
         return MaterialPageRoute(builder: (_) => MapPage());
       case pendingInvitesRoute:
