@@ -80,8 +80,10 @@ let addUsersAndSendInvites = async function(event, invited, add = false, notify 
     return invitedUsersTokens.length;
 };
 
-let notifyNewAnnouncement = async function(event, creator, notify = true) {
+let notifyNewAnnouncement = async function(event, notify = true) {
     if (event.followers != null && event.followers.length !== 0) {
+        let creator = await User.findById(event.creator);
+        
         let userSettings = await UserSettings.find({
             _id: { $in: event.followers }
         });
