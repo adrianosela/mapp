@@ -34,7 +34,21 @@ let getEvent = async function(req, res) {
             }
         }
 
-        res.json(event);
+        let eventObject = event.toJSON();
+        if (event.creator == userId) { 
+            eventObject.relevance = "created";
+        }
+        else if (event.followers.includes(userId)) {
+            eventObject.relevance = "subscribed";
+        }
+        else if (event.invited.includes(userId)) {
+            eventObject.relevance = "invited";
+        }
+        else {
+            eventObject.relevance = "public";
+        }
+
+        res.json(eventObject);
     }
     catch (e) {
         logger.error(e);
