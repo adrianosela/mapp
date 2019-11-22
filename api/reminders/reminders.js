@@ -33,8 +33,8 @@ let remind = async function() {
     catch (e) {
         logger.error(e);
     }
-}
+};
 
 module.exports = {
     remindUsers: remind
-}
+};
