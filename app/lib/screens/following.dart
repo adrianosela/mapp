@@ -11,23 +11,23 @@ import 'package:app/models/fcmToken.dart';
 
 import 'package:app/screens/inviteToEventsScreen.dart';
 
-class FriendsPage extends StatefulWidget {
+class FollowingPage extends StatefulWidget {
   final Map<String, String> events;
 
-  FriendsPage({this.events});
+  FollowingPage({this.events});
 
   @override
-  _FriendsPageState createState() => _FriendsPageState(events: events);
+  _FollowingPageState createState() => _FollowingPageState(events: events);
 }
 
-class _FriendsPageState extends State<FriendsPage> {
+class _FollowingPageState extends State<FollowingPage> {
   String userToken;
   final Map<String, String> events;
 
-  _FriendsPageState({this.events});
+  _FollowingPageState({this.events});
 
   Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("My Friends");
+  Widget cusWidget = Text("Following");
   List<List<String>> rows = new List<List<String>>();
   List<String> ids = new List<String>();
   var searchText;
@@ -71,7 +71,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   );
                 } else {
                   this.cusIcon = Icon(Icons.search);
-                  this.cusWidget = Text("Friends");
+                  this.cusWidget = Text("Following");
                   setState(() {
                     _getUsers();
                   });
@@ -113,7 +113,7 @@ class _FriendsPageState extends State<FriendsPage> {
           title: ReusableFunctions.listItemText(item[0]),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
             IconButton(
-                icon: Icon(Icons.note_add, color: Colors.green),
+                icon: Icon(Icons.note_add),
                 onPressed: () async {
                   Navigator.push(
                       context,
@@ -122,7 +122,7 @@ class _FriendsPageState extends State<FriendsPage> {
                               events: events, userId: id)));
                 }),
             IconButton(
-                icon: Icon(Icons.delete_forever, color: Colors.red),
+                icon: Icon(Icons.delete_forever),
                 onPressed: () {
                   UserController.unfollowUser(userToken, id);
                   setState(() {
@@ -158,13 +158,9 @@ class _FriendsPageState extends State<FriendsPage> {
     });
     var response = await UserController.searchUsers(userToken, search);
     if (response != null) {
-      print("here");
-      print(search);
-      print(response);
       response.forEach((id, user) {
         setState(() {
           ids.add(id);
-          print(user);
           rows.add(user);
         });
       });
