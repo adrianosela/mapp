@@ -3,10 +3,17 @@ const logger = require("tracer").console();
 const app = require("./server");
 const db = require("./store/datastore");
 const notifications = require("./notifications/notifications");
+const reminder = require("./reminders/reminders");
+
+const ONE_HOUR_IN_MS = 3600000;
 
 db.initialize(config.get("database.url"), config.get("database.name"));
 
 notifications.initialize(config.get("notifications.firebase"));
+
+setInterval(() => {
+    reminder.remindUsers();
+}, ONE_HOUR_IN_MS);
 
 // serve http - when running on Google App Engine, the PORT env variable
 // gets set by the runtime. Otherwise we use the default 'port' in config
