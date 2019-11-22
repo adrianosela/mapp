@@ -10,8 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:app/main.dart';
 import 'package:app/screens/registerScreen.dart';
-import 'package:app/screens/map.dart';
-import 'package:app/models/fcmToken.dart';
+//import 'package:app/screens/map.dart';
+//import 'package:app/models/fcmToken.dart';
 
 
 void main() {
@@ -67,7 +67,7 @@ void main() {
   });
 
 
-  testWidgets('Test Search Events functionality', (WidgetTester tester) async {
+  /*testWidgets('Test Search Events functionality', (WidgetTester tester) async {
 
     await tester.pumpWidget(new MyApp());
 
@@ -83,8 +83,6 @@ void main() {
     await tester.tap(loginButton);
     await tester.pump(const Duration(seconds: 1));
     var token = FCM.getToken();
-    print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-    print(token);
 
     MapPage page = new MapPage(userToken: token);
     var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
@@ -99,13 +97,13 @@ void main() {
     expect(find.byKey(new Key('search_popup')), findsOneWidget);
 
     Finder search = find.byKey(new Key('search'));
-    
+
     await tester.tap(search);
     await tester.pump(const Duration(seconds: 1));
   });
 
-  //TODO notifications test
-  /*testWidgets('Test Notification functionality', (WidgetTester tester) async {
+
+  testWidgets('Test Notification functionality', (WidgetTester tester) async {
 
     MapPage page = new MapPage();
     var app = new MediaQuery(data: new MediaQueryData(), child: new MaterialApp(home: page));
