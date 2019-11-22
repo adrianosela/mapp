@@ -264,7 +264,7 @@ describe("Test Event Handlers", function() {
                         endTime: TODAY_IN_EPOCH + DAY_IN_SEC,
                         _public: true,
                     };
-                    await eventHandler.update({body:{event:mockE}, authorization: {id: mockUser._id.toString()}}, response);
+                    await eventHandler.update({body:{eventId: mockE._id.toString(), event:mockE}, authorization: {id: mockUser._id.toString()}}, response);
                     expect(response.json).toBeCalled();
                 });
             });
