@@ -1,7 +1,9 @@
 const logger = require("tracer").console();
+const mongodb = require("mongodb");
+const UserHelpers = require("../utils/user");
+
 let User = require("../models/user");
 let Event = require("../models/event");
-let mongodb = require("mongodb");
 
 let getUser = async function(req, res) {
     try {
@@ -251,6 +253,8 @@ let followUser = async function(req, res) {
         userToFollow.followers.addToSet(user._id);
         await userToFollow.save();
 
+        UserHelpers.notifyFollowee(userToFollow, user);
+
         res.send("Successfully followed requested user");
     }
     catch (e) {
@@ -316,6 +320,10 @@ let subscribeToEvents = async function(req, res) {
 
         for (let event of events) {
             if (event.public) {
+                if (event.creator == userId) {
+                    continue;
+                }
+
                 if (user.pendingInvites.includes(event._id)) {
                     user.pendingInvites.pull(event._id);
                 }

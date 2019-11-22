@@ -1,7 +1,7 @@
 const logger = require("tracer").console();
 const validator = require("../validator/validator");
 const eventHelpers = require("../utils/event");
-var mongodb = require("mongodb");
+const mongodb = require("mongodb");
 
 // import Event, User, and Announcement schemas
 let Event = require("../models/event");
@@ -282,7 +282,7 @@ let createAnnouncement = async function(req, res) {
         announcements.messages.addToSet(msgObject);
         await announcements.save();
 
-        await eventHelpers.notifyAnnouncements(event, message);
+        await eventHelpers.notifyAnnouncements(event, userId);
 
         return res.send("Announcement created successfully");
     }

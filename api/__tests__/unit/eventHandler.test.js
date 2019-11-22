@@ -1,4 +1,4 @@
-let notifications = require("../../notifications/notifications");
+const notifications = require("../../notifications/notifications");
 const eventHandler = require("./../../handlers/event");
 const Response = require("jest-express/lib/response").Response;
 const mongoose = require("mongoose");
@@ -12,8 +12,6 @@ const LONGITUDE = -123.249572;
 const LATITUDE = 49.261718;
 const RADIUS_IN_M = 50000;
 
-notifications.initialize({}, false);
-
 describe("Test Event Handlers", function() {
     let response;
     const mockFriends = [mongoose.Types.ObjectId(), mongoose.Types.ObjectId()];
@@ -24,6 +22,8 @@ describe("Test Event Handlers", function() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
+
+        notifications.initialize({}, false);
 
         // mock user 1
         let mockUserSettings = await (new UserSettings({
