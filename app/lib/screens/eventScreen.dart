@@ -52,127 +52,146 @@ class _EventPageState extends State<EventPage> {
       );
     } else {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(event.name),
-        ),
-        body: Center(
-            child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.all(3.0),
-                child: Text("Event Details",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                        color: Colors.blue))),
-            Padding(
-              padding: EdgeInsets.all(2.0),
-              child: Text("About: " + event.description,
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-            ),
-            Padding(
-              padding: EdgeInsets.all(2.0),
-              child: Text((event.public) ? "Public Event" : "Private Event",
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0)),
-            ),
-            Padding(
-                padding: EdgeInsets.all(2.0),
-                child: Text(
-                    "Starts on " +
-                        new DateFormat.yMMMEd().format(event.date) +
-                        " " +
-                        new DateFormat.jm().format(event.date),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15.0))),
-            Padding(
-                padding: EdgeInsets.all(2.0),
-                child: Text(
-                    "Ends on " +
-                        new DateFormat.yMMMEd().format(event.date.add(
-                            new Duration(hours: int.parse(event.duration)))) +
-                        " " +
-                        new DateFormat.jm().format(event.date.add(
-                            new Duration(hours: int.parse(event.duration)))),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 15.0))),
-            Padding(
-              padding: EdgeInsets.all(2.0),
-              child: Text(address,
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0)),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(3.0),
-                  child: RaisedButton(
-                    color: Colors.blue,
-                    textColor: Colors.white,
-                    disabledColor: Colors.grey,
-                    disabledTextColor: Colors.black,
-                    padding: EdgeInsets.all(2.0),
-                    splashColor: Colors.blueAccent,
-                    onPressed: _openMap,
-                    child: Text('Directions',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 17.0)),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(3.0),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(3.0),
-                  child: RaisedButton(
-                    color: Colors.blue,
-                    textColor: Colors.white,
-                    disabledColor: Colors.grey,
-                    disabledTextColor: Colors.black,
-                    padding: EdgeInsets.all(2.0),
-                    splashColor: Colors.blueAccent,
-                    onPressed: _subscribeToEvent,
-                    child: Text('Going',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 17.0)),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: RaisedButton(
-                color: Colors.blue,
-                textColor: Colors.white,
-                disabledColor: Colors.grey,
-                disabledTextColor: Colors.black,
-                padding: EdgeInsets.all(2.0),
-                splashColor: Colors.blueAccent,
-                child: Text("Ok",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0)),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                },
+          appBar: AppBar(
+            title: Text(event.name),
+          ),
+          body: Column(
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: Center(
+                    child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.all(3.0),
+                        child: Text("Event Details",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                                color: Colors.blue))),
+                    Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Text("About: " + event.description,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18.0)),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Text(
+                          (event.public) ? "Public Event" : "Private Event",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15.0)),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: Text(
+                            "Starts on " +
+                                new DateFormat.yMMMEd().format(event.date) +
+                                " " +
+                                new DateFormat.jm().format(event.date),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15.0))),
+                    Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: Text(
+                            "Ends on " +
+                                new DateFormat.yMMMEd().format(event.date.add(
+                                    new Duration(
+                                        hours: int.parse(event.duration)))) +
+                                " " +
+                                new DateFormat.jm().format(event.date.add(
+                                    new Duration(
+                                        hours: int.parse(event.duration)))),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15.0))),
+                    Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Text(address,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15.0)),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(3.0),
+                          child: RaisedButton(
+                            color: Colors.blue,
+                            textColor: Colors.white,
+                            disabledColor: Colors.grey,
+                            disabledTextColor: Colors.black,
+                            padding: EdgeInsets.all(2.0),
+                            splashColor: Colors.blueAccent,
+                            onPressed: _openMap,
+                            child: Text('Directions',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17.0)),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(3.0),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(3.0),
+                          child: RaisedButton(
+                            color: Colors.blue,
+                            textColor: Colors.white,
+                            disabledColor: Colors.grey,
+                            disabledTextColor: Colors.black,
+                            padding: EdgeInsets.all(2.0),
+                            splashColor: Colors.blueAccent,
+                            onPressed: _subscribeToEvent,
+                            child: Text('Going',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17.0)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: RaisedButton(
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.black,
+                        padding: EdgeInsets.all(2.0),
+                        splashColor: Colors.blueAccent,
+                        child: Text("Back to Map",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15.0)),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Text("Announcmentes",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                              color: Colors.blue)),
+                    ),
+                  ],
+                )),
               ),
-            ),
-            new Container(
-              height: 400,
-              child: ListView.builder(
-                  // itemCount: this.count,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) =>
-                      this._buildRow(context, index)),
-            ),
-          ],
-        )),
-      );
+              Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: ListView.builder(
+                    // itemCount: this.count,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) =>
+                        this._buildRow(context, index)),
+              ),
+            ],
+          ));
     }
   }
 
