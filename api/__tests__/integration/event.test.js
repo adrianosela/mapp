@@ -167,6 +167,7 @@ describe("Test Event Handlers", function() {
             };
 
             const reqBody = {
+                "eventId": updatedEvent._id,
                 "event": updatedEvent
             };
             const res = await request.put("/event")
@@ -197,6 +198,7 @@ describe("Test Event Handlers", function() {
             };
 
             const reqBody = {
+                "eventId": updatedEvent._id,
                 "event": updatedEvent
             };
             const res = await request.put("/event")
