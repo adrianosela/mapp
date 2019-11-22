@@ -29,6 +29,33 @@ class UserController {
     return following;
   }
 
+  ///Get a map of users the current user is following => map(userid, username)
+  static Future<Map<String, String>> getUserFollowers(token) async {
+    var uri = Uri.https("mapp-254321.appspot.com", "/user/followers");
+
+    Map<String, String> following = new Map<String, String>();
+
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "authorization": "Bearer $token"
+    });
+
+    print("_______________________________________");
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      var userContainer = json.decode(response.body);
+      if (userContainer != null) {
+        for (var instance in userContainer) {
+          following[instance["id"].toString()] = instance["name"].toString();
+        }
+      }
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to fetch data');
+    }
+    return following;
+  }
+
   static Future<Map<String, List<String>>> searchUsers(token, String search) async {
     Map<String, String> query = {
       'username': search,
