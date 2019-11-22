@@ -80,21 +80,20 @@ let addUsersAndSendInvites = async function(event, invited, add = false, notify 
     return invitedUsersTokens.length;
 };
 
-let notifyNewAnnouncement = async function(event, message, notify = true) {
-    let subscribedUsersTokens = [];
+let notifyNewAnnouncement = async function(event, creator, notify = true) {
     if (event.followers != null && event.followers.length !== 0) {
-        let creator = await User.findById(event.creator);
-
         let userSettings = await UserSettings.find({
             _id: { $in: event.followers }
         });
+
+        let subscribedUsersTokens = [];
         for (let user of userSettings) {
             subscribedUsersTokens.push(user.fcmToken);
         }
 
         let notification = {
             title: "New Event Announcement",
-            body: `${creator.name} just announced: ${message}`
+            body: `${creator.name} just announced to ${event.name}`
         };
         if (notify) {
             notifications.notify(notification, subscribedUsersTokens);

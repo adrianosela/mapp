@@ -1,3 +1,4 @@
+const notifications = require("../../notifications/notifications");
 const userHandler = require("./../../handlers/user");
 const Response = require("jest-express/lib/response").Response;
 const mongoose = require("mongoose");
@@ -15,6 +16,8 @@ describe("Test User Handlers", function() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
+
+        notifications.initialize({}, false);
 
         // mock user 1
         let mockUserSettings = await (new UserSettings({
