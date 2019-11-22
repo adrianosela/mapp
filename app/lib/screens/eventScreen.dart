@@ -181,10 +181,10 @@ class _EventPageState extends State<EventPage> {
       final item = rows[index];
       return Card(
         child: ListTile(
-          title: Text(new DateFormat.yMMMEd().format(event.date) +
+          title: Text(item.message),
+          subtitle: Text(new DateFormat.yMMMEd().format(event.date) +
               " " +
               new DateFormat.jm().format(item.date)),
-          subtitle: Text(item.message),
         ),
       );
     }
