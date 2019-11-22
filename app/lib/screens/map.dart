@@ -56,8 +56,6 @@ class _MapPageState extends State<MapPage> {
   double radius = 5.0;
   double newRadius = 0;
 
-  Map<String, String> eventsInRadius = new Map<String, String>();
-
   //Map Filter
   Map<String, bool> categoriesMap = {
     'social': false,
@@ -528,8 +526,6 @@ class _MapPageState extends State<MapPage> {
         print(event.name);
         print(event.eventId);
 
-        eventsInRadius[event.eventId] = event.name;
-
         final MarkerId markerId = MarkerId(event.eventId);
 
         eventIds[markerId] = event.eventId;
@@ -577,7 +573,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(events: eventsInRadius),
+      drawer: MyDrawer(),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[

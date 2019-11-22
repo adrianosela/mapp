@@ -2,32 +2,23 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/router.dart';
 
-import 'package:app/screens/following.dart';
-
 import 'package:app/models/fcmToken.dart';
 
 
 class MyDrawer extends StatefulWidget {
-  final Map<String, String> events;
-  MyDrawer({this.events});
 
   @override
-  _MyDrawerState createState() => _MyDrawerState(events: events);
+  _MyDrawerState createState() => _MyDrawerState();
 }
 
 class _MyDrawerState extends State<MyDrawer> {
 
   String userToken;
-  final Map<String, String> events;
-  _MyDrawerState({this.events});
-
 
   @override
   void initState() {
     super.initState();
     userToken = FCM.getToken();
-    print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-    print(events);
   }
 
 
@@ -66,7 +57,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 onTap: () {
                   Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FollowingPage(events: events)));
+                  Navigator.pushNamed(context, Router.followingRoute);
                 },
               ),
               ListTile(
