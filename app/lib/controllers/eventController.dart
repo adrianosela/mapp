@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:app/models/eventModel.dart';
+import 'package:app/models/announcementModel.dart';
 import 'package:http/http.dart' as http;
 
 class EventController {
@@ -90,6 +91,61 @@ class EventController {
       Map<String, dynamic> jsonResponse = json.decode(response.body);
       return jsonResponse["data"]["eventId"];
     });
+  }
+
+  ///create an event
+   createAnnouncement(token, String eventId, String announcement) async {
+
+    var body = { "message": announcement, "eventId": eventId };
+
+    var uri = Uri.https(
+      "mapp-254321.appspot.com",
+      "/event/announcement",
+    );
+    return http
+        .post(uri,
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": "Bearer $token"
+        },
+        body: jsonEncode(body))
+        .then((http.Response response) {
+      final int statusCode = response.statusCode;
+
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        throw new Exception("Error while fetching data");
+      }
+
+    });
+  }
+
+  ///get specific event object by event id
+  static Future<List<Announcement>> getAnnouncements(String token, String eventId) async {
+    Map<String, String> query = {'id': eventId};
+
+    var uri = Uri.https(
+      "mapp-254321.appspot.com",
+      "/event/announcements",
+      query,
+    );
+
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "authorization": "Bearer $token"
+    });
+
+    List<Announcement> annnouncements = new List<Announcement>();
+    print(response.body);
+    if (response.statusCode == 200) {
+      var decodedResp = json.decode(response.body);
+      for (var announcement in decodedResp["messages"]) {
+        annnouncements.add(Announcement.fromJson(announcement));
+      }
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post');
+    }
+    return annnouncements;
   }
 
   ///invite users to an event

@@ -12,7 +12,7 @@ import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
 import 'package:app/models/eventModel.dart';
-
+import 'package:app/models/announcementModel.dart';
 import 'package:app/screens/eventScreen.dart';
 
 class CreatedEventsPage extends StatefulWidget {
@@ -51,8 +51,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         ],
       ),
       body: ListView.builder(
-          itemBuilder: (context, index) => this._buildRow(context, index)
-      ),
+          itemBuilder: (context, index) => this._buildRow(context, index)),
     );
   }
 
@@ -74,80 +73,76 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
               MaterialPageRoute(
                   builder: (context) => new EventPage(eventId: id)));
         },
-        trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.message),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(builder: (context, setState) {
-                            return SimpleDialog(
-                              title: ReusableFunctions.titleText("Create Announcment"),
-                              children: <Widget>[
-                                SimpleDialogOption(
-                                  child: ReusableFunctions.formInputMultiLine(
-                                      "Create Announcment... ", announcementCont),
-                                ),
-                                SimpleDialogOption(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: RaisedButton(
-                                        color: Colors.blue,
-                                        textColor: Colors.white,
-                                        disabledColor: Colors.grey,
-                                        disabledTextColor: Colors.black,
-                                        padding: EdgeInsets.all(2.0),
-                                        splashColor: Colors.blueAccent,
-                                        child: Text("Post"),
-                                        onPressed: () async {
-                                        //TODO add post call to send annoucment
-                                          announcementCont.clear();
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                    )
-                                ),
-                              ],
-                            );
-                          });
-                        });
-                  }
-              ),
-              IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    setState(()  {
-                      _update(id);
+        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          IconButton(
+              icon: Icon(Icons.message),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(builder: (context, setState) {
+                        return SimpleDialog(
+                          title:
+                          ReusableFunctions.titleText("Create Announcment"),
+                          children: <Widget>[
+                            SimpleDialogOption(
+                              child: ReusableFunctions.formInputMultiLine(
+                                  "Create Announcment... ", announcementCont),
+                            ),
+                            SimpleDialogOption(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: RaisedButton(
+                                    color: Colors.blue,
+                                    textColor: Colors.white,
+                                    disabledColor: Colors.grey,
+                                    disabledTextColor: Colors.black,
+                                    padding: EdgeInsets.all(2.0),
+                                    splashColor: Colors.blueAccent,
+                                    child: Text("Post"),
+                                    onPressed: () async {
+                                     await _createAnnouncement(
+                                          announcementCont.text, id);
+                                      announcementCont.clear();
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                )),
+                          ],
+                        );
+                      });
                     });
-                  }
-              ),
-              IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    setState(() {
-                      rows.removeAt(index);
-                      ReusableFunctions.showInSnackBar(
-                          "Event Deleted", context);
-                      EventController.deleteEvent(userToken, id);
-                    });
-                  }
-              ),
-            ]
-        ),
+              }),
+          IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                setState(() {
+                  _update(id);
+                });
+              }),
+          IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                setState(() {
+                  rows.removeAt(index);
+                  ReusableFunctions.showInSnackBar("Event Deleted", context);
+                  EventController.deleteEvent(userToken, id);
+                });
+              }),
+        ]),
       );
     }
   }
 
   _update(String id) async {
-
     Event event_prev = await EventController.getEventObject(userToken, id);
 
-    TextEditingController eventNameCont = TextEditingController(text: event_prev.name);
-    TextEditingController eventDescriptionCont = TextEditingController(text:  event_prev.description);
-    TextEditingController eventDurationCont = TextEditingController(text: event_prev.duration);
+    TextEditingController eventNameCont =
+    TextEditingController(text: event_prev.name);
+    TextEditingController eventDescriptionCont =
+    TextEditingController(text: event_prev.description);
+    TextEditingController eventDurationCont =
+    TextEditingController(text: event_prev.duration);
 
     bool isSwitched = event_prev.public;
 
@@ -178,11 +173,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           DatePicker.showDatePicker(context,
                               showTitleActions: true,
                               minTime: DateTime.now(),
-                              maxTime: DateTime.now()
-                                  .add(new Duration(days: 365)),
-                              onChanged: (date) {}, onConfirm: (date) {
-                            eventDate = date;
-                          },
+                              maxTime:
+                              DateTime.now().add(new Duration(days: 365)),
+                              onChanged: (date) {},
+                              onConfirm: (date) {
+                                eventDate = date;
+                              },
                               currentTime: DateTime.now(),
                               locale: LocaleType.en);
                         },
@@ -203,8 +199,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                         child: Text(
                           "Private Event?",
                           style: TextStyle(
-                              //TODO
-                              ),
+                            //TODO
+                          ),
                         ),
                       ),
                       Container(
@@ -229,14 +225,15 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                     child: RaisedButton(
                       child: Text("Save"),
                       onPressed: () async {
-                        if(_formKey.currentState.validate()) {
-
+                        if (_formKey.currentState.validate()) {
                           Event event = new Event(
                             name: eventNameCont.text,
                             description: eventDescriptionCont.text,
                             longitude: event_prev.longitude,
                             latitude: event_prev.latitude,
-                            date: (eventDate == null) ? event_prev.date : eventDate,
+                            date: (eventDate == null)
+                                ? event_prev.date
+                                : eventDate,
                             duration: eventDurationCont.text,
                             public: isSwitched,
                             invited: event_prev.invited,
@@ -244,12 +241,10 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           );
 
                           Map<String, dynamic> eventToJson(event2) =>
-                              {
-                                'event': event2,
-                                'eventId': id
-                              };
+                              {'event': event2, 'eventId': id};
 
-                          await EventController.updateEvent(userToken, eventToJson(event.toJson()));
+                          await EventController.updateEvent(
+                              userToken, eventToJson(event.toJson()));
 
                           ///clear text controllers
                           eventNameCont.clear();
@@ -257,7 +252,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           eventDurationCont.clear();
 
                           Navigator.of(context).pop();
-                          Navigator.pushNamed(context, Router.createdEventsRoute);
+                          Navigator.pushNamed(
+                              context, Router.createdEventsRoute);
                         }
                       },
                     ),
@@ -277,5 +273,10 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         rows.add(name);
       });
     }
+  }
+
+  _createAnnouncement(String announcement, String eventId) async {
+    await EventController()
+        .createAnnouncement(userToken, eventId, announcement);
   }
 }
