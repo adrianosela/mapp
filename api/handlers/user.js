@@ -62,7 +62,7 @@ let getFollowers = async function(req, res) {
             };
 
             if (user.following.includes(follower._id)) {
-                followeeObject.following = true;
+                followerObject.following = true;
             }
 
             response.push(followerObject);
