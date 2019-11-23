@@ -53,30 +53,61 @@ class _EventPageState extends State<EventPage> {
     } else {
       return Scaffold(
           appBar: AppBar(
-            title: Text(event.name),
+            title: Text("Event Details"),
           ),
           body: Column(
             children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: Center(
-                    child: Column(
+                    child: Card(
+                        child:Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Padding(
                         padding: EdgeInsets.all(3.0),
-                        child: Text("Event Details",
+                        child: Text(event.name,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 25,
                                 color: Colors.blue))),
                     Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: Text("About: " + event.description,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18.0)),
-                    ),
+                        padding: EdgeInsets.all(2.0),
+                        child: Card(
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return StatefulBuilder(
+                                        builder: (context, setState) {
+                                          return SimpleDialog(
+                                            title: ReusableFunctions.titleText(
+                                                event.name),
+                                            children: <Widget>[
+                                              SimpleDialogOption(
+                                                child:  Text(event.description,
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, fontSize: 18.0)),
+                                              )
+                                            ],
+                                          );
+                                        });
+                                  });
+                            },
+                            child: ListTile(
+                              title: Text("About", style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: Colors.blue)),
+                              subtitle: Text(event.description,overflow: TextOverflow.ellipsis,style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  )),
+                            ),
+                          ),
+                        )),
                     Padding(
                       padding: EdgeInsets.all(2.0),
                       child: Text(
@@ -109,8 +140,11 @@ class _EventPageState extends State<EventPage> {
                     Padding(
                       padding: EdgeInsets.all(2.0),
                       child: Text(address,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15.0)),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                          )),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -170,25 +204,33 @@ class _EventPageState extends State<EventPage> {
                         },
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: Text("Announcmentes",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                              color: Colors.blue)),
-                    ),
                   ],
-                )),
+                ))),
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.4,
-                child: ListView.builder(
-                    // itemCount: this.count,
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) =>
-                        this._buildRow(context, index)),
+              Card(
+                child: Container(
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: Column(
+//                          mainAxisSize: MainAxisSize.min,
+//                          mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.all(3.0),
+                            child: Text("Announcements",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                    color: Colors.blue)),
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.35,
+                            child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) =>
+                                    this._buildRow(context, index)),
+                          ),
+                        ]))
               ),
             ],
           ));
