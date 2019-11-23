@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as prefix0;
 import 'dart:io' show Platform;
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
@@ -131,7 +132,6 @@ class _MapPageState extends State<MapPage> {
         ///get new notifications token if we just logged in
         if (FCM.getFcmToken() == null) {
           Map<String, dynamic> toJson(token) => {'fcmToken': token};
-
           LoginController.postFCM(toJson(token), userToken);
           FCM.setFcmToken(token);
         }

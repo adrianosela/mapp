@@ -14,6 +14,7 @@ class LoginController {
 
       if(statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
+
         return jsonResponse["token"];
       }
       else if (statusCode == 400 || statusCode == 401 || (statusCode == 500 && response.body != null)) {

@@ -2,7 +2,8 @@ import 'package:app/components/reusableFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/components/router.dart';
-
+import 'package:app/models/fcmToken.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // This will works always for lock screen Orientation.
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -34,6 +35,8 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
+
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -41,6 +44,25 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _login();
+  }
+
+  _login() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString("token");
+
+    print(token);
+
+    if(token != null){
+      FCM.setToken(token);
+      Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
