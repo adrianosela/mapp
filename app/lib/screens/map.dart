@@ -128,13 +128,9 @@ class _MapPageState extends State<MapPage> {
     ///only show notifications for Android
     if (Platform.isAndroid) {
       _firebaseMessaging.getToken().then((token) async {
-
         ///get new notifications token if we just logged in
-        if(FCM.getFcmToken() == null) {
-
-          Map<String, dynamic> toJson(token) => {
-            'fcmToken' : token
-          };
+        if (FCM.getFcmToken() == null) {
+          Map<String, dynamic> toJson(token) => {'fcmToken': token};
 
           LoginController.postFCM(toJson(token), userToken);
           FCM.setFcmToken(token);
@@ -179,33 +175,31 @@ class _MapPageState extends State<MapPage> {
               children: <Widget>[
                 SimpleDialogOption(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 25.0),
-                      child: Slider(
-                        min: 0.0,
-                        max: 20,
-                        divisions: 20,
-                        label: newRadius.toString(),
-                        onChanged: (val) {
-                          setState(() => newRadius = val);
-                        },
-                        value: newRadius,
-                      ),
-                    )
-                ),
+                  padding: const EdgeInsets.only(top: 25.0),
+                  child: Slider(
+                    min: 0.0,
+                    max: 20,
+                    divisions: 20,
+                    label: newRadius.toString(),
+                    onChanged: (val) {
+                      setState(() => newRadius = val);
+                    },
+                    value: newRadius,
+                  ),
+                )),
                 SimpleDialogOption(
                     child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: RaisedButton(
-                        child: Text("Update Map"),
-                        onPressed: () async {
-                          radius = newRadius;
-                          LocationData curLocation = await location.getLocation();
-                          await _addMarkers(curLocation);
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    )
-                ),
+                  padding: const EdgeInsets.all(2.0),
+                  child: RaisedButton(
+                    child: Text("Update Map"),
+                    onPressed: () async {
+                      radius = newRadius;
+                      LocationData curLocation = await location.getLocation();
+                      await _addMarkers(curLocation);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )),
               ],
             );
           });
@@ -222,251 +216,257 @@ class _MapPageState extends State<MapPage> {
           return StatefulBuilder(
             builder: (context, setState) {
               return AlertDialog(
-                content: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ReusableFunctions.titleText("Create New Event"),
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: ReusableFunctions.formInput(
-                            "enter event name", eventNameCont),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: ReusableFunctions.formInput(
-                            "enter event description", eventDescriptionCont),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: FlatButton(
-                            onPressed: () {
-                              DatePicker.showDateTimePicker(context,
-                                  showTitleActions: true,
-                                  minTime: DateTime.now(),
-                                  maxTime: DateTime.now()
-                                      .add(new Duration(days: 365)),
-                                  onChanged: (date) {}, onConfirm: (date) {
-                                eventDate = date;
-                              },
-                                  currentTime: DateTime.now(),
-                                  locale: LocaleType.en);
-                            },
-                            child: Text(
-                              'pick event date',
-                              style: TextStyle(color: Colors.blue),
-                            )),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: ReusableFunctions.formInput(
-                            "enter event duration (hours)", eventDurationCont),
-                      ),
-                      Row(
+                content: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              "Private Event?"
-                            ),
+                          ReusableFunctions.titleText("Create New Event"),
+                          Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: ReusableFunctions.formInput(
+                                "enter event name", eventNameCont),
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.14,
+                          Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: ReusableFunctions.formInput(
+                                "enter event description",
+                                eventDescriptionCont),
                           ),
-                          Container(
-                            child: Switch(
-                              value: isSwitched,
-                              onChanged: (value) {
-                                setState(() {
-                                  isSwitched = value;
-                                });
+                          Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: FlatButton(
+                                onPressed: () {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime.now(),
+                                      maxTime: DateTime.now()
+                                          .add(new Duration(days: 365)),
+                                      onChanged: (date) {}, onConfirm: (date) {
+                                    eventDate = date;
+                                  },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.en);
+                                },
+                                child: Text(
+                                  'pick event date',
+                                  style: TextStyle(color: Colors.blue),
+                                )),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: ReusableFunctions.formInput(
+                                "enter event duration (hours)",
+                                eventDurationCont),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.all(10.0),
+                                child: Text("Private Event?"),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.14,
+                              ),
+                              Container(
+                                child: Switch(
+                                  value: isSwitched,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isSwitched = value;
+                                    });
+                                  },
+                                  activeTrackColor: Colors.lightBlueAccent,
+                                  activeColor: Colors.blue,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.all(10.0),
+                                child: Text("Invite Friends"),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.16,
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  final result = await Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new InviteFriendsPage()));
+                                  usersToInvite = result;
+                                },
+                                icon: Icon(Icons.person_add),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: RaisedButton(
+                              color: Colors.blue,
+                              textColor: Colors.white,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              padding: EdgeInsets.all(6.0),
+                              splashColor: Colors.blueAccent,
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return StatefulBuilder(
+                                          builder: (context, setState) {
+                                        return SimpleDialog(
+                                          title: ReusableFunctions.titleText(
+                                              "Categories"),
+                                          children: <Widget>[
+                                            SimpleDialogOption(
+                                              child: CheckboxListTile(
+                                                title: Text("Social"),
+                                                value: eventCategoriesMap[
+                                                    'social'],
+                                                selected: eventCategoriesMap[
+                                                    'social'],
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    eventCategoriesMap[
+                                                        'social'] = val;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            SimpleDialogOption(
+                                              child: CheckboxListTile(
+                                                title: Text("Community"),
+                                                value: eventCategoriesMap[
+                                                    'community'],
+                                                selected: eventCategoriesMap[
+                                                    'community'],
+                                                onChanged: (bool val) {
+                                                  setState(() {
+                                                    eventCategoriesMap[
+                                                        'community'] = val;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            SimpleDialogOption(
+                                              child: CheckboxListTile(
+                                                title: Text("Sports"),
+                                                value: eventCategoriesMap[
+                                                    'sports'],
+                                                selected: eventCategoriesMap[
+                                                    'sports'],
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    eventCategoriesMap[
+                                                        'sports'] = val;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            SimpleDialogOption(
+                                              child: CheckboxListTile(
+                                                title: Text("Corporate"),
+                                                selected: eventCategoriesMap[
+                                                    'corporate'],
+                                                value: eventCategoriesMap[
+                                                    'corporate'],
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    eventCategoriesMap[
+                                                        'corporate'] = val;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            SimpleDialogOption(
+                                              child: CheckboxListTile(
+                                                title: Text("Other"),
+                                                selected:
+                                                    eventCategoriesMap['other'],
+                                                value:
+                                                    eventCategoriesMap['other'],
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    eventCategoriesMap[
+                                                        'other'] = val;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            SimpleDialogOption(
+                                                child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
+                                              child: RaisedButton(
+                                                child: Text("Ok"),
+                                                onPressed: () async {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            )),
+                                          ],
+                                        );
+                                      });
+                                    });
                               },
-                              activeTrackColor: Colors.lightBlueAccent,
-                              activeColor: Colors.blue,
+                              child: Text("Select Categories"),
                             ),
                           ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              "Invite Friends"
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.16,
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              final result = await Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) =>
-                                          new InviteFriendsPage()));
-                              usersToInvite = result;
-                            },
-                            icon: Icon(Icons.person_add),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: RaisedButton(
-                          color: Colors.blue,
-                          textColor: Colors.white,
-                          disabledColor: Colors.grey,
-                          disabledTextColor: Colors.black,
-                          padding: EdgeInsets.all(6.0),
-                          splashColor: Colors.blueAccent,
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return StatefulBuilder(
-                                      builder: (context, setState) {
-                                    return SimpleDialog(
-                                      title: ReusableFunctions.titleText(
-                                          "Categories"),
-                                      children: <Widget>[
-                                        SimpleDialogOption(
-                                          child: CheckboxListTile(
-                                            title: Text("Social"),
-                                            value: eventCategoriesMap['social'],
-                                            selected:
-                                                eventCategoriesMap['social'],
-                                            onChanged: (val) {
-                                              setState(() {
-                                                eventCategoriesMap['social'] =
-                                                    val;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        SimpleDialogOption(
-                                          child: CheckboxListTile(
-                                            title: Text("Community"),
-                                            value:
-                                                eventCategoriesMap['community'],
-                                            selected:
-                                                eventCategoriesMap['community'],
-                                            onChanged: (bool val) {
-                                              setState(() {
-                                                eventCategoriesMap[
-                                                    'community'] = val;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        SimpleDialogOption(
-                                          child: CheckboxListTile(
-                                            title: Text("Sports"),
-                                            value: eventCategoriesMap['sports'],
-                                            selected:
-                                                eventCategoriesMap['sports'],
-                                            onChanged: (val) {
-                                              setState(() {
-                                                eventCategoriesMap['sports'] =
-                                                    val;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        SimpleDialogOption(
-                                          child: CheckboxListTile(
-                                            title: Text("Corporate"),
-                                            selected:
-                                                eventCategoriesMap['corporate'],
-                                            value:
-                                                eventCategoriesMap['corporate'],
-                                            onChanged: (val) {
-                                              setState(() {
-                                                eventCategoriesMap[
-                                                    'corporate'] = val;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        SimpleDialogOption(
-                                          child: CheckboxListTile(
-                                            title: Text("Other"),
-                                            selected:
-                                                eventCategoriesMap['other'],
-                                            value: eventCategoriesMap['other'],
-                                            onChanged: (val) {
-                                              setState(() {
-                                                eventCategoriesMap['other'] =
-                                                    val;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        SimpleDialogOption(
-                                            child: Padding(
-                                          padding: const EdgeInsets.all(2.0),
-                                          child: RaisedButton(
-                                            child: Text("Ok"),
-                                            onPressed: () async {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        )),
-                                      ],
-                                    );
-                                  });
-                                });
-                          },
-                          child: Text("Select Categories"),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: RaisedButton(
-                          color: Colors.blue,
-                          textColor: Colors.white,
-                          disabledColor: Colors.grey,
-                          disabledTextColor: Colors.black,
-                          padding: EdgeInsets.all(2.0),
-                          splashColor: Colors.blueAccent,
-                          child: Text("Save"),
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              List<String> categories = new List<String>();
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: RaisedButton(
+                              color: Colors.blue,
+                              textColor: Colors.white,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              padding: EdgeInsets.all(2.0),
+                              splashColor: Colors.blueAccent,
+                              child: Text("Save"),
+                              onPressed: () async {
+                                if (_formKey.currentState.validate()) {
+                                  List<String> categories = new List<String>();
 
-                              for (String category in eventCategoriesMap.keys) {
-                                if (eventCategoriesMap[category]) {
-                                  categories.add(category);
+                                  for (String category
+                                      in eventCategoriesMap.keys) {
+                                    if (eventCategoriesMap[category]) {
+                                      categories.add(category);
+                                    }
+                                  }
+                                  Event event = new Event(
+                                    name: eventNameCont.text,
+                                    description: eventDescriptionCont.text,
+                                    longitude: latlang.longitude,
+                                    latitude: latlang.latitude,
+                                    date: eventDate,
+                                    duration: eventDurationCont.text,
+                                    public: !isSwitched,
+                                    invited: usersToInvite,
+                                    categories: categories,
+                                  );
+
+                                  eventId = await eventController.createEvent(
+                                      "https://mapp-254321.appspot.com/event",
+                                      userToken,
+                                      event.toJson());
+
+                                  _addMarkerLongPressed(latlang);
+
+                                  Navigator.of(context).pop();
                                 }
-                              }
-                              Event event = new Event(
-                                name: eventNameCont.text,
-                                description: eventDescriptionCont.text,
-                                longitude: latlang.longitude,
-                                latitude: latlang.latitude,
-                                date: eventDate,
-                                duration: eventDurationCont.text,
-                                public: !isSwitched,
-                                invited: usersToInvite,
-                                categories: categories,
-                              );
-
-                              eventId = await eventController.createEvent(
-                                  "https://mapp-254321.appspot.com/event",
-                                  userToken,
-                                  event.toJson());
-
-                              _addMarkerLongPressed(latlang);
-
-                              Navigator.of(context).pop();
-                            }
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
               );
             },
           );
@@ -526,16 +526,21 @@ class _MapPageState extends State<MapPage> {
         final LatLng position =
             new prefix0.LatLng(event.latitude, event.longitude);
 
-        BitmapDescriptor color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
+        BitmapDescriptor color =
+            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
 
-        if (event.relevance == "invited"){
-          color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
-        } else if (event.relevance == "public"){
-          color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-        } else if (event.relevance == "subscribed"){
-          color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+        if (event.relevance == "invited") {
+          color =
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+        } else if (event.relevance == "public") {
+          color =
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+        } else if (event.relevance == "subscribed") {
+          color =
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
         } else {
-          color = BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
+          color =
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
         }
 
         Marker marker = Marker(
@@ -658,29 +663,30 @@ class _MapPageState extends State<MapPage> {
                                   padding: const EdgeInsets.all(2.0),
                                   child: Text("Search"),
                                   onPressed: () async {
-                                    List<String> categories = new List<String>();
+                                    List<String> categories =
+                                        new List<String>();
 
-                                    for (String category in categoriesMap.keys) {
+                                    for (String category
+                                        in categoriesMap.keys) {
                                       if (categoriesMap[category]) {
                                         categories.add(category);
                                       }
                                     }
                                     List<Event> events =
-                                    await eventController.searchEvents(
-                                        eventSearchCont.text,
-                                        categories,
-                                        userToken);
+                                        await eventController.searchEvents(
+                                            eventSearchCont.text,
+                                            categories,
+                                            userToken);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                            new SearchedEventsPage(
-                                                events: events)));
+                                                new SearchedEventsPage(
+                                                    events: events)));
                                     eventSearchCont.clear();
                                   },
                                 ),
-                              )
-                          ),
+                              )),
                         ],
                       );
                     });
@@ -693,11 +699,13 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
       body: _initializeMap(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await _onActionButtonTap();
         },
-        child: Icon(Icons.filter_tilt_shift),
+        icon: Icon(Icons.filter_tilt_shift),
+        label: Text('RADIUS'),
         backgroundColor: Colors.green,
       ),
     );
@@ -715,8 +723,8 @@ class _MapPageState extends State<MapPage> {
                 padding: EdgeInsets.all(15.0),
                 child: Text(msg,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
                     )),
               ),
               Padding(
@@ -728,14 +736,12 @@ class _MapPageState extends State<MapPage> {
                   disabledTextColor: Colors.black,
                   padding: EdgeInsets.all(2.0),
                   splashColor: Colors.blueAccent,
-                  onPressed:() {
+                  onPressed: () {
                     Navigator.pop(context);
                   },
                   child: Text('Ok',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17.0
-                      )),
+                          fontWeight: FontWeight.bold, fontSize: 17.0)),
                 ),
               ),
             ],
