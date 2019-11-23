@@ -217,14 +217,6 @@ class _EventPageState extends State<EventPage> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: Text("Announcements",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                              color: Colors.blue)),
-                    ),
                   ],
                 ))),
               ),
