@@ -1,5 +1,17 @@
 const emailValidator = require("email-validator");
 const isValidCoordinates = require("is-valid-coordinates");
+const mongodb = require("mongodb");
+
+// validateMongoId validates that an id is valid mongo ObjectID
+let validateMongoId = function(id) {
+    if (!id) {
+        return {ok: false, error: "no resource id provided"};
+    }
+    if (!mongodb.ObjectID.isValid(id)) {
+        return {ok: false, error: "provided id is not valid"};
+    }
+    return {ok:true};
+};
 
 // validateExistingUserData validates an email, password pair
 let validateExistingUserData = function(email, password) {
@@ -105,6 +117,7 @@ let validateEventSearch = function(lat, lon, rad) {
 };
 
 module.exports = {
+    mongoId: validateMongoId,
     existingUser: validateExistingUserData,
     newUser: validateNewUserData,
     event: validateEventData,
