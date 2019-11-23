@@ -56,8 +56,6 @@ class _MapPageState extends State<MapPage> {
   double radius = 5.0;
   double newRadius = 0;
 
-  Map<String, String> eventsInRadius = new Map<String, String>();
-
   //Map Filter
   Map<String, bool> categoriesMap = {
     'social': false,
@@ -256,7 +254,6 @@ class _MapPageState extends State<MapPage> {
                                   locale: LocaleType.en);
                             },
                             child: Text(
-                              //TODO
                               'pick event date',
                               style: TextStyle(color: Colors.blue),
                             )),
@@ -271,10 +268,7 @@ class _MapPageState extends State<MapPage> {
                           Container(
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              "Private Event?",
-                              style: TextStyle(
-                                  //TODO
-                                  ),
+                              "Private Event?"
                             ),
                           ),
                           Container(
@@ -299,10 +293,7 @@ class _MapPageState extends State<MapPage> {
                           Container(
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              "Invite Friends",
-                              style: TextStyle(
-                                  //TODO
-                                  ),
+                              "Invite Friends"
                             ),
                           ),
                           Container(
@@ -528,8 +519,6 @@ class _MapPageState extends State<MapPage> {
         print(event.name);
         print(event.eventId);
 
-        eventsInRadius[event.eventId] = event.name;
-
         final MarkerId markerId = MarkerId(event.eventId);
 
         eventIds[markerId] = event.eventId;
@@ -577,7 +566,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(events: eventsInRadius),
+      drawer: MyDrawer(),
       appBar: AppBar(
         title: cusWidget,
         actions: <Widget>[

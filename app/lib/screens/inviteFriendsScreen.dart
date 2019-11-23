@@ -82,7 +82,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   }
 
   _getUsers() async {
-    var response = await UserController.getUserFollowing(userToken);
+    var response = await UserController.getUserFollowers(userToken);
     if(response != null) {
       response.forEach((key, value){
           ids.add(key);
