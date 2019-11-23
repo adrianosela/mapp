@@ -94,9 +94,8 @@ class EventController {
   }
 
   ///create an event
-   createAnnouncement(token, String eventId, String announcement) async {
-
-    var body = { "message": announcement, "eventId": eventId };
+  createAnnouncement(token, String eventId, String announcement) async {
+    var body = {"message": announcement, "eventId": eventId};
 
     var uri = Uri.https(
       "mapp-254321.appspot.com",
@@ -104,23 +103,23 @@ class EventController {
     );
     return http
         .post(uri,
-        headers: {
-          "Content-Type": "application/json",
-          "authorization": "Bearer $token"
-        },
-        body: jsonEncode(body))
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": "Bearer $token"
+            },
+            body: jsonEncode(body))
         .then((http.Response response) {
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
         throw new Exception("Error while fetching data");
       }
-
     });
   }
 
   ///get specific event object by event id
-  static Future<List<Announcement>> getAnnouncements(String token, String eventId) async {
+  static Future<List<Announcement>> getAnnouncements(
+      String token, String eventId) async {
     Map<String, String> query = {'id': eventId};
 
     var uri = Uri.https(
@@ -138,8 +137,10 @@ class EventController {
     print(response.body);
     if (response.statusCode == 200) {
       var decodedResp = json.decode(response.body);
-      for (var announcement in decodedResp["messages"]) {
-        annnouncements.add(Announcement.fromJson(announcement));
+      if (decodedResp != null) {
+        for (var announcement in decodedResp["messages"]) {
+          annnouncements.add(Announcement.fromJson(announcement));
+        }
       }
     } else {
       // If that response was not OK, throw an error.
@@ -182,11 +183,7 @@ class EventController {
   static Future<String> deleteEvent(String token, eventId) async {
     Map<String, String> query = {'id': eventId};
 
-    var uri = Uri.https(
-      "mapp-254321.appspot.com",
-      "/event",
-      query
-    );
+    var uri = Uri.https("mapp-254321.appspot.com", "/event", query);
 
     final response = await http.delete(uri, headers: {
       "Content-Type": "application/json",
@@ -206,11 +203,11 @@ class EventController {
   static Future<String> updateEvent(token, body) async {
     return http
         .put("https://mapp-254321.appspot.com/event",
-        headers: {
-          "Content-Type": "application/json",
-          "authorization": "Bearer $token"
-        },
-        body: jsonEncode(body))
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": "Bearer $token"
+            },
+            body: jsonEncode(body))
         .then((http.Response response) {
       final int statusCode = response.statusCode;
 
