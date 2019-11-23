@@ -13,6 +13,7 @@ import 'package:app/models/fcmToken.dart';
 import 'package:app/models/eventModel.dart';
 
 import 'package:app/screens/map.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReusableFunctions{
 
@@ -226,6 +227,8 @@ class ReusableFunctions{
               //save user token
               userToken = response;
               FCM.setToken(userToken);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setString('token', userToken);
               Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
 
             }

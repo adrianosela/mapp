@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:app/components/router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Constants {
@@ -33,7 +34,9 @@ class MyPopupMenu {
     );
   }
 
-  static void choiceAction(String choice) {
+  static void choiceAction(String choice) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', null);
     Navigator.pushNamedAndRemoveUntil(mycontext, Router.homeRoute, (_) => false);
   }
 }
