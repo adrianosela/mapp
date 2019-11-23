@@ -138,8 +138,10 @@ class EventController {
     print(response.body);
     if (response.statusCode == 200) {
       var decodedResp = json.decode(response.body);
-      for (var announcement in decodedResp["messages"]) {
-        annnouncements.add(Announcement.fromJson(announcement));
+      if (decodedResp != null){
+        for (var announcement in decodedResp["messages"]) {
+          annnouncements.add(Announcement.fromJson(announcement));
+        }
       }
     } else {
       // If that response was not OK, throw an error.
@@ -147,7 +149,7 @@ class EventController {
     }
     return annnouncements;
   }
-
+  
   ///invite users to an event
   static Future<String> inviteToEvent(String url, token, body) async {
     return http
