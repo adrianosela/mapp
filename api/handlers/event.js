@@ -1,7 +1,6 @@
 const logger = require("tracer").console();
 const validator = require("../validator/validator");
 const eventHelpers = require("../utils/event");
-const mongodb = require("mongodb");
 
 // import Event, User, and Announcement schemas
 let Event = require("../models/event");
@@ -12,14 +11,12 @@ let Announcement = require("../models/announcement");
 let getEvent = async function(req, res) {
     try {
         const userId = req.authorization.id;
-
         const eventId = req.query.id;
-        if (!eventId) {
-            return res.status(400).send("No event id in query string");
-        }
 
-        if (!mongodb.ObjectID.isValid(eventId)) {
-            return res.status(400).send("provided id is not valid");
+        // validate id
+        let val = validator.mongoId(eventId);
+        if (val.ok === false) {
+            return res.status(400).send(val.error);
         }
 
         let event = await Event.findById(eventId);
@@ -35,7 +32,7 @@ let getEvent = async function(req, res) {
         }
 
         let eventObject = event.toJSON();
-        if (event.creator == userId) { 
+        if (event.creator == userId) {
             eventObject.relevance = "created";
         }
         else if (event.followers.includes(userId)) {
@@ -139,8 +136,10 @@ let updateEvent = async function(req, res) {
             return res.status(400).send("No updated event specified");
         }
 
-        if (!mongodb.ObjectID.isValid(eventId)) {
-            return res.status(400).send("Event id provided is not valid");
+        // validate id
+        let valid = validator.mongoId(eventId);
+        if (valid.ok === false) {
+            return res.status(400).send(val.error);
         }
 
         let latitude = Number(newEvent.latitude);
@@ -184,12 +183,11 @@ let deleteEvent = async function(req, res) {
     const userId = req.authorization.id;
 
     const eventId = req.query.id;
-    if (!eventId) {
-        return res.status(400).send("No event id provided");
-    }
 
-    if (!mongodb.ObjectID.isValid(eventId)) {
-        return res.status(400).send("provided id is not valid");
+    // validate id
+    let val = validator.mongoId(eventId);
+    if (val.ok === false) {
+        return res.status(400).send(val.error);
     }
 
     try {
@@ -223,12 +221,11 @@ let getAnnouncementsForEvent = async function(req, res) {
     const userId = req.authorization.id;
 
     const eventId = req.query.id;
-    if (!eventId) {
-        return res.status(400).send("No event id in query string");
-    }
 
-    if (!mongodb.ObjectID.isValid(eventId)) {
-        return res.status(400).send("provided id is not valid");
+    // validate id
+    let val = validator.mongoId(eventId);
+    if (val.ok === false) {
+        return res.status(400).send(val.error);
     }
 
     try {
@@ -266,8 +263,10 @@ let createAnnouncement = async function(req, res) {
         return res.status(400).send("Event id and/or message not provided");
     }
 
-    if (!mongodb.ObjectID.isValid(eventId)) {
-        return res.status(400).send("Event id is not valid");
+    // validate id
+    let val = validator.mongoId(eventId);
+    if (val.ok === false) {
+        return res.status(400).send(val.error);
     }
 
     try {
@@ -310,12 +309,11 @@ let createAnnouncement = async function(req, res) {
 let invitePeople = async function(req, res) {
     try {
         const eventId = req.body.eventId;
-        if (!eventId) {
-            return res.status(400).send("No event id provided");
-        }
 
-        if (!mongodb.ObjectID.isValid(eventId)) {
-            return res.status(400).send("provided id is not valid");
+        // validate id
+        let val = validator.mongoId(eventId);
+        if (val.ok === false) {
+            return res.status(400).send(val.error);
         }
 
         let invited = req.body.invited;
@@ -402,7 +400,7 @@ let findEvents = async function(req, res) {
         let eventsObject = [];
         for (let event of events) {
             let eventObject = event.toJSON();
-            if (event.creator == userId) { 
+            if (event.creator == userId) {
                 eventObject.relevance = "created";
             }
             else if (event.followers.includes(userId)) {
@@ -414,7 +412,7 @@ let findEvents = async function(req, res) {
             else {
                 eventObject.relevance = "public";
             }
-    
+
             eventsObject.push(eventObject);
         }
 

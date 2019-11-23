@@ -134,7 +134,7 @@ describe("Test Event Handlers", function() {
             it("should not get non-existent event with no id provided", async function() {
                 await eventHandler.get({query:{id:""}, authorization:{id:mockUser._id}}, response);
                 expect(response.status).toBeCalledWith(400);
-                expect(response.send).toBeCalledWith("No event id in query string");
+                expect(response.send).toBeCalledWith("no resource id provided");
             });
         });
     });
