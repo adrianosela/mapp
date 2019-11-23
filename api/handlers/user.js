@@ -57,8 +57,14 @@ let getFollowers = async function(req, res) {
         for (let follower of followers) {
             let followerObject = {
                 id: follower._id,
-                name: follower.name
+                name: follower.name,
+                following: false
             };
+
+            if (user.following.includes(follower._id)) {
+                followerObject.following = true;
+            }
+
             response.push(followerObject);
         }
 
