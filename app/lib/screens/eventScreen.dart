@@ -61,7 +61,7 @@ class _EventPageState extends State<EventPage> {
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: Center(
                     child: Card(
-                        child:Column(
+                        child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -82,28 +82,32 @@ class _EventPageState extends State<EventPage> {
                                   builder: (BuildContext context) {
                                     return StatefulBuilder(
                                         builder: (context, setState) {
-                                          return SimpleDialog(
-                                            title: ReusableFunctions.titleText(
-                                                event.name),
-                                            children: <Widget>[
-                                              SimpleDialogOption(
-                                                child:  Text(event.description,
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.bold, fontSize: 18.0)),
-                                              )
-                                            ],
-                                          );
-                                        });
+                                      return SimpleDialog(
+                                        title: ReusableFunctions.titleText(
+                                            event.name),
+                                        children: <Widget>[
+                                          SimpleDialogOption(
+                                            child: Text(event.description,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18.0)),
+                                          )
+                                        ],
+                                      );
+                                    });
                                   });
                             },
                             child: ListTile(
-                              title: Text("About", style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.blue)),
-                              subtitle: Text(event.description,overflow: TextOverflow.ellipsis,style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                              title: Text("About",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: Colors.blue)),
+                              subtitle: Text(event.description,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
                                   )),
                             ),
                           ),
@@ -208,30 +212,29 @@ class _EventPageState extends State<EventPage> {
                 ))),
               ),
               Card(
-                child: Container(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: Column(
+                  child: Container(
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: Column(
 //                          mainAxisSize: MainAxisSize.min,
 //                          mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(3.0),
-                            child: Text("Announcements",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0,
-                                    color: Colors.blue)),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.35,
-                            child: ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) =>
-                                    this._buildRow(context, index)),
-                          ),
-                        ]))
-              ),
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.all(3.0),
+                              child: Text("Announcements",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                      color: Colors.blue)),
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.35,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) =>
+                                      this._buildRow(context, index)),
+                            ),
+                          ]))),
             ],
           ));
     }
