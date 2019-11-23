@@ -266,7 +266,7 @@ class _EventPageState extends State<EventPage> {
       return Card(
         child: ListTile(
           title: Text(item.message),
-          subtitle: Text(new DateFormat.yMMMEd().format(event.date) +
+          subtitle: Text(new DateFormat.yMMMEd().format(item.date) +
               " " +
               new DateFormat.jm().format(item.date)),
         ),
