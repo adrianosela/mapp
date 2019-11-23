@@ -693,11 +693,14 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
       body: _initializeMap(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await _onActionButtonTap();
         },
-        child: Icon(Icons.filter_tilt_shift),
+
+        icon: Icon(Icons.filter_tilt_shift),
+        label:Text('RADIUS'),
         backgroundColor: Colors.green,
       ),
     );
