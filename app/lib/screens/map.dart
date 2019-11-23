@@ -272,7 +272,7 @@ class _MapPageState extends State<MapPage> {
                             ),
                           ),
                           Container(
-                            width: 100,
+                            width: MediaQuery.of(context).size.width * 0.14,
                           ),
                           Container(
                             child: Switch(
@@ -297,7 +297,7 @@ class _MapPageState extends State<MapPage> {
                             ),
                           ),
                           Container(
-                            width: 110,
+                            width: MediaQuery.of(context).size.width * 0.16,
                           ),
                           IconButton(
                             onPressed: () async {
