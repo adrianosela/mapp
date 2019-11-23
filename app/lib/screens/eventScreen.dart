@@ -57,7 +57,8 @@ class _EventPageState extends State<EventPage> {
           appBar: AppBar(
             title: Text("Event Details"),
           ),
-          body: Column(
+          body: Card (
+              child:Column(
             children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height * 0.4,
@@ -246,7 +247,7 @@ class _EventPageState extends State<EventPage> {
                             ),
                           ]))),
             ],
-          ),
+          )),
           floatingActionButton: new FloatingActionButton(
               elevation: 0.0,
               child: new Icon(Icons.check),
