@@ -226,9 +226,8 @@ class ReusableFunctions{
               //save user token
               userToken = response;
               FCM.setToken(userToken);
-              Navigator.push(context, new MaterialPageRoute(
-                  builder: (context) => new MapPage(
-                      userToken: userToken.toString())));
+              Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+
             }
 
             ///cleanup
