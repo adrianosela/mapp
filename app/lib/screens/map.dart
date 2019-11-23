@@ -254,7 +254,6 @@ class _MapPageState extends State<MapPage> {
                                   locale: LocaleType.en);
                             },
                             child: Text(
-                              //TODO
                               'pick event date',
                               style: TextStyle(color: Colors.blue),
                             )),
@@ -269,10 +268,7 @@ class _MapPageState extends State<MapPage> {
                           Container(
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              "Private Event?",
-                              style: TextStyle(
-                                  //TODO
-                                  ),
+                              "Private Event?"
                             ),
                           ),
                           Container(
@@ -297,10 +293,7 @@ class _MapPageState extends State<MapPage> {
                           Container(
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              "Invite Friends",
-                              style: TextStyle(
-                                  //TODO
-                                  ),
+                              "Invite Friends"
                             ),
                           ),
                           Container(

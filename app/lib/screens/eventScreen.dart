@@ -9,6 +9,7 @@ import 'package:app/models/eventModel.dart';
 import 'package:app/models/fcmToken.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app/components/reusableFunctions.dart';
+import 'package:app/screens/inviteFriendsScreen.dart';
 
 class EventPage extends StatefulWidget {
   final String eventId;
@@ -24,6 +25,7 @@ class _EventPageState extends State<EventPage> {
   Event event;
   final String eventId;
   String address;
+  List<String> usersToInvite;
 
   List<Announcement> rows = new List<Announcement>();
 
@@ -123,7 +125,7 @@ class _EventPageState extends State<EventPage> {
                             textColor: Colors.white,
                             disabledColor: Colors.grey,
                             disabledTextColor: Colors.black,
-                            padding: EdgeInsets.all(2.0),
+                            padding: EdgeInsets.all(7.0),
                             splashColor: Colors.blueAccent,
                             onPressed: _openMap,
                             child: Text('Directions',
@@ -151,24 +153,31 @@ class _EventPageState extends State<EventPage> {
                                     fontSize: 17.0)),
                           ),
                         ),
+                        Padding(
+                          padding: EdgeInsets.all(3.0),
+                          child: RaisedButton(
+                            color: Colors.blue,
+                            textColor: Colors.white,
+                            disabledColor: Colors.grey,
+                            disabledTextColor: Colors.black,
+                            padding: EdgeInsets.all(2.0),
+                            splashColor: Colors.blueAccent,
+                            onPressed: ()async {
+                              final result = await Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) =>
+                                      new InviteFriendsPage()));
+                              usersToInvite = result;
+                              _inviteToEvent();
+                            },
+                            child: Text('Invite',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17.0)),
+                          ),
+                        ),
                       ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: RaisedButton(
-                        color: Colors.blue,
-                        textColor: Colors.white,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(2.0),
-                        splashColor: Colors.blueAccent,
-                        child: Text("Back to Map",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 15.0)),
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                        },
-                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.all(2.0),
@@ -191,7 +200,16 @@ class _EventPageState extends State<EventPage> {
                         this._buildRow(context, index)),
               ),
             ],
-          ));
+          ),
+          floatingActionButton: new FloatingActionButton(
+              elevation: 0.0,
+              child: new Icon(Icons.check),
+              backgroundColor: Colors.blue,
+              onPressed: () async {
+                Navigator.pop(context, usersToInvite);
+              }
+          )
+      );
     }
   }
 
@@ -243,5 +261,13 @@ class _EventPageState extends State<EventPage> {
 
   _subscribeToEvent() async {
     await UserController.postSubscribe(userToken, {'eventIds': eventId});
+  }
+
+  _inviteToEvent() async {
+
+    Map<String, dynamic> eventToJson() =>
+        {'invited': usersToInvite, 'eventId': eventId};
+
+    EventController.inviteToEvent(userToken, eventToJson());
   }
 }

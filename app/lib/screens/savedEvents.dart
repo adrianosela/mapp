@@ -72,7 +72,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
                     setState(() {
                       rows.removeAt(index);
                       ReusableFunctions.showInSnackBar(
-                          "Unsibscribed", context);
+                          "Unsubscribed", context);
                       UserController.postUnsubscribe(userToken, _toJson(id));
                     });
                   }
