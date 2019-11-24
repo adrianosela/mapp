@@ -47,7 +47,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
         title: Text("Invite Friends"),
@@ -79,10 +79,10 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: (invite[index]) ? Icon(Icons.add, color: Colors.green) : Icon(Icons.add, color: Colors.grey),
+                  icon: (eventId == null) ? Icon(Icons.add, color: Colors.green) : (invite[index]) ? Icon(Icons.add, color: Colors.green) : Icon(Icons.add, color: Colors.grey),
                   onPressed: () {
                     setState(() {
-                      if(invite[index]) {
+                      if(eventId == null || invite[index]) {
                         ReusableFunctions.showInSnackBar(
                             "Friend Invited", context);
                         usersToInvite.add(id);
@@ -100,8 +100,10 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   }
 
   _getUsers() async {
-    event = await EventController.getEventObject(userToken, eventId);
-
+    if(eventId != null) {
+      ///fetch event if this isnt a newly created one
+      event = await EventController.getEventObject(userToken, eventId);
+    }
     setState(() {
       ids.clear();
       rows.clear();
@@ -112,7 +114,10 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     if(response != null) {
       response.forEach((key, value){
           ids.add(key);
-          if(event.invited != null && event.invited.contains(key)) {
+          //print(event.toJson());
+          //print("PPPPPPPPPPPPPPPPPPPPPP");
+          //print(event.invited);
+          if(eventId != null && event.invited != null && event.invited.contains(key)) {
             invite.add(false);
           } else {
             invite.add(true);

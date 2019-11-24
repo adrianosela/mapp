@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:async' as prefix0;
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -35,8 +34,6 @@ class UserController {
     var uri = Uri.https("mapp-254321.appspot.com", "/user/followers");
 
     Map<String, Map<String, bool>> followers = new Map<String, Map<String, bool>>();
-    Map<String, bool> temp = new Map();
-
 
     final response = await http.get(uri, headers: {
       "Content-Type": "application/json",
@@ -47,6 +44,7 @@ class UserController {
       var userContainer = json.decode(response.body);
       if (userContainer != null) {
         for (var instance in userContainer) {
+          Map<String, bool> temp = new Map();
           temp[instance["name"]] = instance["following"];
           followers[instance["id"].toString()] = temp;
         }
