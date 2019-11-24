@@ -190,7 +190,10 @@ class _EventPageState extends State<EventPage> {
                                         disabledTextColor: Colors.black,
                                         padding: EdgeInsets.all(2.0),
                                         splashColor: Colors.blueAccent,
-                                        onPressed: _subscribeToEvent,
+                                        onPressed: (() {
+                                          _subscribeToEvent;
+                                          _showAlert();
+                                        }),
                                         child: Text('Going',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
@@ -313,7 +316,6 @@ class _EventPageState extends State<EventPage> {
 
   _subscribeToEvent() async {
     await UserController.postSubscribe(userToken, {'eventIds': eventId});
-    //TODO show confirmation message
   }
 
   _inviteToEvent() async {
@@ -322,5 +324,52 @@ class _EventPageState extends State<EventPage> {
         {'invited': usersToInvite, 'eventId': eventId};
 
     EventController.inviteToEvent(userToken, eventToJson());
+  }
+
+  _showAlert() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Form(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: Text(
+                          "Subscribed",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0
+                          )
+                      )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: RaisedButton(
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(3.0),
+                      splashColor: Colors.blueAccent,
+                      child: Text("Ok",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0
+                          )),
+                      onPressed: () async {
+                        //navigate to login screen
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+    );
   }
 }
