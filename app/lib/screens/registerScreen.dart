@@ -78,9 +78,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                         //send new user info to backend
                         User user = new User(
-                            name: ReusableFunctions.getLoginText('name'),
-                            email: ReusableFunctions.getLoginText('email'),
-                            password: ReusableFunctions.getLoginText('password')
+                            name: ReusableFunctions.getLoginText('Name'),
+                            email: ReusableFunctions.getLoginText('Email'),
+                            password: ReusableFunctions.getLoginText('Password')
                         );
 
                         var response = await LoginController.registerUser(
