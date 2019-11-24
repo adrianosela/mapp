@@ -99,8 +99,8 @@ class _FollowingPageState extends State<FollowingPage> {
           trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
             IconButton(
                 icon: Icon(Icons.person_add, color: Colors.green),
-                onPressed: () {
-                  UserController.followUser(userToken, id);
+                onPressed: () async {
+                  await UserController.followUser(userToken, id);
                   setState(() {
                     rows.removeAt(index);
                     ReusableFunctions.showInSnackBar(
