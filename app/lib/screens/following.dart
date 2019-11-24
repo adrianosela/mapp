@@ -103,6 +103,8 @@ class _FollowingPageState extends State<FollowingPage> {
                   UserController.followUser(userToken, id);
                   setState(() {
                     rows.removeAt(index);
+                    ReusableFunctions.showInSnackBar(
+                        "Followed User", context);
                   });
                 }),
           ]),

@@ -8,6 +8,8 @@ import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
 
+import 'package:app/screens/eventScreen.dart';
+
 
 class PendingInvitesPage extends StatefulWidget {
 
@@ -54,7 +56,19 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
       final item = rows[index];
       final id = ids[index];
       return ListTile(
-        title: ReusableFunctions.listItemTextButton(item, id, context),
+        title: ReusableFunctions.listItemText(item),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => new EventPage(eventId: id)));
+        },
+        onLongPress: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => new EventPage(eventId: id)));
+        },
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
