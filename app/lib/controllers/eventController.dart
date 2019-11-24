@@ -179,6 +179,30 @@ class EventController {
     return event;
   }
 
+  ///get specific event object by event id
+  static Future<Map<String, dynamic>> getEvent(String token, String eventId) async {
+    Map<String, String> query = {'id': eventId};
+
+    var uri = Uri.https(
+      "mapp-254321.appspot.com",
+      "/event",
+      query,
+    );
+
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "authorization": "Bearer $token"
+    });
+
+    if (response.statusCode == 200) {
+      var eventJson = json.decode(response.body);
+      return eventJson;
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
+
   ///delete an event
   static Future<String> deleteEvent(String token, eventId) async {
     Map<String, String> query = {'id': eventId};

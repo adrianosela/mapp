@@ -31,6 +31,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   Map<String, bool> temp = new Map<String, bool>();
   List<String> usersToInvite = new List<String>();
   var event;
+  var add_button;
 
 
   @override
@@ -77,7 +78,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: Icon(Icons.add, color: Colors.green),
+                  icon: (add_button) ? Icon(Icons.add, color: Colors.green) : Icon(Icons.add, color: Colors.grey),
                   onPressed: () {
                     setState(() {
                         ReusableFunctions.showInSnackBar(
@@ -95,7 +96,10 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   _getUsers() async {
     if(eventId != null) {
       ///fetch event if this isnt a newly created one
-      event = await EventController.getEventObject(userToken, eventId);
+      event = await EventController.getEvent(userToken, eventId);
+      print('...................................................................');
+      print(event);
+      print(event['followers']);
     }
     setState(() {
       ids.clear();
@@ -107,6 +111,8 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     if(response != null) {
       response.forEach((key, value){
           ids.add(key);
+          add_button = event['followers'][0] == key;
+          print(event['followers'][0] == key);
           temp = value;
           value.forEach((name, following){
             rows.add(name);
