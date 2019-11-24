@@ -81,8 +81,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                     builder: (BuildContext context) {
                       return StatefulBuilder(builder: (context, setState) {
                         return SimpleDialog(
-                          title:
-                          ReusableFunctions.titleText("Create Announcement"),
+                          title: ReusableFunctions.titleText(
+                              "Create Announcement"),
                           children: <Widget>[
                             SimpleDialogOption(
                               child: ReusableFunctions.formInputMultiLine(
@@ -90,23 +90,23 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                             ),
                             SimpleDialogOption(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: RaisedButton(
-                                    color: Colors.blue,
-                                    textColor: Colors.white,
-                                    disabledColor: Colors.grey,
-                                    disabledTextColor: Colors.black,
-                                    padding: EdgeInsets.all(2.0),
-                                    splashColor: Colors.blueAccent,
-                                    child: Text("Post"),
-                                    onPressed: () async {
-                                     await _createAnnouncement(
-                                          announcementCont.text, id);
-                                      announcementCont.clear();
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                )),
+                              padding: const EdgeInsets.all(2.0),
+                              child: RaisedButton(
+                                color: Colors.blue,
+                                textColor: Colors.white,
+                                disabledColor: Colors.grey,
+                                disabledTextColor: Colors.black,
+                                padding: EdgeInsets.all(2.0),
+                                splashColor: Colors.blueAccent,
+                                child: Text("Post"),
+                                onPressed: () async {
+                                  await _createAnnouncement(
+                                      announcementCont.text, id);
+                                  announcementCont.clear();
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            )),
                           ],
                         );
                       });
@@ -137,11 +137,11 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
     Event event_prev = await EventController.getEventObject(userToken, id);
 
     TextEditingController eventNameCont =
-    TextEditingController(text: event_prev.name);
+        TextEditingController(text: event_prev.name);
     TextEditingController eventDescriptionCont =
-    TextEditingController(text: event_prev.description);
+        TextEditingController(text: event_prev.description);
     TextEditingController eventDurationCont =
-    TextEditingController(text: event_prev.duration);
+        TextEditingController(text: event_prev.duration);
 
     bool isSwitched = event_prev.public;
 
@@ -149,120 +149,119 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ReusableFunctions.titleText("Update Event"),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput(
-                        "Enter Event Name", eventNameCont),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput(
-                        "Enter Event Description", eventDescriptionCont),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: FlatButton(
-                        onPressed: () {
-                          DatePicker.showDatePicker(context,
-                              showTitleActions: true,
-                              minTime: DateTime.now(),
-                              maxTime:
-                              DateTime.now().add(new Duration(days: 365)),
-                              onChanged: (date) {},
-                              onConfirm: (date) {
+            content: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ReusableFunctions.titleText("Update Event"),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: ReusableFunctions.formInput(
+                            "Enter Event Name", eventNameCont),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: ReusableFunctions.formInput(
+                            "Enter Event Description", eventDescriptionCont),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: FlatButton(
+                            onPressed: () {
+                              DatePicker.showDatePicker(context,
+                                  showTitleActions: true,
+                                  minTime: DateTime.now(),
+                                  maxTime: DateTime.now()
+                                      .add(new Duration(days: 365)),
+                                  onChanged: (date) {}, onConfirm: (date) {
                                 eventDate = date;
                               },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.en);
-                        },
-                        child: Text(
-                          'Pick Event Date',
-                          style: TextStyle(color: Colors.blue),
-                        )),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput(
-                        "Enter Event Duration (hours)", eventDurationCont),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          "Private Event?"
-                        ),
+                                  currentTime: DateTime.now(),
+                                  locale: LocaleType.en);
+                            },
+                            child: Text(
+                              'Pick Event Date',
+                              style: TextStyle(color: Colors.blue),
+                            )),
                       ),
-                      Container(
-                        width: 100,
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: ReusableFunctions.formInput(
+                            "Enter Event Duration (hours)", eventDurationCont),
                       ),
-                      Container(
-                        child: Switch(
-                          value: isSwitched,
-                          onChanged: (value) {
-                            setState(() {
-                              isSwitched = value;
-                            });
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text("Private Event?"),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.14,
+                          ),
+                          Container(
+                            child: Switch(
+                              value: isSwitched,
+                              onChanged: (value) {
+                                setState(() {
+                                  isSwitched = value;
+                                });
+                              },
+                              activeTrackColor: Colors.lightBlueAccent,
+                              activeColor: Colors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: RaisedButton(
+                          child: Text("Save"),
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          disabledColor: Colors.grey,
+                          disabledTextColor: Colors.black,
+                          padding: EdgeInsets.all(2.0),
+                          splashColor: Colors.blueAccent,
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              Event event = new Event(
+                                name: eventNameCont.text,
+                                description: eventDescriptionCont.text,
+                                longitude: event_prev.longitude,
+                                latitude: event_prev.latitude,
+                                date: (eventDate == null)
+                                    ? event_prev.date
+                                    : eventDate,
+                                duration: eventDurationCont.text,
+                                public: isSwitched,
+                                invited: event_prev.invited,
+                                categories: event_prev.categories,
+                              );
+
+                              Map<String, dynamic> eventToJson(event2) =>
+                                  {'event': event2, 'eventId': id};
+
+                              await EventController.updateEvent(
+                                  userToken, eventToJson(event.toJson()));
+
+                              ///clear text controllers
+                              eventNameCont.clear();
+                              eventDescriptionCont.clear();
+                              eventDurationCont.clear();
+
+                              Navigator.of(context).pop();
+                              Navigator.pushNamed(
+                                  context, Router.createdEventsRoute);
+                            }
                           },
-                          activeTrackColor: Colors.lightBlueAccent,
-                          activeColor: Colors.blue,
                         ),
-                      ),
+                      )
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: RaisedButton(
-                      child: Text("Save"),
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
-                      padding: EdgeInsets.all(2.0),
-                      splashColor: Colors.blueAccent,
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          Event event = new Event(
-                            name: eventNameCont.text,
-                            description: eventDescriptionCont.text,
-                            longitude: event_prev.longitude,
-                            latitude: event_prev.latitude,
-                            date: (eventDate == null)
-                                ? event_prev.date
-                                : eventDate,
-                            duration: eventDurationCont.text,
-                            public: isSwitched,
-                            invited: event_prev.invited,
-                            categories: event_prev.categories,
-                          );
-
-                          Map<String, dynamic> eventToJson(event2) =>
-                              {'event': event2, 'eventId': id};
-
-                          await EventController.updateEvent(
-                              userToken, eventToJson(event.toJson()));
-
-                          ///clear text controllers
-                          eventNameCont.clear();
-                          eventDescriptionCont.clear();
-                          eventDurationCont.clear();
-
-                          Navigator.of(context).pop();
-                          Navigator.pushNamed(
-                              context, Router.createdEventsRoute);
-                        }
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
+                )),
           );
         });
   }
