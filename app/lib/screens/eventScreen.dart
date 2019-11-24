@@ -204,7 +204,7 @@ class _EventPageState extends State<EventPage> {
                                     disabledTextColor: Colors.black,
                                     padding: EdgeInsets.all(2.0),
                                     splashColor: Colors.blueAccent,
-                                    onPressed: ()async {
+                                    onPressed: () async {
                                       final result = await Navigator.push(
                                           context,
                                           new MaterialPageRoute(

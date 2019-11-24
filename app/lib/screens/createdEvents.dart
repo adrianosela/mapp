@@ -82,7 +82,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       return StatefulBuilder(builder: (context, setState) {
                         return SimpleDialog(
                           title:
-                          ReusableFunctions.titleText("Create Announcment"),
+                          ReusableFunctions.titleText("Create Announcement"),
                           children: <Widget>[
                             SimpleDialogOption(
                               child: ReusableFunctions.formInputMultiLine(
@@ -158,12 +158,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: ReusableFunctions.formInput(
-                        "enter event name", eventNameCont),
+                        "Enter Event Name", eventNameCont),
                   ),
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: ReusableFunctions.formInput(
-                        "enter event description", eventDescriptionCont),
+                        "Enter Event Description", eventDescriptionCont),
                   ),
                   Padding(
                     padding: EdgeInsets.all(2.0),
@@ -182,24 +182,21 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                               locale: LocaleType.en);
                         },
                         child: Text(
-                          'pick event date',
+                          'Pick Event Date',
                           style: TextStyle(color: Colors.blue),
                         )),
                   ),
                   Padding(
                     padding: EdgeInsets.all(2.0),
                     child: ReusableFunctions.formInput(
-                        "enter event duration (hours)", eventDurationCont),
+                        "Enter Event Duration (hours)", eventDurationCont),
                   ),
                   Row(
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.all(10.0),
                         child: Text(
-                          "Private Event?",
-                          style: TextStyle(
-                            //TODO
-                          ),
+                          "Private Event?"
                         ),
                       ),
                       Container(
@@ -223,6 +220,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                     padding: const EdgeInsets.all(2.0),
                     child: RaisedButton(
                       child: Text("Save"),
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(2.0),
+                      splashColor: Colors.blueAccent,
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           Event event = new Event(
