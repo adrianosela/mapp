@@ -12,7 +12,6 @@ import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
 import 'package:app/models/eventModel.dart';
-import 'package:app/models/announcementModel.dart';
 import 'package:app/screens/eventScreen.dart';
 
 class CreatedEventsPage extends StatefulWidget {

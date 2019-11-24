@@ -63,6 +63,10 @@ class _FollowersPageState extends State<FollowersPage> {
                     ReusableFunctions.showInSnackBar(
                         "Followed User", context);
                     UserController.followUser(userToken, id);
+                    //TODO figure out how to refresh this page
+                  } else {
+                    ReusableFunctions.showInSnackBar(
+                        "Already Following", context);
                   }
                 });
               }

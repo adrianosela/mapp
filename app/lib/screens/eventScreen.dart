@@ -209,7 +209,7 @@ class _EventPageState extends State<EventPage> {
                                           context,
                                           new MaterialPageRoute(
                                               builder: (context) =>
-                                              new InviteFriendsPage()));
+                                              new InviteFriendsPage(eventId: eventId)));
                                       usersToInvite = result;
                                       _inviteToEvent();
                                     },
