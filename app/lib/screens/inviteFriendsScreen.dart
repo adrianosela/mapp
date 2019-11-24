@@ -11,7 +11,7 @@ import 'package:app/models/fcmToken.dart';
 
 
 class InviteFriendsPage extends StatefulWidget {
-  String eventId;
+  final String eventId;
 
   InviteFriendsPage({this.eventId});
 
@@ -31,7 +31,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   Map<String, bool> temp = new Map<String, bool>();
   List<String> usersToInvite = new List<String>();
   var event;
-  var add_button;
+  List<bool>add_button = new List<bool>();
 
 
   @override
@@ -72,18 +72,23 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      return ListTile(
+      return new ListTile(
         title: ReusableFunctions.listItemText(item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: (add_button) ? Icon(Icons.add, color: Colors.green) : Icon(Icons.add, color: Colors.grey),
+                  icon: (eventId == null || add_button[index]) ? Icon(Icons.add, color: Colors.green) : Icon(Icons.add, color: Colors.grey),
                   onPressed: () {
                     setState(() {
+                      if(eventId == null || add_button[index]) {
                         ReusableFunctions.showInSnackBar(
                             "Friend Invited", context);
                         usersToInvite.add(id);
+                      } else {
+                        ReusableFunctions.showInSnackBar(
+                            "Already Invited", context);
+                      }
                     });
                   }
               ),
@@ -97,10 +102,8 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     if(eventId != null) {
       ///fetch event if this isnt a newly created one
       event = await EventController.getEvent(userToken, eventId);
-      print('...................................................................');
-      print(event);
-      print(event['followers']);
     }
+
     setState(() {
       ids.clear();
       rows.clear();
@@ -111,8 +114,15 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     if(response != null) {
       response.forEach((key, value){
           ids.add(key);
-          add_button = event['followers'][0] == key;
-          print(event['followers'][0] == key);
+
+          if(eventId == null || (event['followers'].toString().length == 2 && event['invited'].toString().length == 2)) {
+            add_button.add(true);
+          } else if(event['followers'].toString().contains(key.toString()) || event['invited'].toString().contains(key.toString())) {
+            add_button.add(false);
+          } else {
+            add_button.add(true);
+          }
+
           temp = value;
           value.forEach((name, following){
             rows.add(name);

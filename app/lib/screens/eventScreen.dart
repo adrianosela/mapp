@@ -11,7 +11,6 @@ import 'package:app/models/fcmToken.dart';
 import 'package:app/models/announcementModel.dart';
 
 import 'package:app/components/reusableFunctions.dart';
-import 'package:app/components/router.dart';
 
 import 'package:app/screens/inviteFriendsScreen.dart';
 
@@ -30,8 +29,7 @@ class _EventPageState extends State<EventPage> {
   Event event;
   final String eventId;
   String address;
-  List<String> usersToInvite;
-
+  List<String> usersToInvite = new List<String>();
   List<Announcement> rows = new List<Announcement>();
 
   _EventPageState({this.eventId});
@@ -58,7 +56,7 @@ class _EventPageState extends State<EventPage> {
         ),
       );
     } else {
-      return Scaffold(
+      return new Scaffold(
           appBar: AppBar(
             title: Text("Event Details"),
           ),

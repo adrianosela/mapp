@@ -111,6 +111,6 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
   }
 
   Map<String, dynamic> _toJson(id) => {
-    'eventIds' : id
+    'eventId' : id
   };
 }
