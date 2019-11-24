@@ -72,7 +72,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      return ListTile(
+      return new ListTile(
         title: ReusableFunctions.listItemText(item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,

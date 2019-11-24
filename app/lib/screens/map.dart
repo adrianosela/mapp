@@ -40,7 +40,7 @@ class _MapPageState extends State<MapPage> {
 
   _MapPageState({this.userId, this.userToken});
 
-  List<String> usersToInvite;
+  List<String> usersToInvite = new List<String>();
 
   GoogleMapController mapController;
   Location location = Location();

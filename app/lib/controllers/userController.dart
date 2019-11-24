@@ -279,10 +279,7 @@ class UserController {
             body: jsonEncode(body))
         .then((http.Response response) {
       final int statusCode = response.statusCode;
-      print(jsonEncode(body));
       if (statusCode < 200 || statusCode > 400 || json == null) {
-        print(statusCode);
-        print(json);
         throw new Exception("Error while fetching data");
       }
     });
