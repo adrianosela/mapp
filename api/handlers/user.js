@@ -1,5 +1,5 @@
 const logger = require("tracer").console();
-const mongodb = require("mongodb");
+const validator = require("../validator/validator");
 const UserHelpers = require("../utils/user");
 
 let User = require("../models/user");
@@ -139,12 +139,10 @@ let declineInvite = async function(req, res) {
     const userId = req.authorization.id;
     const eventId = req.body.eventId;
 
-    if (!eventId) {
-        return res.status(400).send("No event Id from pending invite");
-    }
-
-    if (!mongodb.ObjectID.isValid(eventId)) {
-        return res.status(400).send("provided id is not valid");
+    // validate id
+    let val = validator.mongoId(eventId);
+    if (val.ok === false) {
+        return res.status(400).send(val.error);
     }
 
     try {
@@ -235,12 +233,11 @@ let followUser = async function(req, res) {
         const userId = req.authorization.id;
 
         const userToFollowId = req.body.userToFollowId;
-        if (!userToFollowId) {
-            return res.status(400).send("No user to follow specified");
-        }
 
-        if (!mongodb.ObjectID.isValid(userToFollowId)) {
-            return res.status(400).send("provided id is not valid");
+        // validate id
+        let val = validator.mongoId(userToFollowId);
+        if (val.ok === false) {
+            return res.status(400).send(val.error);
         }
 
         let userToFollow = await User.findById(userToFollowId);
@@ -274,12 +271,11 @@ let unfollowUser = async function(req, res) {
         const userId = req.authorization.id;
 
         const userToUnfollowId = req.body.userToUnfollowId;
-        if (!userToUnfollowId) {
-            return res.status(400).send("No user to unfollow specified");
-        }
 
-        if (!mongodb.ObjectID.isValid(userToUnfollowId)) {
-            return res.status(400).send("provided id is not valid");
+        // validate id
+        let val = validator.mongoId(userToUnfollowId);
+        if (val.ok === false) {
+            return res.status(400).send(val.error);
         }
 
         let userToUnfollow = await User.findById(userToUnfollowId);
@@ -409,7 +405,7 @@ let searchUsers = async function(req, res) {
                 ]
             }
         ]
-        
+
     };
 
     try {
