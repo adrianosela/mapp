@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:app/components/router.dart';
 import 'package:app/components/reusableFunctions.dart';
+import 'package:corsac_jwt/corsac_jwt.dart';
 
 import 'package:app/models/fcmToken.dart';
 
@@ -60,9 +61,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
     print(token);
 
+
     if(token != null){
-      FCM.setToken(token);
-      Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+      var decodedToken = new JWT.parse(token);
+      if( DateTime.fromMillisecondsSinceEpoch(decodedToken.expiresAt*1000).isAfter(DateTime.now().add(new Duration(hours: 1)))){
+        FCM.setToken(token);
+        Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+      }
     }
   }
 
