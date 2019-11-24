@@ -59,7 +59,7 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
       final item = rows[index];
       final id = ids[index];
       return ListTile(
-        title: ReusableFunctions.listItemTextButton(item, id, context),
+        title: ReusableFunctions.listItemText(item),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           IconButton(
               icon: Icon(Icons.navigate_next),

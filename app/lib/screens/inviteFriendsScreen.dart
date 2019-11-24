@@ -1,3 +1,4 @@
+import 'package:app/controllers/eventController.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/components/moreHorizWidget.dart';
@@ -10,17 +11,26 @@ import 'package:app/models/fcmToken.dart';
 
 
 class InviteFriendsPage extends StatefulWidget {
+  String eventId;
+
+  InviteFriendsPage({this.eventId});
 
   @override
-  _InviteFriendsPageState createState() => _InviteFriendsPageState();
+  _InviteFriendsPageState createState() => _InviteFriendsPageState(eventId: eventId);
 }
 
 class _InviteFriendsPageState extends State<InviteFriendsPage> {
   String userToken;
+  String eventId;
+
+  _InviteFriendsPageState({this.eventId});
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
+  List<bool> follow = new List<bool>();
+  Map<String, bool> temp = new Map<String, bool>();
   List<String> usersToInvite = new List<String>();
+  var event;
 
 
   @override
@@ -35,7 +45,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
         title: Text("Invite Friends"),
@@ -67,11 +77,12 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: Icon(Icons.add),
+                  icon: Icon(Icons.add, color: Colors.green),
                   onPressed: () {
                     setState(() {
-                      ReusableFunctions.showInSnackBar("Friend Invited", context);
-                      usersToInvite.add(id);
+                        ReusableFunctions.showInSnackBar(
+                            "Friend Invited", context);
+                        usersToInvite.add(id);
                     });
                   }
               ),
@@ -82,11 +93,25 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   }
 
   _getUsers() async {
+    if(eventId != null) {
+      ///fetch event if this isnt a newly created one
+      event = await EventController.getEventObject(userToken, eventId);
+    }
+    setState(() {
+      ids.clear();
+      rows.clear();
+      follow.clear();
+    });
+
     var response = await UserController.getUserFollowers(userToken);
     if(response != null) {
       response.forEach((key, value){
           ids.add(key);
-          rows.add(value);
+          temp = value;
+          value.forEach((name, following){
+            rows.add(name);
+            follow.add(!following);
+          });
       });
     }
   }

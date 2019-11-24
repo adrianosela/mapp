@@ -30,10 +30,10 @@ class UserController {
   }
 
   ///Get a map of users the current user is following => map(userid, username)
-  static Future<Map<String, String>> getUserFollowers(token) async {
+  static Future<Map<String, Map<String, bool>>> getUserFollowers(token) async {
     var uri = Uri.https("mapp-254321.appspot.com", "/user/followers");
 
-    Map<String, String> following = new Map<String, String>();
+    Map<String, Map<String, bool>> followers = new Map<String, Map<String, bool>>();
 
     final response = await http.get(uri, headers: {
       "Content-Type": "application/json",
@@ -44,14 +44,16 @@ class UserController {
       var userContainer = json.decode(response.body);
       if (userContainer != null) {
         for (var instance in userContainer) {
-          following[instance["id"].toString()] = instance["name"].toString();
+          Map<String, bool> temp = new Map();
+          temp[instance["name"]] = instance["following"];
+          followers[instance["id"].toString()] = temp;
         }
       }
     } else {
       // If that response was not OK, throw an error.
       throw Exception('Failed to fetch data');
     }
-    return following;
+    return followers;
   }
 
   static Future<Map<String, List<String>>> searchUsers(token, String search) async {
@@ -89,8 +91,7 @@ class UserController {
     return following;
   }
 
-  ///TODO finish this send a "follow user post"
-  static Future<String> followUser(token, String userId) async {
+  static followUser(token, String userId) async {
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/follow",
@@ -112,8 +113,6 @@ class UserController {
         print(json);
         throw new Exception("Error while fetching data");
       }
-
-      return null;
     });
   }
 
@@ -240,7 +239,7 @@ class UserController {
   }
 
   ///Respond "going" to event invite
-  static Future<String> postSubscribe(String token, body) async {
+  static postSubscribe(String token, body) async {
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/subscribe",
@@ -261,13 +260,11 @@ class UserController {
         print(json);
         throw new Exception("Error while fetching data");
       }
-
-      return null;
     });
   }
 
   ///Respond "not going" to event invite
-  static Future<String> postNotGoing(String token, body) async {
+  static postNotGoing(String token, body) async {
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/declineInvite",
@@ -288,13 +285,11 @@ class UserController {
         print(json);
         throw new Exception("Error while fetching data");
       }
-
-      return null;
     });
   }
 
   ///Unsubscribe from an event
-  static Future<String> postUnsubscribe(String token, body) async {
+  static postUnsubscribe(String token, body) async {
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/unsubscribe",
@@ -315,8 +310,6 @@ class UserController {
         print(json);
         throw new Exception("Error while fetching data");
       }
-
-      return null;
     });
   }
 }

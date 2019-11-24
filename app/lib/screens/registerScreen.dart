@@ -45,21 +45,21 @@ class _RegisterPageState extends State<RegisterPage> {
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
                   width: 250,
-                  child: ReusableFunctions.loginInputField('name'),
+                  child: ReusableFunctions.loginInputField('Name'),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
                   width: 250,
-                  child: ReusableFunctions.loginInputField('email'),
+                  child: ReusableFunctions.loginInputField('Email'),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
                   width: 250,
-                  child: ReusableFunctions.loginInputField('password'),
+                  child: ReusableFunctions.loginInputField('Password'),
                 ),
               ),
               SizedBox(

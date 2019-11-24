@@ -50,7 +50,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
       final item = rows[index];
       final id = ids[index];
       return ListTile(
-        title: ReusableFunctions.listItemTextButton(item, id, context),
+        title: ReusableFunctions.listItemText(item),
         onTap: () {
           Navigator.push(
               context,

@@ -175,31 +175,33 @@ class _MapPageState extends State<MapPage> {
               children: <Widget>[
                 SimpleDialogOption(
                     child: Padding(
-                  padding: const EdgeInsets.only(top: 25.0),
-                  child: Slider(
-                    min: 0.0,
-                    max: 20,
-                    divisions: 20,
-                    label: newRadius.toString(),
-                    onChanged: (val) {
-                      setState(() => newRadius = val);
-                    },
-                    value: newRadius,
-                  ),
-                )),
+                      padding: const EdgeInsets.only(top: 25.0),
+                      child: Slider(
+                        min: 0.0,
+                        max: 20,
+                        divisions: 20,
+                        label: newRadius.toString(),
+                        onChanged: (val) {
+                          setState(() => newRadius = val);
+                        },
+                        value: newRadius,
+                      ),
+                    )
+                ),
                 SimpleDialogOption(
                     child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: RaisedButton(
-                    child: Text("Update Map"),
-                    onPressed: () async {
-                      radius = newRadius;
-                      LocationData curLocation = await location.getLocation();
-                      await _addMarkers(curLocation);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                )),
+                      padding: const EdgeInsets.all(2.0),
+                      child: RaisedButton(
+                        child: Text("Update Map"),
+                        onPressed: () async {
+                          radius = newRadius;
+                          LocationData curLocation = await location.getLocation();
+                          await _addMarkers(curLocation);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    )
+                ),
               ],
             );
           });
@@ -228,12 +230,12 @@ class _MapPageState extends State<MapPage> {
                           Padding(
                             padding: EdgeInsets.all(2.0),
                             child: ReusableFunctions.formInput(
-                                "enter event name", eventNameCont),
+                                "Enter Event Name", eventNameCont),
                           ),
                           Padding(
                             padding: EdgeInsets.all(2.0),
                             child: ReusableFunctions.formInput(
-                                "enter event description",
+                                "Enter Event Description",
                                 eventDescriptionCont),
                           ),
                           Padding(
@@ -252,14 +254,14 @@ class _MapPageState extends State<MapPage> {
                                       locale: LocaleType.en);
                                 },
                                 child: Text(
-                                  'pick event date',
+                                  'Pick Event Date',
                                   style: TextStyle(color: Colors.blue),
                                 )),
                           ),
                           Padding(
                             padding: EdgeInsets.all(2.0),
                             child: ReusableFunctions.formInput(
-                                "enter event duration (hours)",
+                                "Enter Event Duration (hours)",
                                 eventDurationCont),
                           ),
                           Row(
@@ -403,15 +405,16 @@ class _MapPageState extends State<MapPage> {
                                             ),
                                             SimpleDialogOption(
                                                 child: Padding(
-                                              padding:
+                                                  padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: RaisedButton(
-                                                child: Text("Ok"),
-                                                onPressed: () async {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            )),
+                                                  child: RaisedButton(
+                                                    child: Text("Ok"),
+                                                    onPressed: () async {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                  ),
+                                                )
+                                            ),
                                           ],
                                         );
                                       });
