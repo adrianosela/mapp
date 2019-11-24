@@ -215,6 +215,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           ),
                         ],
                       ),
+<<<<<<< HEAD
                       Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: RaisedButton(
@@ -246,6 +247,43 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
 
                               await EventController.updateEvent(
                                   userToken, eventToJson(event.toJson()));
+=======
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: RaisedButton(
+                      child: Text("Save"),
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(2.0),
+                      splashColor: Colors.blueAccent,
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+
+                          if(eventDate == null) {
+                            eventDate = event_prev.date;
+                          }
+
+                          Map<String, dynamic> toJson() => {
+                            'startTime' : (eventDate.toUtc().millisecondsSinceEpoch/1000).round(),
+                            'endTime' : (eventDate.add(new Duration(hours: int.parse(eventDurationCont.text))).toUtc().millisecondsSinceEpoch/1000).round(),
+                            'name' : eventNameCont.text,
+                            'description' : eventDescriptionCont.text,
+                            'public' : isSwitched,
+                            'duration' : eventDurationCont.text,
+                            'longitude': event_prev.longitude,
+                            'latitude': event_prev.latitude,
+                          };
+
+                          Map<String, dynamic> eventToJson() =>
+                              {'event': toJson(), 'eventId': id};
+
+                          await EventController.updateEvent(
+                              userToken, eventToJson());
+>>>>>>> master
 
                               ///clear text controllers
                               eventNameCont.clear();

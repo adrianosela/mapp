@@ -259,8 +259,6 @@ class _EventPageState extends State<EventPage> {
               backgroundColor: Colors.blue,
               onPressed: () async {
                 Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pushNamed(context, Router.mapRoute);
               }
           )
       );
