@@ -149,9 +149,9 @@ class ReusableFunctions{
   static TextFormField loginInputField(String text) {
     return new TextFormField(
       key: (text == 'password') ? new Key('password') : ((text == 'email') ? new Key('login') : new Key('name')),
-      obscureText: (text == 'password') ? true : false,
+      obscureText: (text == 'Password') ? true : false,
       validator: (value) {
-        if(text == 'email' && !RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+        if(text == 'Email' && !RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
           return 'Invalid email';
         }
         if (value.isEmpty) {
@@ -159,7 +159,7 @@ class ReusableFunctions{
         }
         return null;
       },
-      controller: (text == 'email') ? usernameController : ((text == 'password') ? passwordController : nameController),
+      controller: (text == 'Email') ? usernameController : ((text == 'Password') ? passwordController : nameController),
       decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: text
@@ -171,10 +171,10 @@ class ReusableFunctions{
   static String getLoginText(String text) {
     var returnText;
 
-    if(text == 'email') {
+    if(text == 'Email') {
       returnText = usernameController.text;
       usernameController.clear();
-    } else if (text == 'password') {
+    } else if (text == 'Password') {
       returnText = passwordController.text;
       passwordController.clear();
     } else {
