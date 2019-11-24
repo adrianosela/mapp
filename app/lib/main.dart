@@ -1,9 +1,13 @@
-import 'package:app/components/reusableFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:app/components/router.dart';
-import 'package:app/models/fcmToken.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:app/components/router.dart';
+import 'package:app/components/reusableFunctions.dart';
+
+import 'package:app/models/fcmToken.dart';
+
+
 // This will works always for lock screen Orientation.
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -35,11 +39,10 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
-
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
+
 
 class _MyHomePageState extends State<MyHomePage> {
 

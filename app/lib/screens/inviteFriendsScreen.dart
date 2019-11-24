@@ -20,6 +20,8 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
+  List<bool> follow = new List<bool>();
+  Map<String, bool> temp = new Map<String, bool>();
   List<String> usersToInvite = new List<String>();
 
 
@@ -61,17 +63,21 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
+      final add_button = follow[index];
       return ListTile(
         title: ReusableFunctions.listItemText(item),
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: Icon(Icons.add),
+                  icon: (add_button) ? Icon(Icons.add, color: Colors.green) : Icon(Icons.add, color: Colors.grey),
                   onPressed: () {
                     setState(() {
-                      ReusableFunctions.showInSnackBar("Friend Invited", context);
-                      usersToInvite.add(id);
+                      if(add_button) {
+                        ReusableFunctions.showInSnackBar(
+                            "Friend Invited", context);
+                        usersToInvite.add(id);
+                      }
                     });
                   }
               ),
@@ -82,11 +88,20 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   }
 
   _getUsers() async {
+    setState(() {
+      ids.clear();
+      rows.clear();
+      follow.clear();
+    });
     var response = await UserController.getUserFollowers(userToken);
     if(response != null) {
       response.forEach((key, value){
           ids.add(key);
-          rows.add(value);
+          temp = value;
+          value.forEach((name, following){
+            rows.add(name);
+            follow.add(!following);
+          });
       });
     }
   }

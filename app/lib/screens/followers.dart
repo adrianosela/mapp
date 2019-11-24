@@ -19,6 +19,9 @@ class _FollowersPageState extends State<FollowersPage> {
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
+  List<bool> following = new List<bool>();
+  List<bool> follow = new List<bool>();
+  Map<String, bool> temp = new Map<String, bool>();
 
 
   @override
@@ -48,15 +51,22 @@ class _FollowersPageState extends State<FollowersPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
+      final add_button = follow[index];
       return ListTile(
         title: ReusableFunctions.listItemText(item),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           IconButton(
-              icon: Icon(Icons.person_add, color: Colors.green),
+              icon: (add_button) ? Icon(Icons.person_add, color: Colors.green) : Icon(Icons.person_add, color: Colors.grey),
               onPressed: () {
-                UserController.followUser(userToken, id);
-                setState(() {});
-              }),
+                setState(() {
+                  if(add_button) {
+                    ReusableFunctions.showInSnackBar(
+                        "Followed User", context);
+                    UserController.followUser(userToken, id);
+                  }
+                });
+              }
+          ),
         ]),
       );
     }
@@ -66,13 +76,16 @@ class _FollowersPageState extends State<FollowersPage> {
     setState(() {
       ids.clear();
       rows.clear();
+      follow.clear();
     });
     var response = await UserController.getUserFollowers(userToken);
-    if (response != null) {
-      response.forEach((id, name) {
-        setState(() {
-          ids.add(id);
+    if(response != null) {
+      response.forEach((key, value){
+        ids.add(key);
+        temp = value;
+        value.forEach((name, following){
           rows.add(name);
+          follow.add(!following);
         });
       });
     }
