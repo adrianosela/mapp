@@ -149,7 +149,10 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Form(
+
+            content: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Form(
               key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -200,7 +203,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                         ),
                       ),
                       Container(
-                        width: 100,
+                        width: MediaQuery.of(context).size.width * 0.14,
                       ),
                       Container(
                         child: Switch(
@@ -264,7 +267,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                   )
                 ],
               ),
-            ),
+            )),
           );
         });
   }
