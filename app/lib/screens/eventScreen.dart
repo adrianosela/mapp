@@ -11,7 +11,6 @@ import 'package:app/models/fcmToken.dart';
 import 'package:app/models/announcementModel.dart';
 
 import 'package:app/components/reusableFunctions.dart';
-import 'package:app/components/router.dart';
 
 import 'package:app/screens/inviteFriendsScreen.dart';
 

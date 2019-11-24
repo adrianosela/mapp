@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:corsac_jwt/corsac_jwt.dart';
 
 import 'package:app/components/router.dart';
 import 'package:app/components/reusableFunctions.dart';
-import 'package:corsac_jwt/corsac_jwt.dart';
 
 import 'package:app/models/fcmToken.dart';
 
@@ -48,10 +49,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final _formKey = GlobalKey<FormState>();
+  bool expanded = true;
 
-  @override
+  @protected
   void initState() {
     super.initState();
+
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+       // expanded = visible;
+        print(expanded);
+      },
+    );
     _login();
   }
 
@@ -59,14 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token");
 
-    print(token);
-
-
     if(token != null){
       var decodedToken = new JWT.parse(token);
       if( DateTime.fromMillisecondsSinceEpoch(decodedToken.expiresAt*1000).isAfter(DateTime.now().add(new Duration(hours: 1)))){
-        FCM.setToken(token);
-        Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+        await FCM.setToken(token);
+        await Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
       }
     }
   }
@@ -74,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -82,10 +88,17 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Form(
           key: _formKey,
           child: Column(
-
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
+              SizedBox(
+                width: (!expanded) ? 180 : 0,
+                height: (!expanded) ? 180 : 0,
+                child: Image.asset("assets/mapp_icon.png"),
+              ),
+              Padding(
+                padding: (!expanded) ? EdgeInsets.all(15.0) : EdgeInsets.all(0.0),
+              ),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
@@ -108,6 +121,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 250,
                 child: ReusableFunctions.loginButton(context, "Register", _formKey),
               ),
+              Padding(
+                padding: (!expanded) ? EdgeInsets.all(15.0) : EdgeInsets.all(0.0),
+                ),
             ],
           ),
         ),

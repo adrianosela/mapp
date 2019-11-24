@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 
-import 'package:app/components/moreHorizWidget.dart';
-import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
 import 'package:app/components/router.dart';
 
@@ -19,28 +18,42 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
 
-  var userId;
-
   final _formKey = GlobalKey<FormState>();
+  bool expanded = false;
+
+  @protected
+  void initState() {
+    super.initState();
+
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        expanded = visible;
+        print(expanded);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
       appBar: AppBar(
         title: Text("Register"),
-        actions: <Widget>[
-          MyPopupMenu.createPopup(context),
-        ],
       ),
       body: Center(
         child: Form(
           key: _formKey,
           child: Column(
-
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
+              SizedBox(
+                width: (!expanded) ? 200 : 0,
+                height: (!expanded) ? 200 : 0,
+                child: Image.asset("assets/mapp_icon.png"),
+              ),
+              Padding(
+                padding: (!expanded) ? EdgeInsets.all(15.0) : EdgeInsets.all(0.0),
+              ),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
@@ -105,6 +118,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       style: TextStyle(fontSize: 20.0),
                     ),
                   )
+              ),
+              Padding(
+                padding: (!expanded) ? EdgeInsets.all(15.0) : EdgeInsets.all(0.0),
               ),
             ],
           ),
