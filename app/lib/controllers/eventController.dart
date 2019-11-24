@@ -256,11 +256,9 @@ class EventController {
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400) {
-        print("////////////////////////////////////////////////////////////////////////////////////////////////");
-        print(statusCode);
         throw new Exception("Error while fetching data");
       }
-
+      
       return statusCode.toString();
     });
   }
