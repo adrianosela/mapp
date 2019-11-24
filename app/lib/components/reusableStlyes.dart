@@ -31,7 +31,6 @@ class ReusableStyles {
   ///popup form input text style
   static TextStyle formInputField() {
     return new TextStyle(
-      //TODO
       fontSize: 15.0,
     );
   }

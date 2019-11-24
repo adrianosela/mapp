@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
+import 'package:app/components/router.dart';
 
 import 'package:app/controllers/userController.dart';
 
@@ -63,7 +64,9 @@ class _FollowersPageState extends State<FollowersPage> {
                     ReusableFunctions.showInSnackBar(
                         "Followed User", context);
                     UserController.followUser(userToken, id);
-                    //TODO figure out how to refresh this page
+                    Navigator.of(context).pop();
+                    Navigator.pushNamed(
+                        context, Router.followersRoute);
                   } else {
                     ReusableFunctions.showInSnackBar(
                         "Already Following", context);

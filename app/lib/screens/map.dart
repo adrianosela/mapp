@@ -82,7 +82,6 @@ class _MapPageState extends State<MapPage> {
   TextEditingController eventSearchCont = TextEditingController();
   EventController eventController = EventController();
 
-  //TODO sets the initial view of the map needs to be changed to user location
   static const LatLng _center = const LatLng(49.2827, -123.1207);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
@@ -476,10 +475,8 @@ class _MapPageState extends State<MapPage> {
         });
   }
 
-  //TODO Need to pass event related info to marker to display, maybe different colors for different events
   Future _addMarkerLongPressed(LatLng latlang) async {
     setState(() {
-      //TODO need to pass event_id into the MarkerId, using event name for now
       final MarkerId markerId = MarkerId(eventId);
       eventIds[markerId] = eventId;
       Marker marker = Marker(
@@ -498,7 +495,6 @@ class _MapPageState extends State<MapPage> {
           title: eventNameCont.text,
           snippet: eventDescriptionCont.text,
         ),
-        //TODO Change color of marker depending on event type
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
       );
 
@@ -562,8 +558,6 @@ class _MapPageState extends State<MapPage> {
             title: event.name,
             snippet: event.description,
           ),
-          //TODO Change color of marker depending on event type
-
           icon: color,
         );
         markers[markerId] = marker;
