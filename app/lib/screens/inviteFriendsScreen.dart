@@ -8,7 +8,6 @@ import 'package:app/components/reusableFunctions.dart';
 import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
-import 'package:app/models/eventModel.dart';
 
 
 class InviteFriendsPage extends StatefulWidget {
@@ -31,8 +30,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   List<bool> follow = new List<bool>();
   Map<String, bool> temp = new Map<String, bool>();
   List<String> usersToInvite = new List<String>();
-  Event event;
-  List<bool> invite = new List<bool>();
+  var event;
 
 
   @override
@@ -79,17 +77,12 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: (eventId == null) ? Icon(Icons.add, color: Colors.green) : (invite[index]) ? Icon(Icons.add, color: Colors.green) : Icon(Icons.add, color: Colors.grey),
+                  icon: Icon(Icons.add, color: Colors.green),
                   onPressed: () {
                     setState(() {
-                      if(eventId == null || invite[index]) {
                         ReusableFunctions.showInSnackBar(
                             "Friend Invited", context);
                         usersToInvite.add(id);
-                      } else {
-                        ReusableFunctions.showInSnackBar(
-                            "Already Invited", context);
-                      }
                     });
                   }
               ),
@@ -114,14 +107,6 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     if(response != null) {
       response.forEach((key, value){
           ids.add(key);
-          //print(event.toJson());
-          //print("PPPPPPPPPPPPPPPPPPPPPP");
-          //print(event.invited);
-          if(eventId != null && event.invited != null && event.invited.contains(key)) {
-            invite.add(false);
-          } else {
-            invite.add(true);
-          }
           temp = value;
           value.forEach((name, following){
             rows.add(name);
