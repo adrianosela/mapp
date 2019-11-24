@@ -228,25 +228,27 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       splashColor: Colors.blueAccent,
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          Event event = new Event(
-                            name: eventNameCont.text,
-                            description: eventDescriptionCont.text,
-                            longitude: event_prev.longitude,
-                            latitude: event_prev.latitude,
-                            date: (eventDate == null)
-                                ? event_prev.date
-                                : eventDate,
-                            duration: eventDurationCont.text,
-                            public: isSwitched,
-                            invited: event_prev.invited,
-                            categories: event_prev.categories,
-                          );
 
-                          Map<String, dynamic> eventToJson(event2) =>
-                              {'event': event2, 'eventId': id};
+                          if(eventDate == null) {
+                            eventDate = event_prev.date;
+                          }
+
+                          Map<String, dynamic> toJson() => {
+                            'startTime' : (eventDate.toUtc().millisecondsSinceEpoch/1000).round(),
+                            'endTime' : (eventDate.add(new Duration(hours: int.parse(eventDurationCont.text))).toUtc().millisecondsSinceEpoch/1000).round(),
+                            'name' : eventNameCont.text,
+                            'description' : eventDescriptionCont.text,
+                            'public' : isSwitched,
+                            'duration' : eventDurationCont.text,
+                            'longitude': event_prev.longitude,
+                            'latitude': event_prev.latitude,
+                          };
+
+                          Map<String, dynamic> eventToJson() =>
+                              {'event': toJson(), 'eventId': id};
 
                           await EventController.updateEvent(
-                              userToken, eventToJson(event.toJson()));
+                              userToken, eventToJson());
 
                           ///clear text controllers
                           eventNameCont.clear();
