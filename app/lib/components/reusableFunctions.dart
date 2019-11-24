@@ -69,12 +69,6 @@ class ReusableFunctions{
 
   static TextFormField formInputMultiLine(String text, [TextEditingController controller]) {
     return new TextFormField(
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Please enter some text';
-        }
-        return null;
-      },
       textInputAction: TextInputAction.go,
       decoration: InputDecoration(
         hintText: text,
@@ -182,11 +176,6 @@ class ReusableFunctions{
       nameController.clear();
     }
     return returnText;
-  }
-
-  ///returns user token
-  static String getToken() {
-    return userToken;
   }
 
   ///used in registration confirmation

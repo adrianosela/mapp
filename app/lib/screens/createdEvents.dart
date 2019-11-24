@@ -86,7 +86,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           children: <Widget>[
                             SimpleDialogOption(
                               child: ReusableFunctions.formInputMultiLine(
-                                  "Create Announcment... ", announcementCont),
+                                  "Create Announcement... ", announcementCont),
                             ),
                             SimpleDialogOption(
                                 child: Padding(
@@ -99,12 +99,16 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                                     padding: EdgeInsets.all(2.0),
                                     splashColor: Colors.blueAccent,
                                     child: Text("Post"),
-                                    onPressed: () async {
-                                     await _createAnnouncement(
-                                          announcementCont.text, id);
-                                      announcementCont.clear();
-                                      Navigator.pop(context);
-                                    },
+                                      onPressed: () async {
+                                        if (announcementCont.text.toString().length != 0) {
+                                          await _createAnnouncement(
+                                              announcementCont.text, id);
+                                          announcementCont.clear();
+                                          Navigator.pop(context);
+                                        } else {
+                                          _showAlert();
+                                        }
+                                      }
                                   ),
                                 )),
                           ],
@@ -153,121 +157,121 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
             content: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ReusableFunctions.titleText("Update Event"),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput(
-                        "Enter Event Name", eventNameCont),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput(
-                        "Enter Event Description", eventDescriptionCont),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: FlatButton(
-                        onPressed: () {
-                          DatePicker.showDatePicker(context,
-                              showTitleActions: true,
-                              minTime: DateTime.now(),
-                              maxTime:
-                              DateTime.now().add(new Duration(days: 365)),
-                              onChanged: (date) {},
-                              onConfirm: (date) {
-                                eventDate = date;
-                              },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.en);
-                        },
-                        child: Text(
-                          'Pick Event Date',
-                          style: TextStyle(color: Colors.blue),
-                        )),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: ReusableFunctions.formInput(
-                        "Enter Event Duration (hours)", eventDurationCont),
-                  ),
-                  Row(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          "Private Event?"
-                        ),
+                      ReusableFunctions.titleText("Update Event"),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: ReusableFunctions.formInput(
+                            "Enter Event Name", eventNameCont),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.14,
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: ReusableFunctions.formInput(
+                            "Enter Event Description", eventDescriptionCont),
                       ),
-                      Container(
-                        child: Switch(
-                          value: isSwitched,
-                          onChanged: (value) {
-                            setState(() {
-                              isSwitched = value;
-                            });
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: FlatButton(
+                            onPressed: () {
+                              DatePicker.showDatePicker(context,
+                                  showTitleActions: true,
+                                  minTime: DateTime.now(),
+                                  maxTime:
+                                  DateTime.now().add(new Duration(days: 365)),
+                                  onChanged: (date) {},
+                                  onConfirm: (date) {
+                                    eventDate = date;
+                                  },
+                                  currentTime: DateTime.now(),
+                                  locale: LocaleType.en);
+                            },
+                            child: Text(
+                              'Pick Event Date',
+                              style: TextStyle(color: Colors.blue),
+                            )),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: ReusableFunctions.formInput(
+                            "Enter Event Duration (hours)", eventDurationCont),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                                "Private Event?"
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.14,
+                          ),
+                          Container(
+                            child: Switch(
+                              value: isSwitched,
+                              onChanged: (value) {
+                                setState(() {
+                                  isSwitched = value;
+                                });
+                              },
+                              activeTrackColor: Colors.lightBlueAccent,
+                              activeColor: Colors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: RaisedButton(
+                          child: Text("Save"),
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          disabledColor: Colors.grey,
+                          disabledTextColor: Colors.black,
+                          padding: EdgeInsets.all(2.0),
+                          splashColor: Colors.blueAccent,
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+
+                              if(eventDate == null) {
+                                eventDate = event_prev.date;
+                              }
+
+                              Map<String, dynamic> toJson() => {
+                                'startTime' : (eventDate.toUtc().millisecondsSinceEpoch/1000).round(),
+                                'endTime' : (eventDate.add(new Duration(hours: int.parse(eventDurationCont.text))).toUtc().millisecondsSinceEpoch/1000).round(),
+                                'name' : eventNameCont.text,
+                                'description' : eventDescriptionCont.text,
+                                'public' : isSwitched,
+                                'duration' : eventDurationCont.text,
+                                'longitude': event_prev.longitude,
+                                'latitude': event_prev.latitude,
+                              };
+
+                              Map<String, dynamic> eventToJson() =>
+                                  {'event': toJson(), 'eventId': id};
+
+                              await EventController.updateEvent(
+                                  userToken, eventToJson());
+
+                              ///clear text controllers
+                              eventNameCont.clear();
+                              eventDescriptionCont.clear();
+                              eventDurationCont.clear();
+
+                              Navigator.of(context).pop();
+                              Navigator.pushNamed(
+                                  context, Router.createdEventsRoute);
+                            }
                           },
-                          activeTrackColor: Colors.lightBlueAccent,
-                          activeColor: Colors.blue,
                         ),
-                      ),
+                      )
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: RaisedButton(
-                      child: Text("Save"),
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
-                      padding: EdgeInsets.all(2.0),
-                      splashColor: Colors.blueAccent,
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-
-                          if(eventDate == null) {
-                            eventDate = event_prev.date;
-                          }
-
-                          Map<String, dynamic> toJson() => {
-                            'startTime' : (eventDate.toUtc().millisecondsSinceEpoch/1000).round(),
-                            'endTime' : (eventDate.add(new Duration(hours: int.parse(eventDurationCont.text))).toUtc().millisecondsSinceEpoch/1000).round(),
-                            'name' : eventNameCont.text,
-                            'description' : eventDescriptionCont.text,
-                            'public' : isSwitched,
-                            'duration' : eventDurationCont.text,
-                            'longitude': event_prev.longitude,
-                            'latitude': event_prev.latitude,
-                          };
-
-                          Map<String, dynamic> eventToJson() =>
-                              {'event': toJson(), 'eventId': id};
-
-                          await EventController.updateEvent(
-                              userToken, eventToJson());
-
-                          ///clear text controllers
-                          eventNameCont.clear();
-                          eventDescriptionCont.clear();
-                          eventDurationCont.clear();
-
-                          Navigator.of(context).pop();
-                          Navigator.pushNamed(
-                              context, Router.createdEventsRoute);
-                        }
-                      },
-                    ),
-                  )
-                ],
-              ),
-            )),
+                )),
           );
         });
   }
@@ -285,5 +289,52 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   _createAnnouncement(String announcement, String eventId) async {
     await EventController()
         .createAnnouncement(userToken, eventId, announcement);
+  }
+
+  _showAlert() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Form(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.all(3.0),
+                      child: Text(
+                          "Announcement cannot be empty",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0
+                          )
+                      )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: RaisedButton(
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(3.0),
+                      splashColor: Colors.blueAccent,
+                      child: Text("Ok",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0
+                          )),
+                      onPressed: () async {
+                        //navigate to login screen
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+    );
   }
 }
