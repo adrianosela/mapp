@@ -188,8 +188,14 @@ class _EventPageState extends State<EventPage> {
                                         disabledTextColor: Colors.black,
                                         padding: EdgeInsets.all(2.0),
                                         splashColor: Colors.blueAccent,
-                                        onPressed: (() {
-                                          _subscribeToEvent;
+                                        onPressed: (() async {
+
+                                          Map<String, dynamic> toJson() => {
+                                            'eventIds' : eventId
+                                          };
+
+                                          await UserController.postSubscribe(userToken, toJson());
+
                                           _showAlert();
                                         }),
                                         child: Text('Going',
@@ -310,10 +316,6 @@ class _EventPageState extends State<EventPage> {
     } else {
       throw 'Could not launch $url';
     }
-  }
-
-  _subscribeToEvent() async {
-    await UserController.postSubscribe(userToken, {'eventIds': eventId});
   }
 
   _inviteToEvent() async {

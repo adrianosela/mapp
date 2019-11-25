@@ -258,7 +258,7 @@ class EventController {
       if (statusCode < 200 || statusCode > 400) {
         throw new Exception("Error while fetching data");
       }
-      
+
       return statusCode.toString();
     });
   }
