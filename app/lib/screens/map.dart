@@ -567,7 +567,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
         title: cusWidget,

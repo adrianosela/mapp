@@ -143,14 +143,11 @@ class UserController {
     });
   }
 
-  ///Get events user clicked "going to"
   static Future<Map<String, String>> getCreatedEvents(String id) async {
-    Map<String, String> query = {'id': id};
 
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/created",
-      query,
     );
 
     Map<String, String> result = new Map<String, String>();
@@ -177,12 +174,10 @@ class UserController {
 
   ///Get events user clicked "going to"
   static Future<Map<String, String>> getSubscribedEvents(String id) async {
-    Map<String, String> query = {'id': id};
 
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/subscribed",
-      query,
     );
 
     Map<String, String> result = new Map<String, String>();
@@ -209,12 +204,10 @@ class UserController {
 
   ///Get events user is invited to
   static Future<Map<String, String>> getPendingEvents(String id) async {
-    Map<String, String> query = {'id': id};
 
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/pending",
-      query,
     );
 
     Map<String, String> result = new Map<String, String>();
@@ -254,7 +247,6 @@ class UserController {
             body: jsonEncode(body))
         .then((http.Response response) {
       final int statusCode = response.statusCode;
-      print(jsonEncode(body));
       if (statusCode < 200 || statusCode > 400 || json == null) {
         print(statusCode);
         print(json);

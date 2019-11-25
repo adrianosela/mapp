@@ -78,8 +78,8 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
                     setState(() {
                       rows.removeAt(index);
                       ReusableFunctions.showInSnackBar(
-                          "Invite accepted", context);
-                      UserController.postSubscribe(userToken, _toJson(id));
+                          "Invite Accepted", context);
+                      UserController.postSubscribe(userToken, _toJson2(id));
                     });
                   }
               ),
@@ -89,7 +89,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
                     setState(() {
                       rows.removeAt(index);
                       ReusableFunctions.showInSnackBar(
-                          "Invite rejected", context);
+                          "Invite Rejected", context);
                       UserController.postNotGoing(userToken, _toJson(id));
                     });
                   }
@@ -112,5 +112,9 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
 
   Map<String, dynamic> _toJson(id) => {
     'eventId' : id
+  };
+
+  Map<String, dynamic> _toJson2(id) => {
+    'eventIds' : id
   };
 }
