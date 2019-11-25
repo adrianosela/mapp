@@ -175,7 +175,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                         padding: EdgeInsets.all(2.0),
                         child: FlatButton(
                             onPressed: () {
-                              DatePicker.showDatePicker(context,
+                              DatePicker.showDateTimePicker(context,
                                   showTitleActions: true,
                                   minTime: DateTime.now(),
                                   maxTime: DateTime.now()
@@ -269,6 +269,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                               eventDescriptionCont.clear();
                               eventDurationCont.clear();
 
+                              Navigator.of(context).pop();
                               Navigator.of(context).pop();
                               Navigator.pushNamed(
                                   context, Router.createdEventsRoute);

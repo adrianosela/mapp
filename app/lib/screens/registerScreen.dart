@@ -27,7 +27,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
-        expanded = visible;
+        setState(() {
+          expanded = visible;
+        });
         print(expanded);
       },
     );

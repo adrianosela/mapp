@@ -49,7 +49,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final _formKey = GlobalKey<FormState>();
-  bool expanded = true;
+  bool expanded = false;
 
   @protected
   void initState() {
@@ -57,11 +57,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
-       // expanded = visible;
-        print(expanded);
+        setState(() {
+          expanded = visible;
+        });
+
+       print(expanded);
       },
     );
+
     _login();
+
   }
 
   _login() async {
@@ -94,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 width: (!expanded) ? 180 : 0,
                 height: (!expanded) ? 180 : 0,
-                child: Image.asset("assets/mapp_icon.png"),
+                child: (!expanded) ? Image.asset("assets/mapp_icon.png") : null,
               ),
               Padding(
                 padding: (!expanded) ? EdgeInsets.all(15.0) : EdgeInsets.all(0.0),
