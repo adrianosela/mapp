@@ -64,7 +64,9 @@ let addUsersAndSendInvites = async function(event, invited, add = false, notify 
             _id: { $in: invited }
         });
         for (let user of userSettings) {
-            invitedUsersTokens.push(user.fcmToken);
+            if (user.fcmToken) {
+                invitedUsersTokens.push(user.fcmToken);
+            }
         }
 
         let creator = await User.findById(event.creator);
@@ -90,7 +92,9 @@ let notifyNewAnnouncement = async function(event, notify = true) {
 
         let subscribedUsersTokens = [];
         for (let user of userSettings) {
-            subscribedUsersTokens.push(user.fcmToken);
+            if (user.fcmToken) {
+                subscribedUsersTokens.push(user.fcmToken);
+            }
         }
 
         let notification = {

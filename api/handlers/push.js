@@ -26,6 +26,22 @@ let postToken = async function(req, res) {
     }
 };
 
+let rmToken = async function(req, res) {
+    try {
+        const userId = req.authorization.id;
+
+        let userSettings = await UserSettings.findById(userId);
+        userSettings.fcmToken = null;
+        await userSettings.save();
+
+        res.status(200).send("FCM token for user removed");
+    }
+    catch (e) {
+        logger.error(e);
+        res.status(500).send("Error storing FCM Token");
+    }
+};
+
 // test push notification endpoint
 let testPush = async function(req, res) {
     try {
@@ -64,5 +80,6 @@ let testPush = async function(req, res) {
 
 module.exports = {
     post: postToken,
+    remove: rmToken,
     test: testPush
 };

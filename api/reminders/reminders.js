@@ -28,18 +28,13 @@ let remind = async function() {
                 if (user.fcmToken) {
                     subscribedUsersTokens.push(user.fcmToken);
                 }
-                else {
-                    logger.info(`[reminders] could not remind ${user.email} of event ${event._id}. no fcm token for user found`);
-                }
             }
 
             let notification = {
                 title: "Upcoming Event",
                 body: `${event.name} is starting soon...`
             };
-            logger.info(`[reminders] sending ${notification.body}`);
             notifications.notify(notification, subscribedUsersTokens);
-            logger.info(`[reminders] sent ${notification.body}`);
         }
 
         logger.info(`[reminders] finished sweep from ${start} to ${end} successfully!`);
