@@ -294,7 +294,6 @@ class UserController {
         .then((http.Response response) {
       final int statusCode = response.statusCode;
       print(jsonEncode(body));
-      print("++++++++++++++++++++++++++++++");
       print(response.statusCode);
       if (statusCode < 200 || statusCode > 400 || json == null) {
         print(statusCode);
