@@ -94,34 +94,34 @@ class _FollowingPageState extends State<FollowingPage> {
       if (item[1] == "false") {
         return Card(
             child: ListTile(
-          title: ReusableFunctions.listItemText(item[0]),
-          trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            IconButton(
-                icon: Icon(Icons.person_add, color: Colors.green),
-                onPressed: () async {
-                  await UserController.followUser(userToken, id);
-                  setState(() {
-                    rows.removeAt(index);
-                    ReusableFunctions.showInSnackBar("Followed User", context);
-                  });
-                }),
-          ]),
-        ));
+              title: ReusableFunctions.listItemText(item[0]),
+              trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.person_add, color: Colors.green),
+                    onPressed: () async {
+                      await UserController.followUser(userToken, id);
+                      setState(() {
+                        rows.removeAt(index);
+                        ReusableFunctions.showInSnackBar("Followed User", context);
+                      });
+                    }),
+              ]),
+            ));
       } else {
         return Card(
             child: ListTile(
-          title: ReusableFunctions.listItemText(item[0]),
-          trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            IconButton(
-                icon: Icon(Icons.delete, color: Colors.green),
-                onPressed: () {
-                  UserController.unfollowUser(userToken, id);
-                  setState(() {
-                    rows.removeAt(index);
-                  });
-                }),
-          ]),
-        ));
+              title: ReusableFunctions.listItemText(item[0]),
+              trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.delete, color: Colors.green),
+                    onPressed: () {
+                      UserController.unfollowUser(userToken, id);
+                      setState(() {
+                        rows.removeAt(index);
+                      });
+                    }),
+              ]),
+            ));
       }
     }
   }

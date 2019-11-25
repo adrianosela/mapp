@@ -60,80 +60,80 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
       final id = ids[index];
       return Card(
           child: ListTile(
-        title: ReusableFunctions.listItemText(item),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => new EventPage(eventId: id)));
-        },
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          IconButton(
-              icon: Icon(Icons.message, color: Colors.green),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return StatefulBuilder(builder: (context, setState) {
-                        return SimpleDialog(
-                          title: ReusableFunctions.titleText(
-                              "Create Announcement"),
-                          children: <Widget>[
-                            SimpleDialogOption(
-                              child: ReusableFunctions.formInputMultiLine(
-                                  "Create Announcement... ", announcementCont),
-                            ),
-                            SimpleDialogOption(
-                                child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: RaisedButton(
-                                  color: Colors.blue,
-                                  textColor: Colors.white,
-                                  disabledColor: Colors.grey,
-                                  disabledTextColor: Colors.black,
-                                  padding: EdgeInsets.all(2.0),
-                                  splashColor: Colors.blueAccent,
-                                  child: Text("Post"),
-                                  onPressed: () async {
-                                    if (announcementCont.text
-                                            .toString()
-                                            .length !=
-                                        0) {
-                                      await _createAnnouncement(
-                                          announcementCont.text, id);
-                                      announcementCont.clear();
-                                      Navigator.pop(context);
-                                    } else {
-                                      _showAlert();
-                                    }
-                                  }),
-                            )),
-                          ],
-                        );
-                      });
+            title: ReusableFunctions.listItemText(item),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => new EventPage(eventId: id)));
+            },
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.message, color: Colors.green),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(builder: (context, setState) {
+                            return SimpleDialog(
+                              title: ReusableFunctions.titleText(
+                                  "Create Announcement"),
+                              children: <Widget>[
+                                SimpleDialogOption(
+                                  child: ReusableFunctions.formInputMultiLine(
+                                      "Create Announcement... ", announcementCont),
+                                ),
+                                SimpleDialogOption(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: RaisedButton(
+                                          color: Colors.blue,
+                                          textColor: Colors.white,
+                                          disabledColor: Colors.grey,
+                                          disabledTextColor: Colors.black,
+                                          padding: EdgeInsets.all(2.0),
+                                          splashColor: Colors.blueAccent,
+                                          child: Text("Post"),
+                                          onPressed: () async {
+                                            if (announcementCont.text
+                                                .toString()
+                                                .length !=
+                                                0) {
+                                              await _createAnnouncement(
+                                                  announcementCont.text, id);
+                                              announcementCont.clear();
+                                              Navigator.pop(context);
+                                            } else {
+                                              _showAlert();
+                                            }
+                                          }),
+                                    )),
+                              ],
+                            );
+                          });
+                        });
+                  }),
+              IconButton(
+                  icon: Icon(Icons.edit, color: Colors.green),
+                  onPressed: () {
+                    setState(() {
+                      _update(id);
                     });
-              }),
-          IconButton(
-              icon: Icon(Icons.edit, color: Colors.green),
-              onPressed: () {
-                setState(() {
-                  _update(id);
-                });
-              }),
-          IconButton(
-              icon: Icon(
-                Icons.delete,
-                color: Colors.green,
-              ),
-              onPressed: () {
-                setState(() {
-                  rows.removeAt(index);
-                  ReusableFunctions.showInSnackBar("Event Deleted", context);
-                  EventController.deleteEvent(userToken, id);
-                });
-              }),
-        ]),
-      ));
+                  }),
+              IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.green,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      rows.removeAt(index);
+                      ReusableFunctions.showInSnackBar("Event Deleted", context);
+                      EventController.deleteEvent(userToken, id);
+                    });
+                  }),
+            ]),
+          ));
     }
   }
 

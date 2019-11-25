@@ -52,34 +52,34 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
       final id = ids[index];
       return Card(
           child: ListTile(
-        title: ReusableFunctions.listItemText(item),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => new EventPage(eventId: id)));
-        },
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          IconButton(
-              icon: Icon(Icons.check, color: Colors.green),
-              onPressed: () {
-                setState(() {
-                  rows.removeAt(index);
-                  ReusableFunctions.showInSnackBar("Invite Accepted", context);
-                  UserController.postSubscribe(userToken, _toJson2(id));
-                });
-              }),
-          IconButton(
-              icon: Icon(Icons.cancel, color: Colors.green),
-              onPressed: () {
-                setState(() {
-                  rows.removeAt(index);
-                  ReusableFunctions.showInSnackBar("Invite Rejected", context);
-                  UserController.postNotGoing(userToken, _toJson(id));
-                });
-              }),
-        ]),
-      ));
+            title: ReusableFunctions.listItemText(item),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => new EventPage(eventId: id)));
+            },
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.check, color: Colors.green),
+                  onPressed: () {
+                    setState(() {
+                      rows.removeAt(index);
+                      ReusableFunctions.showInSnackBar("Invite Accepted", context);
+                      UserController.postSubscribe(userToken, _toJson2(id));
+                    });
+                  }),
+              IconButton(
+                  icon: Icon(Icons.cancel, color: Colors.green),
+                  onPressed: () {
+                    setState(() {
+                      rows.removeAt(index);
+                      ReusableFunctions.showInSnackBar("Invite Rejected", context);
+                      UserController.postNotGoing(userToken, _toJson(id));
+                    });
+                  }),
+            ]),
+          ));
     }
   }
 

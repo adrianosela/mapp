@@ -657,7 +657,12 @@ class _MapPageState extends State<MapPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: RaisedButton(
-                                  padding: const EdgeInsets.all(2.0),
+                                  color: Colors.blue,
+                                  textColor: Colors.white,
+                                  disabledColor: Colors.grey,
+                                  disabledTextColor: Colors.black,
+                                  padding: EdgeInsets.all(2.0),
+                                  splashColor: Colors.blueAccent,
                                   child: Text("Search"),
                                   onPressed: () async {
                                     List<String> categories =
