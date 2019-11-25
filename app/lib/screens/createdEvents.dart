@@ -277,6 +277,11 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   }
 
   _getCreatedEvents() async {
+    setState(() {
+      ids.clear();
+      rows.clear();
+    });
+
     var response = await UserController.getCreatedEvents(userToken);
     if (response != null) {
       response.forEach((id, name) {

@@ -101,6 +101,10 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
   }
 
   _getPendingInvites() async {
+    setState(() {
+      ids.clear();
+      rows.clear();
+    });
     var response = await UserController.getPendingEvents(userToken);
     if(response != null) {
       response.forEach((id, name){
