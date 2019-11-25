@@ -56,7 +56,7 @@ class _FollowersPageState extends State<FollowersPage> {
         title: ReusableFunctions.listItemText(item),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           IconButton(
-              icon: (follow[index]) ? new Icon(Icons.person_add, color: Colors.green) : new Icon(Icons.person_add, color: Colors.grey),
+              icon: (follow[index]) ? new Icon(Icons.person_add, color: Colors.green) : new Icon(Icons.check, color: Colors.grey),
               onPressed: () {
                 setState(() {
                   if(follow[index]) {
