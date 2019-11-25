@@ -321,11 +321,10 @@ let subscribeToEvents = async function(req, res) {
         });
 
         for (let event of events) {
+            if (event.creator == userId) {
+                continue;
+            }
             if (event.public) {
-                if (event.creator == userId) {
-                    continue;
-                }
-
                 if (user.pendingInvites.includes(event._id)) {
                     user.pendingInvites.pull(event._id);
                 }
