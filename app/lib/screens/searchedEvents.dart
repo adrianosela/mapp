@@ -82,6 +82,11 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
   }
 
   _createSearchedEvents() async {
+    setState(() {
+      ids.clear();
+      rows.clear();
+    });
+
     if (events != null) {
       for (Event event in events) {
         ids.add(event.eventId);

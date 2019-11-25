@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
+import 'package:app/components/router.dart';
 
 import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
+
 import 'package:app/screens/eventScreen.dart';
+
 
 class SavedEventsPage extends StatefulWidget {
   @override
@@ -19,6 +22,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
+  List<bool> buttons = new List<bool>();
 
   @override
   void initState() {
@@ -31,7 +35,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
         title: Text("Saved Events"),
@@ -49,7 +53,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      return ListTile(
+      return new ListTile(
         title: ReusableFunctions.listItemText(item),
         onTap: () {
           Navigator.push(
@@ -67,13 +71,19 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: Icon(Icons.cancel),
+                  icon: (buttons[index]) ? new Icon(Icons.cancel, color: Colors.green) : new Icon(Icons.cancel, color: Colors.grey),
                   onPressed: () {
                     setState(() {
-                      rows.removeAt(index);
-                      ReusableFunctions.showInSnackBar(
-                          "Unsubscribed", context);
-                      UserController.postUnsubscribe(userToken, _toJson(id));
+                      if(buttons[index]) {
+                        ReusableFunctions.showInSnackBar(
+                            "Unsubscribed", context);
+                        UserController.postUnsubscribe(userToken, _toJson(id));
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, Router.savedEventsRoute);
+                      } else {
+                        ReusableFunctions.showInSnackBar(
+                            "Creator Cannot Unsubscribe", context);
+                      }
                     });
                   }
               ),
@@ -84,11 +94,28 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
   }
 
   _getSubscribedEvents() async {
+    setState(() {
+      ids.clear();
+      rows.clear();
+      buttons.clear();
+    });
+
     var response = await UserController.getSubscribedEvents(userToken);
+    var responseCreated = await UserController.getCreatedEvents(userToken);
+
     if (response != null) {
       response.forEach((id, name) {
         ids.add(id);
         rows.add(name);
+        buttons.add(true);
+      });
+    }
+
+    if(responseCreated != null) {
+      responseCreated.forEach((id, name) {
+        ids.add(id);
+        rows.add(name);
+        buttons.add(false);
       });
     }
   }
