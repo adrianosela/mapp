@@ -262,4 +262,32 @@ class EventController {
       return statusCode.toString();
     });
   }
+
+  ///Get a map of users the current user is following => map(userid, username)
+  static Future<List<String>> getSubscribedUsers(token, eventId) async {
+
+    Map<String, String> query = {'id': eventId};
+    var uri = Uri.https("mapp-254321.appspot.com", "/event/subscribed", query);
+
+    List<String> subscribed = new List<String>();
+
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "authorization": "Bearer $token"
+    });
+
+    if (response.statusCode == 200) {
+      var userContainer = json.decode(response.body);
+      print(userContainer);
+      if (userContainer != null) {
+        for (var instance in userContainer) {
+          subscribed.add(instance["name"].toString());
+        }
+      }
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to fetch data');
+    }
+    return subscribed;
+  }
 }

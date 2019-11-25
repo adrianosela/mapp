@@ -305,6 +305,55 @@ let createAnnouncement = async function(req, res) {
     }
 };
 
+// Get Users that are attending an event
+let getSubscribedToEvent = async function(req, res) {
+    const userId = req.authorization.id;
+    
+    const eventId = req.query.id;
+    if (!eventId) {
+        return res.status(400).send("No event Id provided");
+    }
+
+    // validate id
+    let val = validator.mongoId(eventId);
+    if (val.ok === false) {
+        return res.status(400).send(val.error);
+    }
+
+    try {
+        let event = await Event.findById(eventId);
+        if (!event) {
+            return res.status(404).send("Event not found");
+        }
+
+        if (!event.public) {
+            if (event.creator != userId && !event.invited.includes(userId) && !event.followers.includes(userId)) {
+                // Return 404 (Not Found) as user can't know about private event
+                return res.status(404).send("Event not found");
+            }
+        }
+
+        let subscribedUsers = await User.find({
+            _id: { $in: event.followers }
+        });
+
+        let response = [];
+        for (let user of subscribedUsers) {
+            let userObject = {
+                id: user._id,
+                name: user.name
+            };
+            response.push(userObject);
+        }
+
+        res.json(response);
+    }
+    catch (e) {
+        logger.error(e);
+        res.status(500).send("Could not retrieve event's subscribed users");
+    }
+};
+
 // invite people to an event
 let invitePeople = async function(req, res) {
     try {
@@ -468,6 +517,7 @@ module.exports = {
     delete: deleteEvent,
     getAnnouncements: getAnnouncementsForEvent,
     announcement: createAnnouncement,
+    subscribed: getSubscribedToEvent,
     invite: invitePeople,
     find: findEvents,
     search: searchEvents

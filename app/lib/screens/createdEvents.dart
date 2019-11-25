@@ -175,7 +175,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                         padding: EdgeInsets.all(2.0),
                         child: FlatButton(
                             onPressed: () {
-                              DatePicker.showDatePicker(context,
+                              DatePicker.showDateTimePicker(context,
                                   showTitleActions: true,
                                   minTime: DateTime.now(),
                                   maxTime: DateTime.now()
@@ -191,6 +191,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                               style: TextStyle(color: Colors.blue),
                             )),
                       ),
+                      Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            "Event Duration in Hours",
+                            style: TextStyle(fontSize: 15, color: Colors.blue),
+                          )),
                       Padding(
                         padding: EdgeInsets.all(2.0),
                         child: ReusableFunctions.formInput(
@@ -269,6 +275,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                               eventDescriptionCont.clear();
                               eventDurationCont.clear();
 
+                              Navigator.of(context).pop();
                               Navigator.of(context).pop();
                               Navigator.pushNamed(
                                   context, Router.createdEventsRoute);

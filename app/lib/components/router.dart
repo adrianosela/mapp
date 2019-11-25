@@ -11,6 +11,7 @@ import 'package:app/screens/registerScreen.dart';
 import 'package:app/screens/savedEvents.dart';
 import 'package:app/screens/searchedEvents.dart';
 import 'package:app/screens/eventScreen.dart';
+import 'package:app/screens/subscribedScreen.dart';
 
 class Router {
   static const String homeRoute = '/';
@@ -24,6 +25,7 @@ class Router {
   static const String savedEventsRoute = '/savedEvents';
   static const String searchedEventsRoute = '/searchedEvents';
   static const String eventRoute = '/event';
+  static const String subscribedRoute = '/subscribed';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -49,6 +51,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => SearchedEventsPage());
       case eventRoute:
         return MaterialPageRoute(builder: (_) => EventPage());
+      case subscribedRoute:
+        return MaterialPageRoute(builder: (_) => SubscribedPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
