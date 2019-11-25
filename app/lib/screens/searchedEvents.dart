@@ -9,7 +9,6 @@ import 'package:app/models/fcmToken.dart';
 
 import 'package:app/screens/eventScreen.dart';
 
-
 class SearchedEventsPage extends StatefulWidget {
   final List<Event> events;
 
@@ -24,6 +23,7 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
   String userToken;
 
   final List<Event> events;
+
   _SearchedEventsPageState({this.events});
 
   List<String> rows = new List<String>();
@@ -58,7 +58,8 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      return ListTile(
+      return Card(
+          child: ListTile(
         title: ReusableFunctions.listItemText(item),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           IconButton(
@@ -69,16 +70,13 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
                 });
               }),
         ]),
-      );
+      ));
     }
   }
 
   _goToEventPage(id) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-            new EventPage(eventId: id)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => new EventPage(eventId: id)));
   }
 
   _createSearchedEvents() async {

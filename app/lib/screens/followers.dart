@@ -52,7 +52,8 @@ class _FollowersPageState extends State<FollowersPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      return ListTile(
+      return Card (
+          child:ListTile(
         title: ReusableFunctions.listItemText(item),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           IconButton(
@@ -72,7 +73,7 @@ class _FollowersPageState extends State<FollowersPage> {
               }
           ),
         ]),
-      );
+      ));
     }
   }
 
