@@ -192,6 +192,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                             )),
                       ),
                       Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            "Event Duration in Hours",
+                            style: TextStyle(fontSize: 15, color: Colors.blue),
+                          )),
+                      Padding(
                         padding: EdgeInsets.all(2.0),
                         child: ReusableFunctions.formInput(
                             "Enter Event Duration (hours)", eventDurationCont),
