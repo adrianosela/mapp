@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:app/components/moreHorizWidget.dart';
 import 'package:app/components/drawerWidget.dart';
 import 'package:app/components/reusableFunctions.dart';
-import 'package:app/components/router.dart';
 
 import 'package:app/controllers/userController.dart';
 
@@ -23,6 +22,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
   List<bool> buttons = new List<bool>();
+  var unsubscribed = false;
 
   @override
   void initState() {
@@ -61,19 +61,22 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
               MaterialPageRoute(
                   builder: (context) => new EventPage(eventId: id)));
         },
-        trailing: Row(
+        trailing: new Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: (buttons[index]) ? new Icon(Icons.cancel, color: Colors.green) : new Icon(Icons.cancel, color: Colors.grey),
+                  icon: (unsubscribed) ? new Icon(Icons.cancel, color: Colors.grey) : ((buttons[index]) ? new Icon(Icons.cancel, color: Colors.green) : new Icon(Icons.cancel, color: Colors.grey)),
                   onPressed: () {
                     setState(() {
                       if(buttons[index]) {
                         ReusableFunctions.showInSnackBar(
                             "Unsubscribed", context);
                         UserController.postUnsubscribe(userToken, _toJson(id));
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, Router.savedEventsRoute);
+                        buttons[index] = false;
+                        unsubscribed = true;
+                      } else if (unsubscribed == true) {
+                        ReusableFunctions.showInSnackBar(
+                            "Already Unsubscribed", context);
                       } else {
                         ReusableFunctions.showInSnackBar(
                             "Creator Cannot Unsubscribe", context);
