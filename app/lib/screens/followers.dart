@@ -52,21 +52,18 @@ class _FollowersPageState extends State<FollowersPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      final add_button = follow[index];
       return ListTile(
         title: ReusableFunctions.listItemText(item),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           IconButton(
-              icon: (add_button) ? Icon(Icons.person_add, color: Colors.green) : Icon(Icons.person_add, color: Colors.grey),
+              icon: (follow[index]) ? new Icon(Icons.person_add, color: Colors.green) : new Icon(Icons.check, color: Colors.grey),
               onPressed: () {
                 setState(() {
-                  if(add_button) {
+                  if(follow[index]) {
                     ReusableFunctions.showInSnackBar(
                         "Followed User", context);
                     UserController.followUser(userToken, id);
-                    Navigator.of(context).pop();
-                    Navigator.pushNamed(
-                        context, Router.followersRoute);
+                    follow[index] = false;
                   } else {
                     ReusableFunctions.showInSnackBar(
                         "Already Following", context);
