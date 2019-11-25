@@ -11,8 +11,8 @@ db.initialize(config.get("database.url"), config.get("database.name"));
 notifications.initialize(config.get("notifications.firebase"));
 
 // run a cron job in the background which sends 
-// reminder notifications at minute 30 of every hour
-cron.schedule("* * * * *", function() {
+// reminder notifications at minute 0 of every hour
+cron.schedule("0 * * * *", function() {
     reminder.remindUsers();
 });
 
