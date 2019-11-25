@@ -321,18 +321,34 @@ let subscribeToEvents = async function(req, res) {
         });
 
         for (let event of events) {
-            user.pendingInvites.pull(event._id);
-            event.invited.pull(userId);
-            if (event.creator != userId) {
-                if (event.public || event.invited.includes(userId)) {
-                    user.subscribedEvents.addToSet(event._id);
-                    event.followers.addToSet(userId);
+            if (event.public) {
+                if (event.creator == userId) {
+                    continue;
                 }
+
+                if (user.pendingInvites.includes(event._id)) {
+                    user.pendingInvites.pull(event._id);
+                }
+                user.subscribedEvents.addToSet(event._id);
+
+                if (event.invited.includes(userId)) {
+                    event.invited.pull(userId);
+                }
+                event.followers.addToSet(userId);
+                await event.save();
             }
-            await event.save();
+            else if (event.invited.includes(userId)) {
+                user.pendingInvites.pull(event._id);
+                user.subscribedEvents.addToSet(event._id);
+
+                event.invited.pull(user._id);
+                event.followers.addToSet(userId);
+                await event.save();
+            }
         }
 
         await user.save();
+
         res.send(user.subscribedEvents);
     }
     catch (e) {
