@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
-
 import 'package:app/components/router.dart';
 import 'package:app/components/reusableStlyes.dart';
 
 import 'package:app/controllers/loginController.dart';
-import 'package:app/controllers/eventController.dart';
 
 import 'package:app/models/userModel.dart';
 import 'package:app/models/fcmToken.dart';
-import 'package:app/models/eventModel.dart';
 
-import 'package:app/screens/map.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ReusableFunctions{
 

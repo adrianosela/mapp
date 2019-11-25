@@ -63,12 +63,6 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
               MaterialPageRoute(
                   builder: (context) => new EventPage(eventId: id)));
         },
-        onLongPress: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => new EventPage(eventId: id)));
-        },
         trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

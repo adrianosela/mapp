@@ -11,6 +11,7 @@ import 'package:app/models/fcmToken.dart';
 import 'package:app/models/announcementModel.dart';
 
 import 'package:app/components/reusableFunctions.dart';
+import 'package:app/components/router.dart';
 
 import 'package:app/screens/inviteFriendsScreen.dart';
 
@@ -29,6 +30,7 @@ class _EventPageState extends State<EventPage> {
   Event event;
   final String eventId;
   String address;
+  bool going = true;
   List<String> usersToInvite = new List<String>();
   List<Announcement> rows = new List<Announcement>();
 
@@ -43,6 +45,9 @@ class _EventPageState extends State<EventPage> {
       setState(() {});
     });
     _getAnnouncements().then((result) {
+      setState(() {});
+    });
+    _seeIfGoing().then((result) {
       setState(() {});
     });
   }
@@ -189,19 +194,39 @@ class _EventPageState extends State<EventPage> {
                                         padding: EdgeInsets.all(2.0),
                                         splashColor: Colors.blueAccent,
                                         onPressed: (() async {
+                                          if(going) {
+                                            Map<String, dynamic> toJson() => {
+                                              'eventIds' : eventId
+                                            };
 
-                                          Map<String, dynamic> toJson() => {
-                                            'eventIds' : eventId
-                                          };
+                                            await UserController.postSubscribe(userToken, toJson());
+                                            _showAlert("Subscribed");
 
-                                          await UserController.postSubscribe(userToken, toJson());
+                                            ///refresh page
+                                            Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EventPage(eventId: eventId)));
+                                          } else {
+                                            Map<String, dynamic> toJson() => {
+                                              'eventIds' : eventId
+                                            };
 
-                                          _showAlert();
+                                            await UserController.postUnsubscribe(userToken, toJson());
+                                            _showAlert("Unsubscribed");
+
+                                            ///refresh page
+                                            Navigator.pushNamedAndRemoveUntil(context, Router.mapRoute, (_) => false);
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EventPage(eventId: eventId)));
+                                          }
                                         }),
-                                        child: Text('Going',
+                                        child: (going) ? Text('Going',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 17.0)),
+                                                fontSize: 17.0)
+                                        ) : Text('Not Going',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17.0)
+                                        ),
                                       ),
                                     ),
                                     Padding(
@@ -326,7 +351,18 @@ class _EventPageState extends State<EventPage> {
     EventController.inviteToEvent(userToken, eventToJson());
   }
 
-  _showAlert() {
+  _seeIfGoing() async {
+    var responseSaved = await UserController.getSubscribedEvents(userToken);
+    var responseCreated = await UserController.getCreatedEvents(userToken);
+
+    if(responseCreated.toString().contains(eventId) || responseSaved.toString().contains(eventId)) {
+      going = false;
+    } else {
+      going = true;
+    }
+  }
+
+  _showAlert(String text) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -338,7 +374,7 @@ class _EventPageState extends State<EventPage> {
                   Padding(
                       padding: EdgeInsets.all(3.0),
                       child: Text(
-                          "Subscribed",
+                          text,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 17.0

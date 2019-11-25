@@ -66,12 +66,6 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
               MaterialPageRoute(
                   builder: (context) => new EventPage(eventId: id)));
         },
-        onLongPress: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => new EventPage(eventId: id)));
-        },
         trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           IconButton(
               icon: Icon(Icons.message, color: Colors.green),
