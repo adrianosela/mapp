@@ -58,7 +58,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      return ListTile(
+      return Card(
+          child: ListTile(
         title: ReusableFunctions.listItemText(item),
         onTap: () {
           Navigator.push(
@@ -75,8 +76,8 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                     builder: (BuildContext context) {
                       return StatefulBuilder(builder: (context, setState) {
                         return SimpleDialog(
-                          title:
-                          ReusableFunctions.titleText("Create Announcement"),
+                          title: ReusableFunctions.titleText(
+                              "Create Announcement"),
                           children: <Widget>[
                             SimpleDialogOption(
                               child: ReusableFunctions.formInputMultiLine(
@@ -84,27 +85,29 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                             ),
                             SimpleDialogOption(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: RaisedButton(
-                                    color: Colors.blue,
-                                    textColor: Colors.white,
-                                    disabledColor: Colors.grey,
-                                    disabledTextColor: Colors.black,
-                                    padding: EdgeInsets.all(2.0),
-                                    splashColor: Colors.blueAccent,
-                                    child: Text("Post"),
-                                      onPressed: () async {
-                                        if (announcementCont.text.toString().length != 0) {
-                                          await _createAnnouncement(
-                                              announcementCont.text, id);
-                                          announcementCont.clear();
-                                          Navigator.pop(context);
-                                        } else {
-                                          _showAlert();
-                                        }
-                                      }
-                                  ),
-                                )),
+                              padding: const EdgeInsets.all(2.0),
+                              child: RaisedButton(
+                                  color: Colors.blue,
+                                  textColor: Colors.white,
+                                  disabledColor: Colors.grey,
+                                  disabledTextColor: Colors.black,
+                                  padding: EdgeInsets.all(2.0),
+                                  splashColor: Colors.blueAccent,
+                                  child: Text("Post"),
+                                  onPressed: () async {
+                                    if (announcementCont.text
+                                            .toString()
+                                            .length !=
+                                        0) {
+                                      await _createAnnouncement(
+                                          announcementCont.text, id);
+                                      announcementCont.clear();
+                                      Navigator.pop(context);
+                                    } else {
+                                      _showAlert();
+                                    }
+                                  }),
+                            )),
                           ],
                         );
                       });
@@ -118,7 +121,10 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                 });
               }),
           IconButton(
-              icon: Icon(Icons.delete, color: Colors.green,),
+              icon: Icon(
+                Icons.delete,
+                color: Colors.green,
+              ),
               onPressed: () {
                 setState(() {
                   rows.removeAt(index);
@@ -127,7 +133,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                 });
               }),
         ]),
-      );
+      ));
     }
   }
 
@@ -135,11 +141,11 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
     Event event_prev = await EventController.getEventObject(userToken, id);
 
     TextEditingController eventNameCont =
-    TextEditingController(text: event_prev.name);
+        TextEditingController(text: event_prev.name);
     TextEditingController eventDescriptionCont =
-    TextEditingController(text: event_prev.description);
+        TextEditingController(text: event_prev.description);
     TextEditingController eventDurationCont =
-    TextEditingController(text: event_prev.duration);
+        TextEditingController(text: event_prev.duration);
 
     bool isSwitched = event_prev.public;
 
@@ -147,7 +153,6 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-
             content: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Form(
@@ -173,12 +178,11 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                               DatePicker.showDatePicker(context,
                                   showTitleActions: true,
                                   minTime: DateTime.now(),
-                                  maxTime:
-                                  DateTime.now().add(new Duration(days: 365)),
-                                  onChanged: (date) {},
-                                  onConfirm: (date) {
-                                    eventDate = date;
-                                  },
+                                  maxTime: DateTime.now()
+                                      .add(new Duration(days: 365)),
+                                  onChanged: (date) {}, onConfirm: (date) {
+                                eventDate = date;
+                              },
                                   currentTime: DateTime.now(),
                                   locale: LocaleType.en);
                             },
@@ -196,9 +200,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                         children: <Widget>[
                           Container(
                             padding: EdgeInsets.all(10.0),
-                            child: Text(
-                                "Private Event?"
-                            ),
+                            child: Text("Private Event?"),
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.14,
@@ -229,21 +231,32 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           splashColor: Colors.blueAccent,
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-
-                              if(eventDate == null) {
+                              if (eventDate == null) {
                                 eventDate = event_prev.date;
                               }
 
                               Map<String, dynamic> toJson() => {
-                                'startTime' : (eventDate.toUtc().millisecondsSinceEpoch/1000).round(),
-                                'endTime' : (eventDate.add(new Duration(hours: int.parse(eventDurationCont.text))).toUtc().millisecondsSinceEpoch/1000).round(),
-                                'name' : eventNameCont.text,
-                                'description' : eventDescriptionCont.text,
-                                'public' : isSwitched,
-                                'duration' : eventDurationCont.text,
-                                'longitude': event_prev.longitude,
-                                'latitude': event_prev.latitude,
-                              };
+                                    'startTime': (eventDate
+                                                .toUtc()
+                                                .millisecondsSinceEpoch /
+                                            1000)
+                                        .round(),
+                                    'endTime': (eventDate
+                                                .add(new Duration(
+                                                    hours: int.parse(
+                                                        eventDurationCont
+                                                            .text)))
+                                                .toUtc()
+                                                .millisecondsSinceEpoch /
+                                            1000)
+                                        .round(),
+                                    'name': eventNameCont.text,
+                                    'description': eventDescriptionCont.text,
+                                    'public': isSwitched,
+                                    'duration': eventDurationCont.text,
+                                    'longitude': event_prev.longitude,
+                                    'latitude': event_prev.latitude,
+                                  };
 
                               Map<String, dynamic> eventToJson() =>
                                   {'event': toJson(), 'eventId': id};
@@ -301,14 +314,9 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                 children: <Widget>[
                   Padding(
                       padding: EdgeInsets.all(3.0),
-                      child: Text(
-                          "Announcement cannot be empty",
+                      child: Text("Announcement cannot be empty",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17.0
-                          )
-                      )
-                  ),
+                              fontWeight: FontWeight.bold, fontSize: 17.0))),
                   Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: RaisedButton(
@@ -320,9 +328,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       splashColor: Colors.blueAccent,
                       child: Text("Ok",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.0
-                          )),
+                              fontWeight: FontWeight.bold, fontSize: 15.0)),
                       onPressed: () async {
                         //navigate to login screen
                         Navigator.pop(context);
@@ -333,7 +339,6 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
               ),
             ),
           );
-        }
-    );
+        });
   }
 }

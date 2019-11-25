@@ -53,7 +53,8 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      return new ListTile(
+      return new Card(
+          child: ListTile(
         title: ReusableFunctions.listItemText(item),
         onTap: () {
           Navigator.push(
@@ -83,7 +84,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
               ),
             ]
         ),
-      );
+      ));
     }
   }
 

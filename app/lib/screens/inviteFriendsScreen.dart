@@ -9,14 +9,14 @@ import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
 
-
 class InviteFriendsPage extends StatefulWidget {
   final String eventId;
 
   InviteFriendsPage({this.eventId});
 
   @override
-  _InviteFriendsPageState createState() => _InviteFriendsPageState(eventId: eventId);
+  _InviteFriendsPageState createState() =>
+      _InviteFriendsPageState(eventId: eventId);
 }
 
 class _InviteFriendsPageState extends State<InviteFriendsPage> {
@@ -31,8 +31,7 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   Map<String, bool> temp = new Map<String, bool>();
   List<String> usersToInvite = new List<String>();
   var event;
-  List<bool>add_button = new List<bool>();
-
+  List<bool> add_button = new List<bool>();
 
   @override
   void initState() {
@@ -47,60 +46,55 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      drawer: MyDrawer(),
-      appBar: AppBar(
-        title: Text("Invite Friends"),
-        actions: <Widget>[
-          MyPopupMenu.createPopup(context),
-        ],
-      ),
-      body: ListView.builder(
-        itemBuilder:  (context, index) => this._buildRow(context, index)
-      ),
+        drawer: MyDrawer(),
+        appBar: AppBar(
+          title: Text("Invite Friends"),
+          actions: <Widget>[
+            MyPopupMenu.createPopup(context),
+          ],
+        ),
+        body: ListView.builder(
+            itemBuilder: (context, index) => this._buildRow(context, index)),
         floatingActionButton: new FloatingActionButton(
             elevation: 0.0,
             child: new Icon(Icons.check),
             backgroundColor: Colors.blue,
             onPressed: () async {
               Navigator.pop(context, usersToInvite);
-            }
-        )
-    );
+            }));
   }
 
   _buildRow(BuildContext context, int index) {
     while (rows != null && index < rows.length) {
       final item = rows[index];
       final id = ids[index];
-      return new ListTile(
+      return new Card(
+          child: ListTile(
         title: ReusableFunctions.listItemText(item),
-        trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              IconButton(
-                  icon: (eventId == null || add_button[index]) ? new Icon(Icons.add, color: Colors.green) : new Icon(Icons.add, color: Colors.grey),
-                  onPressed: () {
-                    setState(() {
-                      if(eventId == null || add_button[index]) {
-                        ReusableFunctions.showInSnackBar(
-                            "Friend Invited", context);
-                        add_button[index] = false;
-                        usersToInvite.add(id);
-                      } else {
-                        ReusableFunctions.showInSnackBar(
-                            "Already Invited", context);
-                      }
-                    });
+        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          IconButton(
+              icon: (eventId == null || add_button[index])
+                  ? new Icon(Icons.add, color: Colors.green)
+                  : new Icon(Icons.add, color: Colors.grey),
+              onPressed: () {
+                setState(() {
+                  if (eventId == null || add_button[index]) {
+                    ReusableFunctions.showInSnackBar("Friend Invited", context);
+                    add_button[index] = false;
+                    usersToInvite.add(id);
+                  } else {
+                    ReusableFunctions.showInSnackBar(
+                        "Already Invited", context);
                   }
-              ),
-            ]
-        ),
-      );
+                });
+              }),
+        ]),
+      ));
     }
   }
 
   _getUsers() async {
-    if(eventId != null) {
+    if (eventId != null) {
       ///fetch event if this isnt a newly created one
       event = await EventController.getEvent(userToken, eventId);
     }
@@ -112,23 +106,26 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     });
 
     var response = await UserController.getUserFollowers(userToken);
-    if(response != null) {
-      response.forEach((key, value){
-          ids.add(key);
+    if (response != null) {
+      response.forEach((key, value) {
+        ids.add(key);
 
-          if(eventId == null || (event['followers'].toString().length == 2 && event['invited'].toString().length == 2)) {
-            add_button.add(true);
-          } else if(event['followers'].toString().contains(key.toString()) || event['invited'].toString().contains(key.toString())) {
-            add_button.add(false);
-          } else {
-            add_button.add(true);
-          }
+        if (eventId == null ||
+            (event['followers'].toString().length == 2 &&
+                event['invited'].toString().length == 2)) {
+          add_button.add(true);
+        } else if (event['followers'].toString().contains(key.toString()) ||
+            event['invited'].toString().contains(key.toString())) {
+          add_button.add(false);
+        } else {
+          add_button.add(true);
+        }
 
-          temp = value;
-          value.forEach((name, following){
-            rows.add(name);
-            follow.add(!following);
-          });
+        temp = value;
+        value.forEach((name, following) {
+          rows.add(name);
+          follow.add(!following);
+        });
       });
     }
   }
