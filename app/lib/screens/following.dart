@@ -9,7 +9,6 @@ import 'package:app/controllers/userController.dart';
 
 import 'package:app/models/fcmToken.dart';
 
-
 class FollowingPage extends StatefulWidget {
   final Map<String, String> events;
 
@@ -30,7 +29,6 @@ class _FollowingPageState extends State<FollowingPage> {
   List<List<String>> rows = new List<List<String>>();
   List<String> ids = new List<String>();
   var searchText;
-
 
   @override
   void initState() {
@@ -94,7 +92,8 @@ class _FollowingPageState extends State<FollowingPage> {
       final id = ids[index];
 
       if (item[1] == "false") {
-        return ListTile(
+        return Card(
+            child: ListTile(
           title: ReusableFunctions.listItemText(item[0]),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
             IconButton(
@@ -103,14 +102,14 @@ class _FollowingPageState extends State<FollowingPage> {
                   await UserController.followUser(userToken, id);
                   setState(() {
                     rows.removeAt(index);
-                    ReusableFunctions.showInSnackBar(
-                        "Followed User", context);
+                    ReusableFunctions.showInSnackBar("Followed User", context);
                   });
                 }),
           ]),
-        );
+        ));
       } else {
-        return ListTile(
+        return Card(
+            child: ListTile(
           title: ReusableFunctions.listItemText(item[0]),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
             IconButton(
@@ -122,7 +121,7 @@ class _FollowingPageState extends State<FollowingPage> {
                   });
                 }),
           ]),
-        );
+        ));
       }
     }
   }
