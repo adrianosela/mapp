@@ -55,39 +55,39 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
       final id = ids[index];
       return new Card(
           child: ListTile(
-        title: ReusableFunctions.listItemText(item),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => new EventPage(eventId: id)));
-        },
-        trailing: new Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              IconButton(
-                  icon: (unsubscribed) ? new Icon(Icons.cancel, color: Colors.grey) : ((buttons[index]) ? new Icon(Icons.cancel, color: Colors.green) : new Icon(Icons.cancel, color: Colors.grey)),
-                  onPressed: () {
-                    setState(() {
-                      if(buttons[index]) {
-                        ReusableFunctions.showInSnackBar(
-                            "Unsubscribed", context);
-                        UserController.postUnsubscribe(userToken, _toJson(id));
-                        buttons[index] = false;
-                        unsubscribed = true;
-                      } else if (unsubscribed == true) {
-                        ReusableFunctions.showInSnackBar(
-                            "Already Unsubscribed", context);
-                      } else {
-                        ReusableFunctions.showInSnackBar(
-                            "Creator Cannot Unsubscribe", context);
+            title: ReusableFunctions.listItemText(item),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => new EventPage(eventId: id)));
+            },
+            trailing: new Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  IconButton(
+                      icon: (unsubscribed) ? new Icon(Icons.cancel, color: Colors.grey) : ((buttons[index]) ? new Icon(Icons.cancel, color: Colors.green) : new Icon(Icons.cancel, color: Colors.grey)),
+                      onPressed: () {
+                        setState(() {
+                          if(buttons[index]) {
+                            ReusableFunctions.showInSnackBar(
+                                "Unsubscribed", context);
+                            UserController.postUnsubscribe(userToken, _toJson(id));
+                            buttons[index] = false;
+                            unsubscribed = true;
+                          } else if (unsubscribed == true) {
+                            ReusableFunctions.showInSnackBar(
+                                "Already Unsubscribed", context);
+                          } else {
+                            ReusableFunctions.showInSnackBar(
+                                "Creator Cannot Unsubscribe", context);
+                          }
+                        });
                       }
-                    });
-                  }
-              ),
-            ]
-        ),
-      ));
+                  ),
+                ]
+            ),
+          ));
     }
   }
 
