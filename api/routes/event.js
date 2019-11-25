@@ -23,6 +23,9 @@ router.get("/event/announcements", middleware.verifyToken, eventHandlers.getAnno
 // Create new event announcement and notify users assiting to event
 router.post("/event/announcement", middleware.verifyToken, eventHandlers.announcement);
 
+// Get Event's subscribed users
+router.get("/event/subscribed", middleware.verifyToken, eventHandlers.subscribed);
+
 // get all public events within a given radius of user coordinates
 // which satisfy conditions in the request
 router.get("/event/find", middleware.verifyToken, eventHandlers.find);
