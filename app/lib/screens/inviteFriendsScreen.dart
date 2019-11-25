@@ -78,12 +78,13 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: (eventId == null || add_button[index]) ? Icon(Icons.add, color: Colors.green) : Icon(Icons.add, color: Colors.grey),
+                  icon: (eventId == null || add_button[index]) ? new Icon(Icons.add, color: Colors.green) : new Icon(Icons.add, color: Colors.grey),
                   onPressed: () {
                     setState(() {
                       if(eventId == null || add_button[index]) {
                         ReusableFunctions.showInSnackBar(
                             "Friend Invited", context);
+                        add_button[index] = false;
                         usersToInvite.add(id);
                       } else {
                         ReusableFunctions.showInSnackBar(
