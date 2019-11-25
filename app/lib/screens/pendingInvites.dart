@@ -73,7 +73,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
-                  icon: Icon(Icons.check),
+                  icon: Icon(Icons.check, color: Colors.green),
                   onPressed: () {
                     setState(() {
                       rows.removeAt(index);
@@ -84,7 +84,7 @@ class _PendingInvitesPageState extends State<PendingInvitesPage> {
                   }
               ),
               IconButton(
-                  icon: Icon(Icons.cancel),
+                  icon: Icon(Icons.cancel, color: Colors.green),
                   onPressed: () {
                     setState(() {
                       rows.removeAt(index);

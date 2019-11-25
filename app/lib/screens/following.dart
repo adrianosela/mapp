@@ -114,7 +114,7 @@ class _FollowingPageState extends State<FollowingPage> {
           title: ReusableFunctions.listItemText(item[0]),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
             IconButton(
-                icon: Icon(Icons.delete),
+                icon: Icon(Icons.delete, color: Colors.green),
                 onPressed: () {
                   UserController.unfollowUser(userToken, id);
                   setState(() {

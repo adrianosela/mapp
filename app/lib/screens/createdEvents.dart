@@ -74,7 +74,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         },
         trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           IconButton(
-              icon: Icon(Icons.message),
+              icon: Icon(Icons.message, color: Colors.green),
               onPressed: () {
                 showDialog(
                     context: context,
@@ -117,14 +117,14 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                     });
               }),
           IconButton(
-              icon: Icon(Icons.edit),
+              icon: Icon(Icons.edit, color: Colors.green),
               onPressed: () {
                 setState(() {
                   _update(id);
                 });
               }),
           IconButton(
-              icon: Icon(Icons.delete),
+              icon: Icon(Icons.delete, color: Colors.green,),
               onPressed: () {
                 setState(() {
                   rows.removeAt(index);
