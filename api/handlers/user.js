@@ -330,9 +330,9 @@ let subscribeToEvents = async function(req, res) {
                 }
             }
             await event.save();
-            await user.save();
         }
 
+        await user.save();
         res.send(user.subscribedEvents);
     }
     catch (e) {
