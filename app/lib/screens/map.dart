@@ -46,7 +46,7 @@ class _MapPageState extends State<MapPage> {
   Location location = Location();
 
   Icon cusIcon = Icon(Icons.search);
-  Widget cusWidget = Text("Map View");
+  Widget cusWidget = Text("MAPP");
   final _formKey = GlobalKey<FormState>();
   bool isSwitched = true;
   var searchText;

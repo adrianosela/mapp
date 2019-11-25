@@ -1,3 +1,4 @@
+import 'package:app/controllers/eventController.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app/components/drawerWidget.dart';
@@ -9,27 +10,29 @@ import 'package:app/controllers/userController.dart';
 import 'package:app/models/fcmToken.dart';
 
 
-class FollowersPage extends StatefulWidget {
+class SubscribedPage extends StatefulWidget {
 
+  final String eventId;
+  SubscribedPage({this.eventId});
   @override
-  _FollowersPageState createState() => _FollowersPageState();
+  _SubscribedPageState createState() => _SubscribedPageState(eventId: this.eventId);
 }
 
-class _FollowersPageState extends State<FollowersPage> {
+class _SubscribedPageState extends State<SubscribedPage> {
   String userToken;
 
   List<String> rows = new List<String>();
   List<String> ids = new List<String>();
-  List<bool> following = new List<bool>();
-  List<bool> follow = new List<bool>();
-  Map<String, bool> temp = new Map<String, bool>();
 
+  final String eventId;
+
+  _SubscribedPageState({this.eventId});
 
   @override
   void initState() {
     super.initState();
     this.userToken = FCM.getToken();
-    ///fetch user's friends
+    ///fetch going users
     _getUsers().then((result) {
       setState(() {});
     });
@@ -40,7 +43,7 @@ class _FollowersPageState extends State<FollowersPage> {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: Text("Followers"),
+        title: Text("Subscribers"),
       ),
       body: ListView.builder(
         // itemCount: this.count,
@@ -51,48 +54,19 @@ class _FollowersPageState extends State<FollowersPage> {
   _buildRow(BuildContext context, int index) {
     while (rows != null && index < rows.length) {
       final item = rows[index];
-      final id = ids[index];
       return Card (
           child:ListTile(
         title: ReusableFunctions.listItemText(item),
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          IconButton(
-              icon: (follow[index]) ? new Icon(Icons.person_add, color: Colors.green) : new Icon(Icons.check, color: Colors.grey),
-              onPressed: () {
-                setState(() {
-                  if(follow[index]) {
-                    ReusableFunctions.showInSnackBar(
-                        "Followed User", context);
-                    UserController.followUser(userToken, id);
-                    follow[index] = false;
-                  } else {
-                    ReusableFunctions.showInSnackBar(
-                        "Already Following", context);
-                  }
-                });
-              }
-          ),
-        ]),
       ));
     }
   }
 
   _getUsers() async {
     setState(() {
-      ids.clear();
       rows.clear();
-      follow.clear();
     });
-    var response = await UserController.getUserFollowers(userToken);
-    if(response != null) {
-      response.forEach((key, value){
-        ids.add(key);
-        temp = value;
-        value.forEach((name, following){
-          rows.add(name);
-          follow.add(!following);
-        });
-      });
-    }
+
+    var response = await EventController.getSubscribedUsers(userToken, eventId);
+    rows = response;
   }
 }
