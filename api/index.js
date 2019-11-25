@@ -12,7 +12,7 @@ notifications.initialize(config.get("notifications.firebase"));
 
 // run a cron job in the background which sends 
 // reminder notifications at minute 30 of every hour
-cron.schedule("30 * * * *", function() {
+cron.schedule("* * * * *", function() {
     reminder.remindUsers();
 });
 
