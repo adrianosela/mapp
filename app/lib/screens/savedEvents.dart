@@ -23,6 +23,7 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
   List<String> ids = new List<String>();
   List<bool> buttons = new List<bool>();
   var unsubscribed = false;
+  var unsub = false;
 
   @override
   void initState() {
@@ -65,8 +66,8 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
             trailing: new Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  IconButton(
-                      icon: (unsubscribed) ? new Icon(Icons.cancel, color: Colors.grey) : ((buttons[index]) ? new Icon(Icons.cancel, color: Colors.green) : new Icon(Icons.cancel, color: Colors.grey)),
+                  new IconButton(
+                      icon: (buttons[index]) ? new Icon(Icons.cancel, color: Colors.green) : new Icon(Icons.cancel, color: Colors.grey),
                       onPressed: () {
                         setState(() {
                           if(buttons[index]) {
@@ -74,8 +75,8 @@ class _SavedEventsPageState extends State<SavedEventsPage> {
                                 "Unsubscribed", context);
                             UserController.postUnsubscribe(userToken, _toJson(id));
                             buttons[index] = false;
-                            unsubscribed = true;
-                          } else if (unsubscribed == true) {
+                            unsub = true;
+                          } else if (unsub == true) {
                             ReusableFunctions.showInSnackBar(
                                 "Already Unsubscribed", context);
                           } else {
