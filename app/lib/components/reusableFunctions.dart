@@ -166,6 +166,7 @@ class ReusableFunctions{
       controller: (text == 'Email') ? usernameController : ((text == 'Password') ? passwordController : nameController),
       decoration: InputDecoration(
           border: OutlineInputBorder(),
+          counterText: "",
           labelText: text
       ),
     );
