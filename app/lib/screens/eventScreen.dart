@@ -143,13 +143,9 @@ class _EventPageState extends State<EventPage> {
                                     padding: EdgeInsets.all(2.0),
                                     child: Text(
                                         "Ends on " +
-                                            new DateFormat.yMMMEd().format(event.date.add(
-                                                new Duration(
-                                                    hours: int.parse(event.duration)))) +
+                                            new DateFormat.yMMMEd().format(event.duration) +
                                             " " +
-                                            new DateFormat.jm().format(event.date.add(
-                                                new Duration(
-                                                    hours: int.parse(event.duration)))),
+                                            new DateFormat.jm().format(event.duration),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold, fontSize: 15.0))),
                                 Padding(
