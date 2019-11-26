@@ -97,8 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               SizedBox(
-                width: (!expanded) ? 180 : 0,
-                height: (!expanded) ? 180 : 0,
+                width: (!expanded) ? 165 : 0,
+                height: (!expanded) ? 165 : 0,
                 child: (!expanded) ? Image.asset("assets/mapp_icon.png") : null,
               ),
               Padding(
