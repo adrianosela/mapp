@@ -229,13 +229,13 @@ class _MapPageState extends State<MapPage> {
                           Padding(
                             padding: EdgeInsets.all(2.0),
                             child: ReusableFunctions.formInput(
-                                "Enter Event Name", eventNameCont),
+                                "Enter Event Name", 30, eventNameCont),
                           ),
                           Padding(
                             padding: EdgeInsets.all(2.0),
                             child: ReusableFunctions.formInput(
                                 "Enter Event Description",
-                                eventDescriptionCont),
+                                200, eventDescriptionCont),
                           ),
                           Padding(
                             padding: EdgeInsets.all(2.0),
@@ -261,7 +261,7 @@ class _MapPageState extends State<MapPage> {
                             padding: EdgeInsets.all(2.0),
                             child: ReusableFunctions.formInput(
                                 "Enter Event Duration (hours)",
-                                eventDurationCont),
+                                3, eventDurationCont),
                           ),
                           Row(
                             children: <Widget>[
@@ -650,7 +650,7 @@ class _MapPageState extends State<MapPage> {
                           ),
                           SimpleDialogOption(
                             child: ReusableFunctions.formInput(
-                                "Search event... ", eventSearchCont),
+                                "Search event... ", 25, eventSearchCont),
                           ),
                           SimpleDialogOption(
                               key: new Key('search'),
