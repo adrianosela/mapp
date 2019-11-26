@@ -10,6 +10,8 @@ let notifyNewFollower = async function(followee, follower, notify = true) {
         return;
     }
 
+    userTokens.push(userSettings.fcmToken);
+
     let notification = {
         title: "New Follower",
         body: `${follower.name} just followed you`
