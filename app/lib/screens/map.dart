@@ -279,7 +279,7 @@ class _MapPageState extends State<MapPage> {
                                       locale: LocaleType.en);
                                 },
                                 child: Text(
-                                  'Pick Event Durration (hh:mm:ss)',
+                                  'Pick Duration (hh:mm:ss)',
                                   style: TextStyle(color: Colors.blue),
                                 )),
                           ),
