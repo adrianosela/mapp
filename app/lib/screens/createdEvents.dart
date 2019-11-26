@@ -30,7 +30,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
   var eventDuration;
   final _formKey = GlobalKey<FormState>();
   TextEditingController announcementCont = TextEditingController();
-
+  bool isSwitched;
   @override
   void initState() {
     super.initState();
@@ -145,7 +145,9 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         TextEditingController(text: event_prev.name);
     TextEditingController eventDescriptionCont =
         TextEditingController(text: event_prev.description);
-    bool isSwitched = event_prev.public;
+      setState(() {
+        isSwitched = event_prev.public;
+      });
 
     showDialog(
         context: context,
