@@ -60,17 +60,17 @@ class _SearchedEventsPageState extends State<SearchedEventsPage> {
       final id = ids[index];
       return Card(
           child: ListTile(
-        title: ReusableFunctions.listItemText(item),
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          IconButton(
-              icon: Icon(Icons.navigate_next, color: Colors.green),
-              onPressed: () {
-                setState(() {
-                  _goToEventPage(id);
-                });
-              }),
-        ]),
-      ));
+            title: ReusableFunctions.listItemText(item),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.navigate_next, color: Colors.green),
+                  onPressed: () {
+                    setState(() {
+                      _goToEventPage(id);
+                    });
+                  }),
+            ]),
+          ));
     }
   }
 

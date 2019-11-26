@@ -54,26 +54,26 @@ class _FollowersPageState extends State<FollowersPage> {
       final id = ids[index];
       return Card (
           child:ListTile(
-        title: ReusableFunctions.listItemText(item),
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          IconButton(
-              icon: (follow[index]) ? new Icon(Icons.person_add, color: Colors.green) : new Icon(Icons.check, color: Colors.grey),
-              onPressed: () {
-                setState(() {
-                  if(follow[index]) {
-                    ReusableFunctions.showInSnackBar(
-                        "Followed User", context);
-                    UserController.followUser(userToken, id);
-                    follow[index] = false;
-                  } else {
-                    ReusableFunctions.showInSnackBar(
-                        "Already Following", context);
+            title: ReusableFunctions.listItemText(item),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              IconButton(
+                  icon: (follow[index]) ? new Icon(Icons.person_add, color: Colors.green) : new Icon(Icons.check, color: Colors.grey),
+                  onPressed: () {
+                    setState(() {
+                      if(follow[index]) {
+                        ReusableFunctions.showInSnackBar(
+                            "Followed User", context);
+                        UserController.followUser(userToken, id);
+                        follow[index] = false;
+                      } else {
+                        ReusableFunctions.showInSnackBar(
+                            "Already Following", context);
+                      }
+                    });
                   }
-                });
-              }
-          ),
-        ]),
-      ));
+              ),
+            ]),
+          ));
     }
   }
 
