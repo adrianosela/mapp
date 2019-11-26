@@ -220,7 +220,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                           ),
                           Container(
                             child: Switch(
-                              value: isSwitched,
+                              value: !isSwitched,
                               onChanged: (value) {
                                 setState(() {
                                   isSwitched = value;
@@ -266,7 +266,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                                         .round(),
                                     'name': eventNameCont.text,
                                     'description': eventDescriptionCont.text,
-                                    'public': isSwitched,
+                                    'public': !isSwitched,
                                     'longitude': event_prev.longitude,
                                     'latitude': event_prev.latitude,
                                   };
