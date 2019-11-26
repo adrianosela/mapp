@@ -81,7 +81,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                               children: <Widget>[
                                 SimpleDialogOption(
                                   child: ReusableFunctions.formInputMultiLine(
-                                      "Create Announcement... ", announcementCont),
+                                      "Create Announcement... ", 100, announcementCont),
                                 ),
                                 SimpleDialogOption(
                                     child: Padding(
@@ -164,12 +164,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       Padding(
                         padding: EdgeInsets.all(2.0),
                         child: ReusableFunctions.formInput(
-                            "Enter Event Name", eventNameCont),
+                            "Enter Event Name", 25, eventNameCont),
                       ),
                       Padding(
                         padding: EdgeInsets.all(2.0),
                         child: ReusableFunctions.formInput(
-                            "Enter Event Description", eventDescriptionCont),
+                            "Enter Event Description", 200, eventDescriptionCont),
                       ),
                       Padding(
                         padding: EdgeInsets.all(2.0),
@@ -200,7 +200,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       Padding(
                         padding: EdgeInsets.all(2.0),
                         child: ReusableFunctions.formInput(
-                            "Enter Event Duration (hours)", eventDurationCont),
+                            "Enter Event Duration (hours)", 3,eventDurationCont),
                       ),
                       Row(
                         children: <Widget>[
