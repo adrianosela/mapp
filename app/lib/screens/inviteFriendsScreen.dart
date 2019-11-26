@@ -108,24 +108,28 @@ class _InviteFriendsPageState extends State<InviteFriendsPage> {
     var response = await UserController.getUserFollowers(userToken);
     if (response != null) {
       response.forEach((key, value) {
-        ids.add(key);
+        print(key);
+        print(event["creator"].toString());
+        if (key != event["creator"].toString()) {
+          ids.add(key);
 
-        if (eventId == null ||
-            (event['followers'].toString().length == 2 &&
-                event['invited'].toString().length == 2)) {
-          add_button.add(true);
-        } else if (event['followers'].toString().contains(key.toString()) ||
-            event['invited'].toString().contains(key.toString())) {
-          add_button.add(false);
-        } else {
-          add_button.add(true);
+          if (eventId == null ||
+              (event['followers'].toString().length == 2 &&
+                  event['invited'].toString().length == 2)) {
+            add_button.add(true);
+          } else if (event['followers'].toString().contains(key.toString()) ||
+              event['invited'].toString().contains(key.toString())) {
+            add_button.add(false);
+          } else {
+            add_button.add(true);
+          }
+
+          temp = value;
+          value.forEach((name, following) {
+            rows.add(name);
+            follow.add(!following);
+          });
         }
-
-        temp = value;
-        value.forEach((name, following) {
-          rows.add(name);
-          follow.add(!following);
-        });
       });
     }
   }
