@@ -151,7 +151,7 @@ class ReusableFunctions{
   ///input field constructor
   static TextFormField loginInputField(String text) {
     return new TextFormField(
-      maxLength: 25,
+      maxLength: 40,
       key: (text == 'password') ? new Key('password') : ((text == 'email') ? new Key('login') : new Key('name')),
       obscureText: (text == 'Password') ? true : false,
       validator: (value) {
