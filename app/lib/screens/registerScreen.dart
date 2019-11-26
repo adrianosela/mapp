@@ -49,8 +49,8 @@ class _RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               SizedBox(
-                width: (!expanded) ? 200 : 0,
-                height: (!expanded) ? 200 : 0,
+                width: (!expanded) ? 165 : 0,
+                height: (!expanded) ? 165 : 0,
                 child: Image.asset("assets/mapp_icon.png"),
               ),
               Padding(
