@@ -51,6 +51,7 @@ class _MapPageState extends State<MapPage> {
   bool isSwitched = true;
   var searchText;
   var eventDate;
+  var eventDuration;
   var eventId;
   var msg;
 
@@ -249,7 +250,6 @@ class _MapPageState extends State<MapPage> {
                                       onChanged: (date) {}, onConfirm: (date) {
                                     eventDate = date;
                                   },
-                                      currentTime: DateTime.now(),
                                       locale: LocaleType.en);
                                 },
                                 child: Text(
@@ -259,9 +259,20 @@ class _MapPageState extends State<MapPage> {
                           ),
                           Padding(
                             padding: EdgeInsets.all(2.0),
-                            child: ReusableFunctions.formInput(
-                                "Enter Event Duration (hours)",
-                                3, eventDurationCont),
+                            child: FlatButton(
+                                onPressed: () {
+                                  DatePicker.showTimePicker(context,
+                                      showTitleActions: true,
+                                      onChanged: (date) {}, onConfirm: (date) {
+                                        eventDuration = date;
+                                      },
+                                      currentTime: DateTime(0,0,0,0,0),
+                                      locale: LocaleType.en);
+                                },
+                                child: Text(
+                                  'Pick Event Durration',
+                                  style: TextStyle(color: Colors.blue),
+                                )),
                           ),
                           Row(
                             children: <Widget>[
@@ -448,7 +459,7 @@ class _MapPageState extends State<MapPage> {
                                     longitude: latlang.longitude,
                                     latitude: latlang.latitude,
                                     date: eventDate,
-                                    duration: eventDurationCont.text,
+                                    duration: eventDuration,
                                     public: !isSwitched,
                                     invited: usersToInvite,
                                     categories: categories,

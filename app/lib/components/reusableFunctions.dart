@@ -47,8 +47,8 @@ class ReusableFunctions{
     return new TextFormField(
       maxLength: maxLength,
       validator: (value) {
-        if(text == "enter event duration (hours)" && !RegExp("^([0-9]|[1-3][0-9][0-9]|400)").hasMatch(value)) {
-          return 'Event duration must be a number smaller than 400';
+        if(text == "enter event duration (hours)" && !RegExp("^([0-9]|[1-3][0-9][0-9]|400)").hasMatch(value) && (double.parse(value) > 400 || double.parse(value) < 0)) {
+          return 'Event duration must be a number greater than 0 and smaller than 400';
         }
         if (value.isEmpty) {
           return 'Please enter some text';

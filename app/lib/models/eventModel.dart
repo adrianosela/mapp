@@ -5,7 +5,7 @@ class Event {
   final double latitude;
   final String description;
   final DateTime date;
-  final String duration;
+  final DateTime duration;
   final bool public;
   final List<String> invited;
   final List<String> categories;
@@ -21,7 +21,7 @@ class Event {
       latitude: json['location']['coordinates'][1],
       description: json['description'],
       date: new DateTime.fromMillisecondsSinceEpoch(json['startTime']*1000),
-      duration: DateTime.fromMillisecondsSinceEpoch(json['endTime']*1000).difference(DateTime.fromMillisecondsSinceEpoch(json['startTime']*1000)).inHours.toString(),
+      duration: DateTime.fromMillisecondsSinceEpoch(json['endTime']*1000),
       public: json['public'],
       relevance: json['relevance'],
     );
@@ -30,13 +30,13 @@ class Event {
   }
 
   Map<String, dynamic> toJson() => {
-
+    
     'name' : name,
     'longitude' : longitude,
     'latitude' : latitude,
     'description' : description,
     'startTime' : (date.toUtc().millisecondsSinceEpoch/1000).round(),
-    'endTime' : (date.add(new Duration(hours: int.parse(duration))).toUtc().millisecondsSinceEpoch/1000).round(),
+    'endTime' : (date.add(new Duration(hours: duration.hour, minutes: duration.minute)).millisecondsSinceEpoch/1000).round(),
     'public' :  public,
     'invited' : invited,
     'categories': categories
