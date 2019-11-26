@@ -33,7 +33,8 @@ class UserController {
   static Future<Map<String, Map<String, bool>>> getUserFollowers(token) async {
     var uri = Uri.https("mapp-254321.appspot.com", "/user/followers");
 
-    Map<String, Map<String, bool>> followers = new Map<String, Map<String, bool>>();
+    Map<String, Map<String, bool>> followers =
+        new Map<String, Map<String, bool>>();
 
     final response = await http.get(uri, headers: {
       "Content-Type": "application/json",
@@ -56,7 +57,8 @@ class UserController {
     return followers;
   }
 
-  static Future<Map<String, List<String>>> searchUsers(token, String search) async {
+  static Future<Map<String, List<String>>> searchUsers(
+      token, String search) async {
     Map<String, String> query = {
       'username': search,
     };
@@ -80,7 +82,10 @@ class UserController {
       var userContainer = json.decode(response.body);
       if (userContainer != null) {
         for (var instance in userContainer) {
-          var friends = [instance["name"].toString(), instance["friend"].toString()];
+          var friends = [
+            instance["name"].toString(),
+            instance["friend"].toString()
+          ];
           following[instance["id"].toString()] = friends;
         }
       }
@@ -125,11 +130,11 @@ class UserController {
     var body = {"userToUnfollowId": userId};
     return http
         .post(uri,
-        headers: {
-          "Content-Type": "application/json",
-          "authorization": "Bearer $token"
-        },
-        body: jsonEncode(body))
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": "Bearer $token"
+            },
+            body: jsonEncode(body))
         .then((http.Response response) {
       final int statusCode = response.statusCode;
       print(jsonEncode(body));
@@ -143,8 +148,31 @@ class UserController {
     });
   }
 
-  static Future<Map<String, String>> getCreatedEvents(String id) async {
+  static void removeFCM(token) async {
+    var uri = Uri.https(
+      "mapp-254321.appspot.com",
+      "fcmToken",
+    );
 
+    return http.delete(
+      uri,
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": "Bearer $token"
+      },
+    ).then((http.Response response) {
+      final int statusCode = response.statusCode;
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        print(statusCode);
+        print(json);
+        throw new Exception("Error while fetching data");
+      }
+
+      return null;
+    });
+  }
+
+  static Future<Map<String, String>> getCreatedEvents(String id) async {
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/created",
@@ -174,7 +202,6 @@ class UserController {
 
   ///Get events user clicked "going to"
   static Future<Map<String, String>> getSubscribedEvents(String id) async {
-
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/subscribed",
@@ -204,7 +231,6 @@ class UserController {
 
   ///Get events user is invited to
   static Future<Map<String, String>> getPendingEvents(String id) async {
-
     var uri = Uri.https(
       "mapp-254321.appspot.com",
       "/user/pending",

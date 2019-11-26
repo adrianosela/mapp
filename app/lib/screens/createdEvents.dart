@@ -27,9 +27,10 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
 
   ///vars for edit event alert dialog
   var eventDate;
+  var eventDuration;
   final _formKey = GlobalKey<FormState>();
   TextEditingController announcementCont = TextEditingController();
-
+  bool isSwitched;
   @override
   void initState() {
     super.initState();
@@ -81,7 +82,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                               children: <Widget>[
                                 SimpleDialogOption(
                                   child: ReusableFunctions.formInputMultiLine(
-                                      "Create Announcement... ", announcementCont),
+                                      "Create Announcement... ", 100, announcementCont),
                                 ),
                                 SimpleDialogOption(
                                     child: Padding(
@@ -144,10 +145,9 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
         TextEditingController(text: event_prev.name);
     TextEditingController eventDescriptionCont =
         TextEditingController(text: event_prev.description);
-    TextEditingController eventDurationCont =
-        TextEditingController(text: event_prev.duration);
-
-    bool isSwitched = event_prev.public;
+      setState(() {
+        isSwitched = event_prev.public;
+      });
 
     showDialog(
         context: context,
@@ -164,12 +164,12 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       Padding(
                         padding: EdgeInsets.all(2.0),
                         child: ReusableFunctions.formInput(
-                            "Enter Event Name", eventNameCont),
+                            "Enter Event Name", 25, eventNameCont),
                       ),
                       Padding(
                         padding: EdgeInsets.all(2.0),
                         child: ReusableFunctions.formInput(
-                            "Enter Event Description", eventDescriptionCont),
+                            "Enter Event Description", 200, eventDescriptionCont),
                       ),
                       Padding(
                         padding: EdgeInsets.all(2.0),
@@ -192,15 +192,22 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                             )),
                       ),
                       Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: Text(
-                            "Event Duration in Hours",
-                            style: TextStyle(fontSize: 15, color: Colors.blue),
-                          )),
-                      Padding(
                         padding: EdgeInsets.all(2.0),
-                        child: ReusableFunctions.formInput(
-                            "Enter Event Duration (hours)", eventDurationCont),
+                        child: FlatButton(
+                            onPressed: () {
+                              DatePicker.showTimePicker(context,
+                                  
+                                  showTitleActions: true,
+                                  onChanged: (date) {}, onConfirm: (date) {
+                                    eventDuration = date;
+                                  },
+                                  currentTime: DateTime(0,0,0,0,0),
+                                  locale: LocaleType.en);
+                            },
+                            child: Text(
+                              'Pick Event Duration (hh:mm:ss)',
+                              style: TextStyle(color: Colors.blue),
+                            )),
                       ),
                       Row(
                         children: <Widget>[
@@ -239,6 +246,11 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                             if (_formKey.currentState.validate()) {
                               if (eventDate == null) {
                                 eventDate = event_prev.date;
+
+                              }
+                              if (eventDuration == null) {
+                                eventDuration = event_prev.duration;
+
                               }
 
                               Map<String, dynamic> toJson() => {
@@ -247,19 +259,14 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                                                 .millisecondsSinceEpoch /
                                             1000)
                                         .round(),
-                                    'endTime': (eventDate
-                                                .add(new Duration(
-                                                    hours: int.parse(
-                                                        eventDurationCont
-                                                            .text)))
-                                                .toUtc()
-                                                .millisecondsSinceEpoch /
-                                            1000)
+                                    'endTime': (eventDate.add(new Duration(hours: eventDuration.hour, minutes: eventDuration.minute))
+                                        .toUtc()
+                                        .millisecondsSinceEpoch /
+                                        1000)
                                         .round(),
                                     'name': eventNameCont.text,
                                     'description': eventDescriptionCont.text,
                                     'public': isSwitched,
-                                    'duration': eventDurationCont.text,
                                     'longitude': event_prev.longitude,
                                     'latitude': event_prev.latitude,
                                   };
@@ -273,7 +280,6 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                               ///clear text controllers
                               eventNameCont.clear();
                               eventDescriptionCont.clear();
-                              eventDurationCont.clear();
 
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();

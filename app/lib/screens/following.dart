@@ -53,6 +53,7 @@ class _FollowingPageState extends State<FollowingPage> {
                 if (this.cusIcon.icon == Icons.search) {
                   this.cusIcon = Icon(Icons.cancel);
                   this.cusWidget = TextField(
+                    maxLength: 30,
                     textInputAction: TextInputAction.go,
                     decoration: InputDecoration(
                       border: InputBorder.none,

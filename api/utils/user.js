@@ -6,6 +6,10 @@ let notifyNewFollower = async function(followee, follower, notify = true) {
     let userTokens = [];
     let userSettings = await UserSettings.findById(followee._id);
 
+    if (!userSettings.fcmToken) {
+        return;
+    }
+
     userTokens.push(userSettings.fcmToken);
 
     let notification = {

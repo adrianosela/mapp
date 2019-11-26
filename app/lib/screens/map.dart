@@ -51,8 +51,12 @@ class _MapPageState extends State<MapPage> {
   bool isSwitched = true;
   var searchText;
   var eventDate;
+  var eventDuration;
   var eventId;
   var msg;
+
+  bool disableRadius = false;
+  bool disableSearch = false;
 
   double radius = 5.0;
   double newRadius = 0;
@@ -192,10 +196,16 @@ class _MapPageState extends State<MapPage> {
                       padding: const EdgeInsets.all(2.0),
                       child: RaisedButton(
                         child: Text("Update Map"),
-                        onPressed: () async {
+                        onPressed: disableRadius ? null :() async {
+                          setState(() {
+                            disableRadius = true;
+                          });
                           radius = newRadius;
                           LocationData curLocation = await location.getLocation();
                           await _addMarkers(curLocation);
+                          setState(() {
+                            disableRadius = false;
+                          });
                           Navigator.of(context).pop();
                         },
                       ),
@@ -229,13 +239,13 @@ class _MapPageState extends State<MapPage> {
                           Padding(
                             padding: EdgeInsets.all(2.0),
                             child: ReusableFunctions.formInput(
-                                "Enter Event Name", eventNameCont),
+                                "Enter Event Name", 30, eventNameCont),
                           ),
                           Padding(
                             padding: EdgeInsets.all(2.0),
                             child: ReusableFunctions.formInput(
                                 "Enter Event Description",
-                                eventDescriptionCont),
+                                200, eventDescriptionCont),
                           ),
                           Padding(
                             padding: EdgeInsets.all(2.0),
@@ -249,7 +259,6 @@ class _MapPageState extends State<MapPage> {
                                       onChanged: (date) {}, onConfirm: (date) {
                                     eventDate = date;
                                   },
-                                      currentTime: DateTime.now(),
                                       locale: LocaleType.en);
                                 },
                                 child: Text(
@@ -259,9 +268,20 @@ class _MapPageState extends State<MapPage> {
                           ),
                           Padding(
                             padding: EdgeInsets.all(2.0),
-                            child: ReusableFunctions.formInput(
-                                "Enter Event Duration (hours)",
-                                eventDurationCont),
+                            child: FlatButton(
+                                onPressed: () {
+                                  DatePicker.showTimePicker(context,
+                                      showTitleActions: true,
+                                      onChanged: (date) {}, onConfirm: (date) {
+                                        eventDuration = date;
+                                      },
+                                      currentTime: DateTime(0,0,0,0,0),
+                                      locale: LocaleType.en);
+                                },
+                                child: Text(
+                                  'Pick Event Durration (hh:mm:ss)',
+                                  style: TextStyle(color: Colors.blue),
+                                )),
                           ),
                           Row(
                             children: <Widget>[
@@ -448,7 +468,7 @@ class _MapPageState extends State<MapPage> {
                                     longitude: latlang.longitude,
                                     latitude: latlang.latitude,
                                     date: eventDate,
-                                    duration: eventDurationCont.text,
+                                    duration: eventDuration,
                                     public: !isSwitched,
                                     invited: usersToInvite,
                                     categories: categories,
@@ -650,7 +670,7 @@ class _MapPageState extends State<MapPage> {
                           ),
                           SimpleDialogOption(
                             child: ReusableFunctions.formInput(
-                                "Search event... ", eventSearchCont),
+                                "Search event... ", 25, eventSearchCont),
                           ),
                           SimpleDialogOption(
                               key: new Key('search'),
@@ -664,7 +684,10 @@ class _MapPageState extends State<MapPage> {
                                   padding: EdgeInsets.all(2.0),
                                   splashColor: Colors.blueAccent,
                                   child: Text("Search"),
-                                  onPressed: () async {
+                                  onPressed: disableSearch ? null : () async {
+                                    setState(() {
+                                      disableSearch = true;
+                                    });
                                     List<String> categories =
                                         new List<String>();
 
@@ -685,6 +708,9 @@ class _MapPageState extends State<MapPage> {
                                             builder: (context) =>
                                                 new SearchedEventsPage(
                                                     events: events)));
+                                    setState(() {
+                                      disableSearch = false;
+                                    });
                                     eventSearchCont.clear();
                                   },
                                 ),
@@ -704,7 +730,9 @@ class _MapPageState extends State<MapPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
+
           await _onActionButtonTap();
+
         },
         icon: Icon(Icons.filter_tilt_shift),
         label: Text('RADIUS'),

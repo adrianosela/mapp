@@ -43,15 +43,17 @@ class ReusableFunctions{
   }
 
   ///create/update event form input fields
-  static TextFormField formInput(String text, [TextEditingController controller]) {
+  static TextFormField formInput(String text, int maxLength ,[TextEditingController controller]) {
     return new TextFormField(
+      maxLength: maxLength,
       validator: (value) {
-        if(text == "enter event duration (hours)" && !RegExp("^([0-9]|[1-3][0-9][0-9]|400)").hasMatch(value)) {
-          return 'Event duration must be a number smaller than 400';
+        if(text == "enter event duration (hours)" && !RegExp("^([0-9]|[1-3][0-9][0-9]|400)").hasMatch(value) && (double.parse(value) > 400 || double.parse(value) < 0)) {
+          return 'Event duration must be a number greater than 0 and smaller than 400';
         }
         if (value.isEmpty) {
           return 'Please enter some text';
         }
+
         return null;
       },
       textInputAction: TextInputAction.go,
@@ -63,8 +65,19 @@ class ReusableFunctions{
     );
   }
 
-  static TextFormField formInputMultiLine(String text, [TextEditingController controller]) {
+  static TextFormField formInputMultiLine(String text, int maxLength, [TextEditingController controller]) {
     return new TextFormField(
+      maxLength: maxLength,
+      validator: (value) {
+        if(text == "enter event duration (hours)" && !RegExp("^([0-9]|[1-3][0-9][0-9]|400)").hasMatch(value)) {
+          return 'Event duration must be a number smaller than 400';
+        }
+        if (value.isEmpty) {
+          return 'Please enter some text';
+        }
+
+        return null;
+      },
       textInputAction: TextInputAction.go,
       decoration: InputDecoration(
         hintText: text,
@@ -138,7 +151,9 @@ class ReusableFunctions{
   ///input field constructor
   static TextFormField loginInputField(String text) {
     return new TextFormField(
+
       key: (text == 'Password') ? new Key('password') : ((text == 'Email') ? new Key('login') : new Key('name')),
+      maxLength: 40,
       obscureText: (text == 'Password') ? true : false,
       validator: (value) {
         if(text == 'Email' && !RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
@@ -152,6 +167,7 @@ class ReusableFunctions{
       controller: (text == 'Email') ? usernameController : ((text == 'Password') ? passwordController : nameController),
       decoration: InputDecoration(
           border: OutlineInputBorder(),
+          counterText: "",
           labelText: text
       ),
     );

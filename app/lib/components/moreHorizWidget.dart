@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:app/components/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:app/controllers/userController.dart';
+import 'package:app/models/fcmToken.dart';
 
 class Constants {
   static const String Logout = "Logout";
@@ -37,6 +38,8 @@ class MyPopupMenu {
   static void choiceAction(String choice) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', null);
+    await UserController.removeFCM(FCM.getToken());
+    FCM.setFcmToken(null);
     Navigator.pushNamedAndRemoveUntil(mycontext, Router.homeRoute, (_) => false);
   }
 }
