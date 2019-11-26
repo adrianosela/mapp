@@ -164,7 +164,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                       Padding(
                         padding: EdgeInsets.all(2.0),
                         child: ReusableFunctions.formInput(
-                            "Enter Event Name", 25, eventNameCont),
+                            "Enter Event Name", 30, eventNameCont),
                       ),
                       Padding(
                         padding: EdgeInsets.all(2.0),
