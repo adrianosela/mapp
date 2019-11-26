@@ -55,6 +55,9 @@ class _MapPageState extends State<MapPage> {
   var eventId;
   var msg;
 
+  bool disableRadius = false;
+  bool disableSearch = false;
+
   double radius = 5.0;
   double newRadius = 0;
 
@@ -193,10 +196,16 @@ class _MapPageState extends State<MapPage> {
                       padding: const EdgeInsets.all(2.0),
                       child: RaisedButton(
                         child: Text("Update Map"),
-                        onPressed: () async {
+                        onPressed: disableRadius ? null :() async {
+                          setState(() {
+                            disableRadius = true;
+                          });
                           radius = newRadius;
                           LocationData curLocation = await location.getLocation();
                           await _addMarkers(curLocation);
+                          setState(() {
+                            disableRadius = false;
+                          });
                           Navigator.of(context).pop();
                         },
                       ),
@@ -675,7 +684,10 @@ class _MapPageState extends State<MapPage> {
                                   padding: EdgeInsets.all(2.0),
                                   splashColor: Colors.blueAccent,
                                   child: Text("Search"),
-                                  onPressed: () async {
+                                  onPressed: disableSearch ? null : () async {
+                                    setState(() {
+                                      disableSearch = true;
+                                    });
                                     List<String> categories =
                                         new List<String>();
 
@@ -696,6 +708,9 @@ class _MapPageState extends State<MapPage> {
                                             builder: (context) =>
                                                 new SearchedEventsPage(
                                                     events: events)));
+                                    setState(() {
+                                      disableSearch = false;
+                                    });
                                     eventSearchCont.clear();
                                   },
                                 ),
@@ -715,7 +730,9 @@ class _MapPageState extends State<MapPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
+
           await _onActionButtonTap();
+
         },
         icon: Icon(Icons.filter_tilt_shift),
         label: Text('RADIUS'),
