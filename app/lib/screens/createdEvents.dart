@@ -203,7 +203,7 @@ class _CreatedEventsPageState extends State<CreatedEventsPage> {
                                   locale: LocaleType.en);
                             },
                             child: Text(
-                              'Pick Event Duration',
+                              'Pick Event Duration (hh:mm:ss)',
                               style: TextStyle(color: Colors.blue),
                             )),
                       ),

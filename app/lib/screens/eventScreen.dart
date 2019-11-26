@@ -79,6 +79,7 @@ class _EventPageState extends State<EventPage> {
                                 Padding(
                                     padding: EdgeInsets.all(3.0),
                                     child: Text(event.name,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 25,
