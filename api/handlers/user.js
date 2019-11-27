@@ -369,7 +369,7 @@ let unsubscribeFromEvents = async function(req, res) {
         let user = await User.findById(userId);
         if (!user) {
             return res.status(404).send("Requesting user not found");
-        }
+        } 
 
         let events = await Event.find({
             _id: { $in: eventIds }
