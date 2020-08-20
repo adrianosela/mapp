@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/adrianosela/mapp#readme",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "config": "^3.2.2",
     "email-validator": "^2.0.4",
     "express": "^4.17.1",
